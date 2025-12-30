@@ -3,14 +3,37 @@
 @tailwind utilities;
 
 /* ========================================
-   RAGuard Enterprise Design System
-   Dense, Operational, Security-grade UI
+   Ragaurd Design System
+   Landing Page + Dashboard Styles
    ======================================== */
 
 @layer base {
   :root {
-    /* SOC Console Theme */
-    --background: 220 14% 96%; /* Slightly darker bg */
+    /* Landing Page Colors */
+    --bg-dark: #0B1220;
+    --bg-light: #F9FAFB;
+    --bg-card: #FFFFFF;
+    --bg-card-dark: #111827;
+    --bg-footer: #020617;
+
+    --primary: #2563EB;
+    --primary-hover: #1D4ED8;
+    --secondary: #38BDF8;
+
+    --text-dark-bg: #E5E7EB;
+    --text-dark-muted: #9CA3AF;
+    --text-light-bg: #020617;
+    --text-light-muted: #64748B;
+
+    --border-light: #CBD5E1;
+    --border-dark: #1F2937;
+
+    --status-blocked: #DC2626;
+    --status-passed: #16A34A;
+    --status-warning: #D97706;
+
+    /* Dashboard / Shadcn UI Compatibility */
+    --background: 220 14% 96%;
     --foreground: 222 84% 5%;
 
     --card: 0 0% 100%;
@@ -18,12 +41,6 @@
 
     --popover: 0 0% 100%;
     --popover-foreground: 222 84% 5%;
-
-    --primary: 217 33% 17%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 220 14% 94%;
-    --secondary-foreground: 222 84% 5%;
 
     --muted: 220 14% 94%;
     --muted-foreground: 215 16% 47%;
@@ -38,7 +55,7 @@
     --input: 220 13% 84%;
     --ring: 217 91% 60%;
 
-    --radius: 3px;
+    --radius: 6px;
   }
 }
 
@@ -50,7 +67,7 @@
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-size: 14px;
+    font-size: 16px;
   }
 
   body {
@@ -59,12 +76,159 @@
   }
 
   ::selection {
-    @apply bg-midnight-800 text-white;
+    background-color: #2563EB;
+    color: #FFFFFF;
   }
 }
 
 /* ========================================
-   Typography - Strong Hierarchy
+   Landing Page Typography
+   ======================================== */
+
+@layer components {
+  /* Hero headline - 56px */
+  .hero-headline {
+    @apply text-5xl md:text-6xl font-semibold tracking-tighter text-white;
+    line-height: 1.1;
+  }
+
+  /* Section headers - 40px */
+  .section-header {
+    @apply text-3xl md:text-4xl font-semibold;
+    line-height: 1.2;
+  }
+
+  .section-header-dark {
+    @apply section-header text-white;
+  }
+
+  .section-header-light {
+    @apply section-header text-text-light-bg;
+  }
+
+  /* Subsection headers - 24px */
+  .subsection-header {
+    @apply text-xl md:text-2xl font-semibold;
+  }
+
+  /* Body copy - 18px */
+  .body-copy {
+    @apply text-lg leading-relaxed;
+  }
+
+  .body-copy-dark {
+    @apply body-copy text-text-dark-bg;
+  }
+
+  .body-copy-light {
+    @apply body-copy text-text-light-muted;
+  }
+
+  /* Small text - 14px */
+  .text-caption {
+    @apply text-sm;
+  }
+}
+
+/* ========================================
+   Landing Page Sections
+   ======================================== */
+
+@layer components {
+  .section-dark {
+    @apply bg-bg-dark py-24;
+  }
+
+  .section-light {
+    @apply bg-bg-light py-24;
+  }
+
+  .section-container {
+    @apply container max-w-6xl;
+  }
+}
+
+/* ========================================
+   Landing Page Cards
+   ======================================== */
+
+@layer components {
+  .card-light {
+    @apply bg-white border border-border rounded-lg p-8;
+  }
+
+  .card-dark {
+    @apply bg-bg-card-dark border border-border-dark rounded-lg p-8;
+  }
+
+  .card-layer {
+    @apply bg-white border border-border rounded-lg p-6;
+    border-left: 3px solid #2563EB;
+  }
+}
+
+/* ========================================
+   Landing Page Buttons
+   ======================================== */
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center;
+    @apply bg-primary hover:bg-primary-hover text-white;
+    @apply font-medium px-8 py-4 rounded-md;
+    @apply transition-colors duration-150;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center;
+    @apply bg-transparent text-text-dark-bg;
+    @apply border border-border hover:border-white;
+    @apply font-medium px-8 py-4 rounded-md;
+    @apply transition-colors duration-150;
+  }
+
+  .btn-outline-dark {
+    @apply inline-flex items-center justify-center;
+    @apply bg-transparent text-text-dark-bg;
+    @apply border border-border-dark hover:border-text-dark-muted;
+    @apply font-medium px-8 py-4 rounded-md;
+    @apply transition-colors duration-150;
+  }
+}
+
+/* ========================================
+   Code Blocks
+   ======================================== */
+
+@layer components {
+  .code-block {
+    @apply bg-bg-dark rounded-lg overflow-hidden;
+    @apply font-mono text-sm;
+  }
+
+  .code-block pre {
+    @apply p-6 overflow-x-auto;
+  }
+
+  .code-block code {
+    @apply text-text-dark-bg;
+  }
+
+  .code-keyword {
+    color: #38BDF8;
+  }
+
+  .code-string {
+    color: #34D399;
+  }
+
+  .code-comment {
+    color: #64748B;
+  }
+}
+
+/* ========================================
+   Dashboard Typography (Legacy)
    ======================================== */
 
 @layer components {
@@ -100,7 +264,6 @@
     @apply text-[10px] font-semibold text-midnight-500 uppercase tracking-wider;
   }
 
-  /* Metric typography - commanding presence */
   .metric-xl {
     @apply text-3xl font-bold text-midnight-950 tabular-nums tracking-tight;
   }
@@ -127,7 +290,7 @@
 }
 
 /* ========================================
-   Cards - Dense, Instrument-panel feel
+   Dashboard Cards (Legacy)
    ======================================== */
 
 @layer components {
@@ -155,7 +318,6 @@
     @apply bg-white rounded border border-midnight-300/60 shadow-sm px-3 py-2.5;
   }
 
-  /* Stat card with icon */
   .stat-icon-box {
     @apply w-8 h-8 rounded bg-midnight-100 border border-midnight-200 flex items-center justify-center;
   }
@@ -176,7 +338,6 @@
     @apply w-8 h-8 rounded bg-critical-50 border border-critical-200 flex items-center justify-center;
   }
 
-  /* Trend indicators */
   .trend-positive {
     @apply text-[11px] font-semibold text-secure-700 flex items-center gap-0.5;
   }
@@ -191,7 +352,7 @@
 }
 
 /* ========================================
-   Buttons - Compact, Deliberate
+   Dashboard Buttons (Legacy)
    ======================================== */
 
 @layer components {
@@ -201,12 +362,12 @@
     @apply disabled:opacity-50 disabled:pointer-events-none;
   }
 
-  .btn-primary {
+  .btn-dashboard-primary {
     @apply btn bg-midnight-800 text-white border border-midnight-900;
     @apply hover:bg-midnight-900;
   }
 
-  .btn-secondary {
+  .btn-dashboard-secondary {
     @apply btn bg-white text-midnight-700 border border-midnight-300;
     @apply hover:bg-midnight-50 hover:border-midnight-400;
   }
@@ -235,7 +396,7 @@
 }
 
 /* ========================================
-   Navigation - Anchored, Tool-like
+   Dashboard Navigation (Legacy)
    ======================================== */
 
 @layer components {
@@ -287,7 +448,7 @@
 }
 
 /* ========================================
-   Header - Compact operational bar
+   Dashboard Header (Legacy)
    ======================================== */
 
 @layer components {
@@ -312,7 +473,7 @@
 }
 
 /* ========================================
-   Forms - Compact, Precise
+   Dashboard Forms (Legacy)
    ======================================== */
 
 @layer components {
@@ -365,7 +526,7 @@
 }
 
 /* ========================================
-   Badges - Tight, Status-driven
+   Dashboard Badges (Legacy)
    ======================================== */
 
 @layer components {
@@ -399,7 +560,7 @@
 }
 
 /* ========================================
-   Tables - Dense, Data-focused
+   Dashboard Tables (Legacy)
    ======================================== */
 
 @layer components {
@@ -442,7 +603,7 @@
 }
 
 /* ========================================
-   Dashboard Layout - Dense SOC Console
+   Dashboard Layout (Legacy)
    ======================================== */
 
 @layer components {
@@ -484,7 +645,7 @@
 }
 
 /* ========================================
-   Status Indicators
+   Status Indicators (Legacy)
    ======================================== */
 
 @layer components {
@@ -522,7 +683,7 @@
 }
 
 /* ========================================
-   Progress - Compact
+   Progress Bars (Legacy)
    ======================================== */
 
 @layer components {
@@ -560,7 +721,7 @@
 }
 
 /* ========================================
-   Charts - Dense, Data-forward
+   Charts (Legacy)
    ======================================== */
 
 @layer components {
@@ -590,7 +751,7 @@
 }
 
 /* ========================================
-   Alerts
+   Alerts (Legacy)
    ======================================== */
 
 @layer components {

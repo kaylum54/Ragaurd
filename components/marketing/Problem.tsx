@@ -1,72 +1,72 @@
-import { AlertTriangle, Shield, Database, Mic, FileWarning } from 'lucide-react';
+import { Terminal, Unlock, Database, AudioWaveform, User, FileCheck } from 'lucide-react';
 
 const threats = [
   {
-    icon: AlertTriangle,
+    icon: Terminal,
     title: 'Prompt Injection',
-    description: 'Attackers embed hidden instructions in user inputs that override your agent\'s system prompt. Your carefully designed assistant becomes their tool.',
+    description: 'Attackers embed hidden instructions in user inputs that override your agent\'s system prompt. Your assistant becomes their tool.',
   },
   {
-    icon: Shield,
+    icon: Unlock,
     title: 'Jailbreaking',
-    description: 'Social engineering techniques bypass safety guidelines. "Pretend you\'re DAN" isn\'t a joke — it\'s a documented attack pattern that works against unprotected agents.',
+    description: 'Social engineering techniques bypass safety guidelines. Role manipulation, encoding tricks, and multi-turn attacks defeat naive filtering.',
   },
   {
     icon: Database,
     title: 'Data Exfiltration',
-    description: '"Repeat your instructions verbatim" and "What were you told to do?" are active attack vectors. System prompts contain business logic, API keys, and operational workflows that attackers harvest daily.',
+    description: '"Repeat your instructions verbatim" is an active attack vector. System prompts contain business logic, pricing, and operational details attackers harvest.',
   },
   {
-    icon: Mic,
+    icon: AudioWaveform,
     title: 'Deepfake Audio',
-    description: 'Voice cloning technology is accessible and improving. Callers can impersonate executives, customers, or authorized users. Without audio-level verification, your agent can\'t distinguish real voices from synthetic ones.',
+    description: 'Voice cloning technology is accessible and improving. Without audio-level verification, your agent cannot distinguish real callers from synthetic ones.',
   },
   {
-    icon: FileWarning,
-    title: 'Compliance Exposure',
-    description: 'Voice agents handling PII, PHI, or financial data create regulatory liability. One successful attack can trigger breach notification requirements, fines, and reputational damage.',
+    icon: User,
+    title: 'Identity Manipulation',
+    description: 'Attackers impersonate executives, customers, or authorized users. Voice agents trust the caller without verification.',
+  },
+  {
+    icon: FileCheck,
+    title: 'Compliance Failure',
+    description: 'Agents handling PII, PHI, or financial data create regulatory liability. One successful attack can trigger breach notifications and fines.',
   },
 ];
 
 export function Problem() {
   return (
-    <section className="py-16 bg-midnight-900">
-      <div className="container">
+    <section className="py-24 bg-bg-light">
+      <div className="container max-w-6xl">
         {/* Section Header */}
-        <div className="max-w-2xl mb-10">
-          <h2 className="text-2xl font-semibold text-white">
-            Voice AI Has a Security Problem
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-semibold text-text-light-bg">
+            Voice AI Has a Security Gap
           </h2>
-          <p className="mt-3 text-sm text-midnight-400 leading-relaxed">
-            Voice AI is entering production faster than security teams can evaluate it. Sales agents, support bots, healthcare assistants, and internal tools are being deployed with direct access to customers, sensitive data, and backend systems.
-          </p>
-          <p className="mt-3 text-sm text-midnight-400">
-            The attack surface is significant:
+          <p className="mt-4 text-lg text-text-light-muted max-w-[720px] mx-auto">
+            Agents are being deployed into production with direct access to customers,
+            sensitive data, and backend systems. The attack surface is already being exploited.
           </p>
         </div>
 
-        {/* Threats Grid */}
+        {/* Threat Cards */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {threats.map((threat) => (
             <div
               key={threat.title}
-              className="p-5 bg-midnight-800 border border-midnight-700 rounded"
+              className="bg-white border border-border rounded-lg p-8"
             >
-              <div className="w-9 h-9 bg-critical-700/20 rounded flex items-center justify-center mb-4">
-                <threat.icon className="w-4 h-4 text-critical-500" />
+              <div className="mb-4">
+                <threat.icon className="w-6 h-6 text-primary" strokeWidth={1.5} />
               </div>
-              <h3 className="text-sm font-medium text-white mb-2">{threat.title}</h3>
-              <p className="text-xs text-midnight-400 leading-relaxed">
+              <h3 className="text-lg font-semibold text-text-light-bg mb-2">
+                {threat.title}
+              </h3>
+              <p className="text-base text-text-light-muted leading-relaxed">
                 {threat.description}
               </p>
             </div>
           ))}
         </div>
-
-        {/* Bottom Note */}
-        <p className="mt-8 text-sm text-midnight-400 max-w-2xl">
-          These aren't theoretical risks. They're documented attack patterns being used against production voice agents today.
-        </p>
       </div>
     </section>
   );

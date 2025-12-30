@@ -18,10 +18,46 @@ const config: Config = {
     },
     extend: {
       colors: {
-        // Enterprise Security Design System
-        // Midnight Blue + Steel Gray palette
+        // Landing Page Design System
 
-        // Core Brand Colors
+        // Backgrounds
+        'bg-dark': '#0B1220',
+        'bg-light': '#F9FAFB',
+        'bg-card': '#FFFFFF',
+        'bg-card-dark': '#111827',
+        'bg-footer': '#020617',
+
+        // Primary
+        primary: {
+          DEFAULT: '#2563EB',
+          hover: '#1D4ED8',
+          foreground: '#FFFFFF',
+        },
+
+        // Secondary (highlights, badges)
+        secondary: {
+          DEFAULT: '#38BDF8',
+          foreground: '#0B1220',
+        },
+
+        // Text colors
+        'text-dark-bg': '#E5E7EB',
+        'text-dark-muted': '#9CA3AF',
+        'text-light-bg': '#020617',
+        'text-light-muted': '#64748B',
+
+        // Borders
+        border: {
+          DEFAULT: '#CBD5E1',
+          dark: '#1F2937',
+        },
+
+        // Status colors
+        'status-blocked': '#DC2626',
+        'status-passed': '#16A34A',
+        'status-warning': '#D97706',
+
+        // Legacy compatibility - midnight colors (for dashboard)
         midnight: {
           DEFAULT: '#1E293B',
           50: '#F8FAFC',
@@ -37,7 +73,7 @@ const config: Config = {
           950: '#020617',
         },
 
-        // Accent Blue (use sparingly - <15% of UI)
+        // Accent Blue (for dashboard)
         accent: {
           DEFAULT: '#2563EB',
           50: '#EFF6FF',
@@ -52,7 +88,7 @@ const config: Config = {
           900: '#1E3A8A',
         },
 
-        // Status Colors (state-driven only)
+        // Status Colors (for dashboard)
         secure: {
           DEFAULT: '#15803D',
           50: '#F0FDF4',
@@ -80,12 +116,6 @@ const config: Config = {
           700: '#B91C1C',
         },
 
-        // Semantic aliases for compatibility
-        primary: {
-          DEFAULT: '#1E293B',
-          foreground: '#FFFFFF',
-        },
-
         success: {
           DEFAULT: '#15803D',
           foreground: '#FFFFFF',
@@ -97,15 +127,10 @@ const config: Config = {
         },
 
         // Shadcn UI compatibility
-        border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
-        secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
-        },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))',
@@ -125,28 +150,28 @@ const config: Config = {
       },
 
       borderRadius: {
-        // Sharp, architectural corners (4-6px max)
-        lg: '6px',
-        md: '4px',
-        sm: '2px',
-        DEFAULT: '4px',
+        lg: '8px',
+        md: '6px',
+        sm: '4px',
+        DEFAULT: '6px',
       },
 
       fontFamily: {
         sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'SF Mono', 'Fira Code', 'monospace'],
+        mono: ['JetBrains Mono', 'Fira Code', 'SF Mono', 'monospace'],
       },
 
       fontSize: {
-        'xs': ['0.75rem', { lineHeight: '1.5' }],
-        'sm': ['0.875rem', { lineHeight: '1.5' }],
-        'base': ['1rem', { lineHeight: '1.6' }],
-        'lg': ['1.125rem', { lineHeight: '1.5' }],
-        'xl': ['1.25rem', { lineHeight: '1.4' }],
-        '2xl': ['1.5rem', { lineHeight: '1.3' }],
-        '3xl': ['1.875rem', { lineHeight: '1.25' }],
-        '4xl': ['2.25rem', { lineHeight: '1.2' }],
-        '5xl': ['3rem', { lineHeight: '1.1' }],
+        'xs': ['0.75rem', { lineHeight: '1.5' }],      // 12px
+        'sm': ['0.875rem', { lineHeight: '1.5' }],     // 14px
+        'base': ['1rem', { lineHeight: '1.6' }],       // 16px
+        'lg': ['1.125rem', { lineHeight: '1.6' }],     // 18px
+        'xl': ['1.25rem', { lineHeight: '1.6' }],      // 20px
+        '2xl': ['1.5rem', { lineHeight: '1.3' }],      // 24px
+        '3xl': ['1.875rem', { lineHeight: '1.25' }],   // 30px
+        '4xl': ['2.5rem', { lineHeight: '1.2' }],      // 40px
+        '5xl': ['3rem', { lineHeight: '1.1' }],        // 48px
+        '6xl': ['3.5rem', { lineHeight: '1.1' }],      // 56px - Hero headline
       },
 
       spacing: {
@@ -155,10 +180,13 @@ const config: Config = {
       },
 
       boxShadow: {
-        // Minimal shadows - prefer borders
         'xs': '0 1px 2px 0 rgb(0 0 0 / 0.03)',
         'sm': '0 1px 2px 0 rgb(0 0 0 / 0.05)',
         'DEFAULT': '0 1px 3px 0 rgb(0 0 0 / 0.05)',
+      },
+
+      letterSpacing: {
+        'tighter': '-0.02em',
       },
 
       keyframes: {
@@ -170,11 +198,16 @@ const config: Config = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
+        'fade-in': {
+          from: { opacity: '0' },
+          to: { opacity: '1' },
+        },
       },
 
       animation: {
         'accordion-down': 'accordion-down 0.15s ease-out',
         'accordion-up': 'accordion-up 0.15s ease-out',
+        'fade-in': 'fade-in 0.2s ease-out',
       },
     },
   },

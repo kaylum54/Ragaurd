@@ -1,67 +1,57 @@
 import Link from 'next/link';
-import { ArrowRight, Shield, Zap, Ban, Clock } from 'lucide-react';
+
+const stats = [
+  { value: '99.53%', label: 'Attack block rate' },
+  { value: '0.00%', label: 'False positive rate' },
+  { value: '<200ms', label: 'Response latency' },
+  { value: '6', label: 'Defense layers' },
+];
 
 export function Hero() {
   return (
-    <section className="relative pt-28 pb-16 bg-[#F9FAFB]">
-      <div className="container">
-        <div className="max-w-3xl mx-auto text-center">
-          {/* Main Headline */}
-          <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-midnight-950 leading-[1.15]">
-            Your Voice AI Agents Are
-            <br />
-            Already Being Attacked
-          </h1>
+    <section className="relative bg-bg-dark pt-32 pb-20">
+      <div className="container max-w-[800px] mx-auto text-center">
+        {/* Headline */}
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tighter text-white leading-[1.1]">
+          Your Voice Agents Are Unprotected
+        </h1>
 
-          {/* Subheadline */}
-          <p className="mt-6 text-base text-midnight-600 max-w-2xl mx-auto leading-relaxed">
-            Ragaurd is the security layer that sits between your voice agents and the threats targeting them. One API. Real-time protection. No false positives.
-          </p>
+        {/* Subheadline */}
+        <p className="mt-6 text-lg md:text-xl text-text-dark-bg leading-relaxed max-w-[640px] mx-auto">
+          Voice AI is entering production without security controls. Ragaurd is the
+          defense layer that blocks prompt injection, jailbreaks, and deepfake audio
+          before they reach your agents.
+        </p>
 
-          {/* CTA Buttons */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Link
-              href="/signup"
-              className="inline-flex items-center gap-2 bg-midnight-800 hover:bg-midnight-900 text-white font-medium px-5 py-2.5 rounded transition-colors"
-            >
-              Start Free
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <p className="text-sm text-midnight-500">
-              500 requests/month, no credit card required
-            </p>
-          </div>
-
-          {/* Hero Stats Bar */}
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm text-midnight-600">
-            <span className="flex items-center gap-1.5">
-              <Shield className="w-4 h-4 text-secure-600" />
-              <span className="font-medium">99.53%</span> attack block rate
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Ban className="w-4 h-4 text-secure-600" />
-              <span className="font-medium">0%</span> false positives
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Clock className="w-4 h-4 text-midnight-500" />
-              <span className="font-medium">&lt;200ms</span> latency
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Zap className="w-4 h-4 text-midnight-500" />
-              <span className="font-medium">6-layer</span> defense
-            </span>
-          </div>
+        {/* CTA Group */}
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <Link
+            href="/signup"
+            className="inline-flex items-center justify-center bg-primary hover:bg-primary-hover text-white font-medium px-8 py-4 rounded-md transition-colors"
+          >
+            Start Free
+          </Link>
+          <Link
+            href="/docs"
+            className="inline-flex items-center justify-center bg-transparent text-text-dark-bg border border-border hover:border-white font-medium px-8 py-4 rounded-md transition-colors"
+          >
+            View Documentation
+          </Link>
         </div>
 
-        {/* Platform Compatibility */}
-        <div className="mt-16 text-center">
-          <p className="text-xs font-medium text-midnight-400 uppercase tracking-wide mb-4">Works with your stack</p>
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-midnight-500 font-medium">
-            <span>Vapi</span>
-            <span>Retell</span>
-            <span>Bland AI</span>
-            <span>ElevenLabs</span>
-            <span className="text-midnight-400">+ custom implementations</span>
+        {/* Stats Bar */}
+        <div className="mt-16 pt-8 border-t border-border-dark">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {stats.map((stat) => (
+              <div key={stat.label} className="text-center">
+                <div className="text-2xl md:text-3xl font-semibold text-white">
+                  {stat.value}
+                </div>
+                <div className="mt-1 text-sm text-text-dark-muted">
+                  {stat.label}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
