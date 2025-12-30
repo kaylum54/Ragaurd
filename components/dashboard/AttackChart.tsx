@@ -20,15 +20,15 @@ const categoryLabels: Record<string, string> = {
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white border border-midnight-200 rounded p-3">
+      <div className="bg-midnight-900 border border-midnight-700 rounded px-2.5 py-2 shadow-lg">
         <div className="flex items-center gap-2">
           <div
             className="w-2 h-2 rounded-sm"
             style={{ backgroundColor: payload[0].payload.color }}
           />
-          <span className="text-xs text-midnight-900">{payload[0].name}</span>
+          <span className="text-[11px] text-white">{payload[0].name}</span>
         </div>
-        <p className="text-sm font-semibold text-midnight-900 mt-1">{payload[0].value} blocked</p>
+        <p className="text-xs font-bold text-white mt-1 tabular-nums">{payload[0].value} blocked</p>
       </div>
     );
   }
@@ -59,67 +59,69 @@ export function AttackChart() {
 
   if (loading) {
     return (
-      <div className="bg-white rounded border border-midnight-200 p-5">
-        <div className="mb-5">
-          <h2 className="text-base font-medium text-midnight-950">Threat Categories</h2>
-          <p className="text-xs text-midnight-500 mt-0.5">Blocked threats by type</p>
+      <div className="bg-white rounded border border-midnight-300/60 overflow-hidden">
+        <div className="px-3 py-2 bg-midnight-50/80 border-b border-midnight-200/60">
+          <h2 className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">Threat Categories</h2>
         </div>
-        <div className="h-[230px] flex items-center justify-center">
-          <Loader2 className="h-6 w-6 animate-spin text-midnight-400" />
+        <div className="h-[220px] flex items-center justify-center">
+          <Loader2 className="h-5 w-5 animate-spin text-midnight-400" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded border border-midnight-200 p-5">
-      <div className="mb-5">
-        <h2 className="text-base font-medium text-midnight-950">Threat Categories</h2>
-        <p className="text-xs text-midnight-500 mt-0.5">Blocked threats by type</p>
+    <div className="bg-white rounded border border-midnight-300/60 overflow-hidden">
+      {/* Header */}
+      <div className="px-3 py-2 bg-midnight-50/80 border-b border-midnight-200/60">
+        <h2 className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">Threat Categories</h2>
       </div>
-      <div className="flex items-center gap-6">
-        <div className="relative h-[200px] w-[200px] flex-shrink-0">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={chartData}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={85}
-                paddingAngle={1}
-                dataKey="value"
-              >
-                {chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} stroke="transparent" />
-                ))}
-              </Pie>
-              <Tooltip content={<CustomTooltip />} />
-            </PieChart>
-          </ResponsiveContainer>
-          {/* Center label */}
-          <div className="absolute inset-0 flex items-center justify-center flex-col">
-            <span className="text-2xl font-semibold text-midnight-950 tabular-nums">{total}</span>
-            <span className="text-xs text-midnight-500 uppercase tracking-wide">Blocked</span>
-          </div>
-        </div>
-
-        {/* Legend */}
-        <div className="flex-1 space-y-2">
-          {chartData.map((entry) => (
-            <div key={entry.name} className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div
-                  className="w-2.5 h-2.5 rounded-sm"
-                  style={{ backgroundColor: entry.color }}
-                />
-                <span className="text-xs text-midnight-600">{entry.name}</span>
-              </div>
-              <span className="text-xs font-medium text-midnight-900 tabular-nums">
-                {total > 0 ? Math.round((entry.value / total) * 100) : 0}%
-              </span>
+      {/* Body */}
+      <div className="p-3">
+        <div className="flex items-center gap-4">
+          <div className="relative h-[180px] w-[180px] flex-shrink-0">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={chartData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={50}
+                  outerRadius={75}
+                  paddingAngle={1}
+                  dataKey="value"
+                >
+                  {chartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} stroke="transparent" />
+                  ))}
+                </Pie>
+                <Tooltip content={<CustomTooltip />} />
+              </PieChart>
+            </ResponsiveContainer>
+            {/* Center label */}
+            <div className="absolute inset-0 flex items-center justify-center flex-col">
+              <span className="text-xl font-bold text-midnight-950 tabular-nums">{total}</span>
+              <span className="text-[9px] text-midnight-500 uppercase tracking-wide font-semibold">Blocked</span>
             </div>
-          ))}
+          </div>
+
+          {/* Legend */}
+          <div className="flex-1 space-y-1.5">
+            {chartData.map((entry) => (
+              <div key={entry.name} className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <div
+                    className="w-2 h-2 rounded-sm"
+                    style={{ backgroundColor: entry.color }}
+                  />
+                  <span className="text-[11px] text-midnight-600">{entry.name}</span>
+                </div>
+                <span className="text-[11px] font-semibold text-midnight-900 tabular-nums">
+                  {total > 0 ? Math.round((entry.value / total) * 100) : 0}%
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

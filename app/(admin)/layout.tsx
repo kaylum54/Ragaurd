@@ -41,25 +41,25 @@ export default function AdminLayout({
   };
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB]">
+    <div className="min-h-screen bg-[#EBEEF2]">
       {/* Sidebar */}
       <aside
         className={cn(
-          'fixed left-0 top-0 z-40 h-screen bg-midnight-900 transition-all duration-200',
-          collapsed ? 'w-14' : 'w-60'
+          'fixed left-0 top-0 z-40 h-screen bg-midnight-900 border-r border-midnight-800 transition-all duration-150',
+          collapsed ? 'w-12' : 'w-52'
         )}
       >
         <div className="flex h-full flex-col">
           {/* Logo */}
-          <div className="flex h-14 items-center justify-between px-3 border-b border-midnight-800">
+          <div className="flex h-11 items-center justify-between px-3 border-b border-midnight-800">
             {!collapsed && (
               <Link href="/admin" className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded bg-critical-700 flex items-center justify-center">
-                  <Shield className="w-4 h-4 text-white" />
+                <div className="w-6 h-6 rounded bg-critical-600 flex items-center justify-center">
+                  <Shield className="w-3.5 h-3.5 text-white" />
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="font-semibold text-white">RAGuard</span>
-                  <span className="text-[10px] font-medium px-1.5 py-0.5 bg-critical-700 text-white rounded">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-bold text-sm text-white tracking-tight">RAGuard</span>
+                  <span className="text-[9px] font-bold px-1 py-0.5 bg-critical-600 text-white rounded">
                     ADMIN
                   </span>
                 </div>
@@ -67,17 +67,17 @@ export default function AdminLayout({
             )}
             {collapsed && (
               <Link href="/admin" className="mx-auto">
-                <div className="w-7 h-7 rounded bg-critical-700 flex items-center justify-center">
-                  <Shield className="w-4 h-4 text-white" />
+                <div className="w-6 h-6 rounded bg-critical-600 flex items-center justify-center">
+                  <Shield className="w-3.5 h-3.5 text-white" />
                 </div>
               </Link>
             )}
             {!collapsed && (
               <button
-                className="p-1 rounded text-midnight-400 hover:text-white hover:bg-midnight-800 transition-colors"
+                className="p-1 rounded text-midnight-500 hover:text-midnight-300 hover:bg-midnight-800 transition-colors"
                 onClick={() => setCollapsed(!collapsed)}
               >
-                <ChevronLeft className="h-4 w-4" />
+                <ChevronLeft className="h-3.5 w-3.5" />
               </button>
             )}
           </div>
@@ -85,17 +85,17 @@ export default function AdminLayout({
           {/* Expand button when collapsed */}
           {collapsed && (
             <button
-              className="mx-auto mt-3 p-1 rounded text-midnight-400 hover:text-white hover:bg-midnight-800 transition-colors"
+              className="mx-auto mt-2 p-1 rounded text-midnight-500 hover:text-midnight-300 hover:bg-midnight-800 transition-colors"
               onClick={() => setCollapsed(!collapsed)}
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-3.5 w-3.5" />
             </button>
           )}
 
           {/* Navigation */}
-          <nav className="flex-1 overflow-y-auto p-2 space-y-0.5">
+          <nav className="flex-1 overflow-y-auto p-1.5 space-y-0.5">
             {!collapsed && (
-              <div className="text-xs font-medium uppercase tracking-wide text-midnight-500 px-3 mb-2 mt-2">
+              <div className="text-[10px] font-semibold uppercase tracking-wider text-midnight-500 px-2.5 py-1.5 mt-1">
                 Admin
               </div>
             )}
@@ -105,10 +105,10 @@ export default function AdminLayout({
                 <Link key={item.href} href={item.href}>
                   <div
                     className={cn(
-                      'flex items-center gap-2.5 px-3 py-2 rounded text-sm font-medium transition-colors',
+                      'flex items-center gap-2 px-2.5 py-1.5 rounded text-[13px] font-medium transition-colors',
                       isActive
-                        ? 'bg-critical-700 text-white'
-                        : 'text-midnight-400 hover:bg-midnight-800 hover:text-white'
+                        ? 'bg-critical-600 text-white'
+                        : 'text-midnight-400 hover:bg-midnight-800/50 hover:text-midnight-200'
                     )}
                   >
                     <item.icon
@@ -125,10 +125,10 @@ export default function AdminLayout({
           </nav>
 
           {/* Footer */}
-          <div className="p-2 border-t border-midnight-800 space-y-0.5">
+          <div className="p-1.5 border-t border-midnight-800 space-y-0.5">
             {!collapsed && (
               <Link href="/dashboard">
-                <div className="flex items-center gap-2.5 px-3 py-2 rounded text-sm font-medium text-midnight-400 hover:bg-midnight-800 hover:text-white transition-colors">
+                <div className="flex items-center gap-2 px-2.5 py-1.5 rounded text-[13px] font-medium text-midnight-400 hover:bg-midnight-800/50 hover:text-midnight-200 transition-colors">
                   <ArrowLeft className="h-4 w-4 text-midnight-500" />
                   <span className="flex-1">Back to Dashboard</span>
                 </div>
@@ -137,7 +137,7 @@ export default function AdminLayout({
             <button
               onClick={handleLogout}
               className={cn(
-                'flex items-center gap-2.5 px-3 py-2 rounded text-sm font-medium w-full text-critical-400 hover:bg-critical-900/50 hover:text-critical-300 transition-colors',
+                'flex items-center gap-2 px-2.5 py-1.5 rounded text-[13px] font-medium w-full text-critical-400 hover:bg-critical-900/50 hover:text-critical-300 transition-colors',
                 collapsed && 'justify-center'
               )}
             >
@@ -151,13 +151,14 @@ export default function AdminLayout({
       {/* Header */}
       <header
         className={cn(
-          'fixed top-0 right-0 z-30 h-14 bg-white border-b border-midnight-200 transition-all duration-200',
-          collapsed ? 'left-14' : 'left-60'
+          'fixed top-0 right-0 z-30 h-11 bg-white border-b border-midnight-300/60 transition-all duration-150',
+          collapsed ? 'left-12' : 'left-52'
         )}
       >
-        <div className="flex h-full items-center justify-between px-4">
-          <div className="text-sm font-medium text-midnight-900">Admin Dashboard</div>
-          <div className="flex items-center gap-1.5 px-2 py-1 bg-critical-50 border border-critical-200 rounded text-xs font-medium text-critical-700">
+        <div className="flex h-full items-center justify-between px-3">
+          <div className="text-xs font-semibold text-midnight-900">Admin Dashboard</div>
+          <div className="flex items-center gap-1.5 px-2 py-1 bg-critical-600 rounded text-[10px] font-bold text-white">
+            <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
             ADMIN MODE
           </div>
         </div>
@@ -166,11 +167,11 @@ export default function AdminLayout({
       {/* Main Content */}
       <main
         className={cn(
-          'pt-14 min-h-screen transition-all duration-200',
-          collapsed ? 'pl-14' : 'pl-60'
+          'pt-11 min-h-screen transition-all duration-150',
+          collapsed ? 'pl-12' : 'pl-52'
         )}
       >
-        <div className="p-6 max-w-[1400px]">{children}</div>
+        <div className="p-4 max-w-[1600px]">{children}</div>
       </main>
     </div>
   );

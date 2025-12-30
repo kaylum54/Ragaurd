@@ -1,11 +1,6 @@
 'use client';
 
-import Link from 'next/link';
-import { CreditCard, Check, ArrowRight, ExternalLink, Zap, Loader2 } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { CreditCard, Check, Download, ExternalLink, Zap, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUsageStats } from '@/hooks/useUsage';
 
@@ -55,185 +50,191 @@ export default function BillingPage() {
   const redteamPercent = stats.redteam.limit > 0 ? (stats.redteam.used / stats.redteam.limit) * 100 : 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Billing & Subscription</h1>
-        <p className="text-muted-foreground">
-          Manage your subscription and payment methods
+        <h1 className="text-lg font-bold text-midnight-950">Billing & Subscription</h1>
+        <p className="text-xs text-midnight-500 mt-0.5">
+          Manage your plan and payment methods
         </p>
       </div>
 
       {/* Current Plan */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-start justify-between">
-            <div>
-              <CardTitle>Current Plan</CardTitle>
-              <CardDescription>
-                Your subscription renews on {new Date(subscription.currentPeriodEnd).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-              </CardDescription>
-            </div>
-            <Badge variant="success" className="bg-success text-white">
-              {subscription.status}
-            </Badge>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-6">
+      <div className="bg-white rounded border border-midnight-300/60 overflow-hidden">
+        <div className="px-3 py-2 bg-midnight-50/80 border-b border-midnight-200/60 flex items-center justify-between">
+          <h2 className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">Current Plan</h2>
+          <span className="text-[10px] font-bold px-1.5 py-0.5 bg-secure-600 text-white rounded uppercase">
+            {subscription.status}
+          </span>
+        </div>
+        <div className="p-4 space-y-4">
           <div className="flex items-center gap-4">
-            <div className="h-16 w-16 rounded-xl bg-primary-100 flex items-center justify-center">
-              <Zap className="h-8 w-8 text-primary-600" />
+            <div className="h-12 w-12 rounded bg-accent-100 border border-accent-200 flex items-center justify-center">
+              <Zap className="h-6 w-6 text-accent-600" />
             </div>
             <div>
-              <div className="text-2xl font-bold">{subscription.planName}</div>
-              <div className="text-muted-foreground">
-                ${(subscription.priceMonthly / 100).toFixed(0)}/month
+              <div className="text-lg font-bold text-midnight-950">{subscription.planName}</div>
+              <div className="text-xs text-midnight-500">
+                ${(subscription.priceMonthly / 100).toFixed(0)}/month · Renews {new Date(subscription.currentPeriodEnd).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
               </div>
             </div>
           </div>
 
           {/* Usage */}
-          <div className="space-y-4">
-            {loading ? (
-              <div className="flex items-center justify-center py-4">
-                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+          {loading ? (
+            <div className="flex items-center justify-center py-4">
+              <Loader2 className="h-5 w-5 animate-spin text-midnight-400" />
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-xs font-medium text-midnight-700">Text Requests</span>
+                  <span className="text-xs text-midnight-500 tabular-nums font-medium">
+                    {stats.text.used.toLocaleString()} / {stats.text.limit.toLocaleString()}
+                  </span>
+                </div>
+                <div className="h-2 bg-midnight-100 rounded-sm overflow-hidden">
+                  <div
+                    className="h-full bg-midnight-700 rounded-sm transition-all"
+                    style={{ width: `${Math.min(textPercent, 100)}%` }}
+                  />
+                </div>
               </div>
-            ) : (
-              <>
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">Text Requests</span>
-                    <span className="text-sm text-muted-foreground">
-                      {stats.text.used.toLocaleString()} / {stats.text.limit.toLocaleString()}
-                    </span>
-                  </div>
-                  <Progress value={textPercent} className="h-2" />
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-xs font-medium text-midnight-700">Audio Requests</span>
+                  <span className="text-xs text-midnight-500 tabular-nums font-medium">
+                    {stats.audio.used.toLocaleString()} / {stats.audio.limit.toLocaleString()}
+                  </span>
                 </div>
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">Audio Requests</span>
-                    <span className="text-sm text-muted-foreground">
-                      {stats.audio.used.toLocaleString()} / {stats.audio.limit.toLocaleString()}
-                    </span>
-                  </div>
-                  <Progress value={audioPercent} className="h-2" />
+                <div className="h-2 bg-midnight-100 rounded-sm overflow-hidden">
+                  <div
+                    className="h-full bg-accent-600 rounded-sm transition-all"
+                    style={{ width: `${Math.min(audioPercent, 100)}%` }}
+                  />
                 </div>
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">Red Team Attacks</span>
-                    <span className="text-sm text-muted-foreground">
-                      {stats.redteam.used.toLocaleString()} / {stats.redteam.limit.toLocaleString()}
-                    </span>
-                  </div>
-                  <Progress value={redteamPercent} className="h-2" />
+              </div>
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-xs font-medium text-midnight-700">Red Team Attacks</span>
+                  <span className="text-xs text-midnight-500 tabular-nums font-medium">
+                    {stats.redteam.used.toLocaleString()} / {stats.redteam.limit.toLocaleString()}
+                  </span>
                 </div>
-              </>
-            )}
+                <div className="h-2 bg-midnight-100 rounded-sm overflow-hidden">
+                  <div
+                    className="h-full bg-warning-600 rounded-sm transition-all"
+                    style={{ width: `${Math.min(redteamPercent, 100)}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="flex gap-2 pt-2 border-t border-midnight-100">
+            <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded border border-midnight-200 text-midnight-700 hover:bg-midnight-50 transition-colors">
+              <ExternalLink className="h-3.5 w-3.5" />
+              Manage Subscription
+            </button>
+            <button className="px-3 py-1.5 text-xs font-medium rounded border border-midnight-200 text-midnight-700 hover:bg-midnight-50 transition-colors">
+              Update Payment Method
+            </button>
           </div>
-        </CardContent>
-        <CardFooter className="flex gap-4">
-          <Button variant="outline">
-            <ExternalLink className="mr-2 h-4 w-4" />
-            Manage Subscription
-          </Button>
-          <Button variant="outline">Update Payment Method</Button>
-        </CardFooter>
-      </Card>
+        </div>
+      </div>
 
       {/* Available Plans */}
-      <div className="space-y-4">
-        <h2 className="text-lg font-semibold">Available Plans</h2>
-        <div className="grid md:grid-cols-3 gap-6">
+      <div>
+        <h2 className="text-sm font-semibold text-midnight-900 mb-3">Available Plans</h2>
+        <div className="grid md:grid-cols-3 gap-3">
           {plans.map((plan) => (
-            <Card
+            <div
               key={plan.id}
               className={cn(
-                'relative',
-                plan.current && 'border-primary-500 border-2'
+                'bg-white rounded border overflow-hidden',
+                plan.current ? 'border-accent-500 border-2' : 'border-midnight-300/60'
               )}
             >
               {plan.current && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <Badge className="bg-primary-600">Current Plan</Badge>
+                <div className="bg-accent-600 text-white text-[10px] font-bold uppercase tracking-wide text-center py-1">
+                  Current Plan
                 </div>
               )}
-              <CardHeader>
-                <CardTitle>{plan.name}</CardTitle>
-                <div>
-                  <span className="text-3xl font-bold">
+              <div className="p-4">
+                <div className="text-sm font-semibold text-midnight-900">{plan.name}</div>
+                <div className="mt-1">
+                  <span className="text-2xl font-bold text-midnight-950 tabular-nums">
                     ${(plan.price / 100).toFixed(0)}
                   </span>
-                  <span className="text-muted-foreground">/month</span>
+                  <span className="text-xs text-midnight-500">/month</span>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2">
+                <ul className="mt-3 space-y-1.5">
                   {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2 text-sm">
-                      <Check className="h-4 w-4 text-success" />
+                    <li key={feature} className="flex items-center gap-1.5 text-xs text-midnight-600">
+                      <Check className="h-3.5 w-3.5 text-secure-600 shrink-0" />
                       {feature}
                     </li>
                   ))}
                 </ul>
-              </CardContent>
-              <CardFooter>
-                <Button
-                  className="w-full"
-                  variant={plan.current ? 'outline' : 'default'}
+                <button
+                  className={cn(
+                    'w-full mt-4 px-3 py-1.5 text-xs font-semibold rounded transition-colors',
+                    plan.current
+                      ? 'bg-midnight-100 text-midnight-500 cursor-not-allowed'
+                      : 'bg-midnight-800 text-white hover:bg-midnight-700'
+                  )}
                   disabled={plan.current}
                 >
                   {plan.current ? 'Current Plan' : 'Upgrade'}
-                </Button>
-              </CardFooter>
-            </Card>
+                </button>
+              </div>
+            </div>
           ))}
         </div>
       </div>
 
       {/* Invoices */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Invoice History</CardTitle>
-          <CardDescription>
-            Download past invoices and receipts
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {invoices.map((invoice) => (
-              <div
-                key={invoice.id}
-                className="flex items-center justify-between p-4 bg-slate-50 rounded-lg"
-              >
-                <div className="flex items-center gap-4">
-                  <CreditCard className="h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <div className="font-medium">
-                      {new Date(invoice.date).toLocaleDateString('en-US', {
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric',
-                      })}
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      ${(invoice.amount / 100).toFixed(2)}
-                    </div>
+      <div className="bg-white rounded border border-midnight-300/60 overflow-hidden">
+        <div className="px-3 py-2 bg-midnight-50/80 border-b border-midnight-200/60">
+          <h2 className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">Invoice History</h2>
+        </div>
+        <div className="divide-y divide-midnight-100">
+          {invoices.map((invoice) => (
+            <div
+              key={invoice.id}
+              className="flex items-center justify-between px-4 py-3 hover:bg-midnight-50/50 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <div className="h-8 w-8 rounded bg-midnight-100 flex items-center justify-center">
+                  <CreditCard className="h-4 w-4 text-midnight-600" />
+                </div>
+                <div>
+                  <div className="text-sm font-medium text-midnight-900">
+                    {new Date(invoice.date).toLocaleDateString('en-US', {
+                      month: 'long',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })}
+                  </div>
+                  <div className="text-xs text-midnight-500 tabular-nums">
+                    ${(invoice.amount / 100).toFixed(2)}
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
-                  <Badge variant="success" className="bg-success/10 text-success">
-                    {invoice.status}
-                  </Badge>
-                  <Button variant="ghost" size="sm">
-                    Download
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </div>
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] font-bold px-1.5 py-0.5 bg-secure-100 text-secure-700 rounded uppercase">
+                  {invoice.status}
+                </span>
+                <button className="flex items-center gap-1 text-xs font-medium text-midnight-600 hover:text-midnight-900 transition-colors">
+                  <Download className="h-3.5 w-3.5" />
+                  Download
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

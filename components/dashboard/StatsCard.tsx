@@ -1,4 +1,4 @@
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon, TrendingUp, TrendingDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface StatsCardProps {
@@ -24,35 +24,50 @@ export function StatsCard({
   return (
     <div
       className={cn(
-        'bg-white rounded border border-midnight-200 p-5',
+        'bg-white rounded border border-midnight-300/60 overflow-hidden',
         className
       )}
     >
-      <div className="flex items-start justify-between">
-        <div>
-          <div className="text-xs font-medium text-midnight-500 uppercase tracking-wide">
+      {/* Header */}
+      <div className="px-3 py-2 bg-midnight-50/80 border-b border-midnight-200/60">
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">
             {title}
-            {subtitle && <span className="text-midnight-400 ml-1">({subtitle})</span>}
-          </div>
-          <div className="text-2xl font-semibold text-midnight-950 tabular-nums mt-2">{value}</div>
-          {trend && (
-            <div className="mt-1.5">
-              <span
-                className={cn(
-                  'text-xs font-medium tabular-nums',
-                  trend.isPositive ? 'text-secure-700' : 'text-critical-700'
+          </span>
+          {subtitle && (
+            <span className="text-[10px] text-midnight-400">{subtitle}</span>
+          )}
+        </div>
+      </div>
+      {/* Body */}
+      <div className="px-3 py-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="text-2xl font-bold text-midnight-950 tabular-nums tracking-tight">{value}</div>
+            {trend && (
+              <div className="flex items-center gap-1 mt-1">
+                {trend.isPositive ? (
+                  <TrendingUp className="h-3 w-3 text-secure-600" />
+                ) : (
+                  <TrendingDown className="h-3 w-3 text-critical-600" />
                 )}
-              >
-                {trend.value > 0 ? '+' : ''}{trend.value}%
-              </span>
+                <span
+                  className={cn(
+                    'text-[11px] font-semibold tabular-nums',
+                    trend.isPositive ? 'text-secure-600' : 'text-critical-600'
+                  )}
+                >
+                  {trend.value > 0 ? '+' : ''}{trend.value}%
+                </span>
+              </div>
+            )}
+          </div>
+          {Icon && (
+            <div className="h-10 w-10 rounded bg-midnight-100 border border-midnight-200/60 flex items-center justify-center">
+              <Icon className="h-5 w-5 text-midnight-600" />
             </div>
           )}
         </div>
-        {Icon && (
-          <div className="h-9 w-9 rounded bg-midnight-100 flex items-center justify-center">
-            <Icon className="h-4 w-4 text-midnight-600" />
-          </div>
-        )}
       </div>
     </div>
   );

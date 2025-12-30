@@ -22,82 +22,82 @@ export function RecentRequests() {
   const { data: requests, loading } = useRecentRequests(8);
 
   return (
-    <div className="bg-white rounded border border-midnight-200 p-5">
-      <div className="mb-5">
-        <h2 className="text-base font-medium text-midnight-950">Recent Requests</h2>
-        <p className="text-xs text-midnight-500 mt-0.5">Latest API requests and status</p>
+    <div className="bg-white rounded border border-midnight-300/60 overflow-hidden">
+      {/* Header */}
+      <div className="px-3 py-2 bg-midnight-50/80 border-b border-midnight-200/60">
+        <h2 className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">Recent Requests</h2>
       </div>
 
       {loading ? (
-        <div className="h-[280px] flex items-center justify-center">
-          <Loader2 className="h-6 w-6 animate-spin text-midnight-400" />
+        <div className="h-[220px] flex items-center justify-center">
+          <Loader2 className="h-5 w-5 animate-spin text-midnight-400" />
         </div>
       ) : (
-        <div className="overflow-hidden rounded border border-midnight-200">
+        <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-midnight-50 border-b border-midnight-200">
+            <thead className="bg-midnight-50/50 border-b border-midnight-200/60">
               <tr>
-                <th className="px-3 py-2.5 text-left text-xs font-medium uppercase tracking-wide text-midnight-500">Status</th>
-                <th className="px-3 py-2.5 text-left text-xs font-medium uppercase tracking-wide text-midnight-500">Type</th>
-                <th className="px-3 py-2.5 text-left text-xs font-medium uppercase tracking-wide text-midnight-500">Details</th>
-                <th className="px-3 py-2.5 text-right text-xs font-medium uppercase tracking-wide text-midnight-500">Latency</th>
-                <th className="px-3 py-2.5 text-right text-xs font-medium uppercase tracking-wide text-midnight-500">Time</th>
+                <th className="px-2.5 py-1.5 text-left text-[10px] font-semibold uppercase tracking-wide text-midnight-500">Status</th>
+                <th className="px-2.5 py-1.5 text-left text-[10px] font-semibold uppercase tracking-wide text-midnight-500">Type</th>
+                <th className="px-2.5 py-1.5 text-left text-[10px] font-semibold uppercase tracking-wide text-midnight-500">Details</th>
+                <th className="px-2.5 py-1.5 text-right text-[10px] font-semibold uppercase tracking-wide text-midnight-500">Latency</th>
+                <th className="px-2.5 py-1.5 text-right text-[10px] font-semibold uppercase tracking-wide text-midnight-500">Time</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-midnight-100">
+            <tbody className="divide-y divide-midnight-100/60">
               {requests.map((request) => (
-                <tr key={request.id} className="hover:bg-midnight-50 transition-colors">
-                  <td className="px-3 py-2.5">
-                    <div className="flex items-center gap-2">
+                <tr key={request.id} className="hover:bg-midnight-50/50 transition-colors">
+                  <td className="px-2.5 py-2">
+                    <div className="flex items-center gap-1.5">
                       <div
                         className={cn(
-                          'h-6 w-6 rounded flex items-center justify-center',
-                          request.status === 'blocked' && 'bg-critical-50',
-                          request.status === 'passed' && 'bg-secure-50',
-                          request.status === 'error' && 'bg-warning-50'
+                          'h-5 w-5 rounded flex items-center justify-center',
+                          request.status === 'blocked' && 'bg-critical-100',
+                          request.status === 'passed' && 'bg-secure-100',
+                          request.status === 'error' && 'bg-warning-100'
                         )}
                       >
                         {request.status === 'blocked' ? (
-                          <AlertTriangle className="h-3.5 w-3.5 text-critical-600" />
+                          <AlertTriangle className="h-3 w-3 text-critical-600" />
                         ) : (
-                          <Shield className="h-3.5 w-3.5 text-secure-600" />
+                          <Shield className="h-3 w-3 text-secure-600" />
                         )}
                       </div>
                       <span
                         className={cn(
-                          'text-xs font-medium px-1.5 py-0.5 rounded border capitalize',
+                          'text-[10px] font-semibold px-1.5 py-0.5 rounded capitalize',
                           request.status === 'blocked'
-                            ? 'bg-critical-50 text-critical-700 border-critical-200'
-                            : 'bg-secure-50 text-secure-700 border-secure-200'
+                            ? 'bg-critical-600 text-white'
+                            : 'bg-secure-600 text-white'
                         )}
                       >
                         {request.status}
                       </span>
                     </div>
                   </td>
-                  <td className="px-3 py-2.5">
-                    <span className="text-xs font-medium px-1.5 py-0.5 bg-midnight-100 text-midnight-700 border border-midnight-200 rounded capitalize">
+                  <td className="px-2.5 py-2">
+                    <span className="text-[10px] font-semibold px-1.5 py-0.5 bg-midnight-200 text-midnight-700 rounded capitalize">
                       {request.type}
                     </span>
                   </td>
-                  <td className="px-3 py-2.5">
+                  <td className="px-2.5 py-2">
                     {request.threatCategory ? (
-                      <span className="text-xs text-midnight-600">
+                      <span className="text-[11px] text-midnight-600">
                         {request.blockedBy?.replace(/_/g, ' ')} - {request.threatCategory.replace(/_/g, ' ')}
                       </span>
                     ) : (
-                      <span className="text-xs text-midnight-400">—</span>
+                      <span className="text-[11px] text-midnight-400">—</span>
                     )}
                   </td>
-                  <td className="px-3 py-2.5 text-right">
-                    <span className="text-xs font-medium text-midnight-900 tabular-nums">
+                  <td className="px-2.5 py-2 text-right">
+                    <span className="text-[11px] font-semibold text-midnight-900 tabular-nums">
                       {request.latencyMs ? `${request.latencyMs}ms` : '—'}
                     </span>
                   </td>
-                  <td className="px-3 py-2.5 text-right">
+                  <td className="px-2.5 py-2 text-right">
                     <div className="flex items-center gap-1 justify-end text-midnight-500">
-                      <Clock className="h-3 w-3" />
-                      <span className="text-xs">{formatTimeAgo(request.timestamp)}</span>
+                      <Clock className="h-2.5 w-2.5" />
+                      <span className="text-[10px]">{formatTimeAgo(request.timestamp)}</span>
                     </div>
                   </td>
                 </tr>

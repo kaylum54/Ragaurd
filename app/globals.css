@@ -4,14 +4,14 @@
 
 /* ========================================
    RAGuard Enterprise Design System
-   Security-first, Infrastructure-grade UI
+   Dense, Operational, Security-grade UI
    ======================================== */
 
 @layer base {
   :root {
-    /* Light Theme - Clean, Professional */
-    --background: 210 20% 98%; /* #F9FAFB */
-    --foreground: 222 84% 5%; /* #020617 */
+    /* SOC Console Theme */
+    --background: 220 14% 96%; /* Slightly darker bg */
+    --foreground: 222 84% 5%;
 
     --card: 0 0% 100%;
     --card-foreground: 222 84% 5%;
@@ -19,26 +19,26 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 84% 5%;
 
-    --primary: 217 33% 17%; /* #1E293B */
+    --primary: 217 33% 17%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 20% 96%;
+    --secondary: 220 14% 94%;
     --secondary-foreground: 222 84% 5%;
 
-    --muted: 210 20% 96%;
-    --muted-foreground: 215 16% 47%; /* #475569 */
+    --muted: 220 14% 94%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 217 91% 60%; /* #2563EB */
+    --accent: 217 91% 60%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 72% 51%; /* #B91C1C */
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 32% 83%; /* #CBD5E1 */
-    --input: 214 32% 83%;
+    --border: 220 13% 84%;
+    --input: 220 13% 84%;
     --ring: 217 91% 60%;
 
-    --radius: 4px;
+    --radius: 3px;
   }
 }
 
@@ -50,6 +50,7 @@
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-size: 14px;
   }
 
   body {
@@ -58,7 +59,7 @@
   }
 
   ::selection {
-    @apply bg-accent-100 text-midnight-900;
+    @apply bg-midnight-800 text-white;
   }
 }
 
@@ -68,27 +69,27 @@
 
 @layer components {
   .heading-1 {
-    @apply text-4xl md:text-5xl font-semibold tracking-tight text-midnight-950;
+    @apply text-3xl font-bold tracking-tight text-midnight-950;
   }
 
   .heading-2 {
-    @apply text-2xl md:text-3xl font-semibold tracking-tight text-midnight-950;
+    @apply text-xl font-semibold tracking-tight text-midnight-950;
   }
 
   .heading-3 {
-    @apply text-xl md:text-2xl font-medium text-midnight-950;
+    @apply text-base font-semibold text-midnight-950;
   }
 
   .heading-4 {
-    @apply text-lg font-medium text-midnight-950;
+    @apply text-sm font-semibold text-midnight-900;
   }
 
   .body-large {
-    @apply text-base text-midnight-600 leading-relaxed;
+    @apply text-sm text-midnight-600 leading-relaxed;
   }
 
   .body {
-    @apply text-sm text-midnight-600;
+    @apply text-[13px] text-midnight-600;
   }
 
   .body-small {
@@ -96,73 +97,112 @@
   }
 
   .label {
-    @apply text-xs font-medium text-midnight-700 uppercase tracking-wide;
+    @apply text-[10px] font-semibold text-midnight-500 uppercase tracking-wider;
+  }
+
+  /* Metric typography - commanding presence */
+  .metric-xl {
+    @apply text-3xl font-bold text-midnight-950 tabular-nums tracking-tight;
+  }
+
+  .metric-lg {
+    @apply text-2xl font-bold text-midnight-950 tabular-nums tracking-tight;
   }
 
   .metric {
-    @apply text-2xl font-semibold text-midnight-950 tabular-nums;
+    @apply text-xl font-bold text-midnight-950 tabular-nums;
+  }
+
+  .metric-sm {
+    @apply text-lg font-semibold text-midnight-950 tabular-nums;
   }
 
   .metric-label {
-    @apply text-xs font-medium text-midnight-500 uppercase tracking-wide;
+    @apply text-[10px] font-semibold text-midnight-500 uppercase tracking-wider;
+  }
+
+  .metric-sublabel {
+    @apply text-[11px] text-midnight-500;
   }
 }
 
 /* ========================================
-   Cards - Solid, Architectural
+   Cards - Dense, Instrument-panel feel
    ======================================== */
 
 @layer components {
-  .card-base {
-    @apply bg-white rounded border border-midnight-200;
+  .card-panel {
+    @apply bg-white rounded border border-midnight-300/60 shadow-sm;
   }
 
-  .card-interactive {
-    @apply card-base transition-colors duration-150;
+  .card-panel-header {
+    @apply px-3 py-2 border-b border-midnight-200 bg-midnight-50/50;
   }
 
-  .card-interactive:hover {
-    @apply border-midnight-300;
+  .card-panel-title {
+    @apply text-xs font-semibold text-midnight-800 uppercase tracking-wide;
   }
 
-  .stat-card {
-    @apply card-base p-5;
+  .card-panel-body {
+    @apply p-3;
   }
 
-  .stat-value {
-    @apply text-2xl font-semibold text-midnight-950 tabular-nums;
+  .card-stat {
+    @apply bg-white rounded border border-midnight-300/60 shadow-sm p-3;
   }
 
-  .stat-label {
-    @apply text-xs font-medium text-midnight-500 uppercase tracking-wide mt-1;
+  .card-stat-compact {
+    @apply bg-white rounded border border-midnight-300/60 shadow-sm px-3 py-2.5;
   }
 
-  .stat-change {
-    @apply text-xs font-medium mt-2 flex items-center gap-1;
+  /* Stat card with icon */
+  .stat-icon-box {
+    @apply w-8 h-8 rounded bg-midnight-100 border border-midnight-200 flex items-center justify-center;
   }
 
-  .stat-change-positive {
-    @apply text-secure-700;
+  .stat-icon-box-accent {
+    @apply w-8 h-8 rounded bg-accent-50 border border-accent-200 flex items-center justify-center;
   }
 
-  .stat-change-negative {
-    @apply text-critical-700;
+  .stat-icon-box-secure {
+    @apply w-8 h-8 rounded bg-secure-50 border border-secure-200 flex items-center justify-center;
+  }
+
+  .stat-icon-box-warning {
+    @apply w-8 h-8 rounded bg-warning-50 border border-warning-200 flex items-center justify-center;
+  }
+
+  .stat-icon-box-critical {
+    @apply w-8 h-8 rounded bg-critical-50 border border-critical-200 flex items-center justify-center;
+  }
+
+  /* Trend indicators */
+  .trend-positive {
+    @apply text-[11px] font-semibold text-secure-700 flex items-center gap-0.5;
+  }
+
+  .trend-negative {
+    @apply text-[11px] font-semibold text-critical-700 flex items-center gap-0.5;
+  }
+
+  .trend-neutral {
+    @apply text-[11px] font-medium text-midnight-500 flex items-center gap-0.5;
   }
 }
 
 /* ========================================
-   Buttons - Firm, Deliberate
+   Buttons - Compact, Deliberate
    ======================================== */
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center font-medium rounded transition-colors duration-150;
+    @apply inline-flex items-center justify-center font-medium rounded transition-colors duration-100;
     @apply focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-accent;
     @apply disabled:opacity-50 disabled:pointer-events-none;
   }
 
   .btn-primary {
-    @apply btn bg-midnight-800 text-white;
+    @apply btn bg-midnight-800 text-white border border-midnight-900;
     @apply hover:bg-midnight-900;
   }
 
@@ -177,140 +217,207 @@
   }
 
   .btn-danger {
-    @apply btn bg-critical-700 text-white;
-    @apply hover:bg-critical-700/90;
+    @apply btn bg-critical-700 text-white border border-critical-800;
+    @apply hover:bg-critical-800;
   }
 
-  .btn-accent {
-    @apply btn bg-accent-600 text-white;
-    @apply hover:bg-accent-700;
+  .btn-xs {
+    @apply px-2 py-1 text-xs;
   }
 
   .btn-sm {
-    @apply px-3 py-1.5 text-sm;
+    @apply px-2.5 py-1.5 text-xs;
   }
 
   .btn-md {
-    @apply px-4 py-2 text-sm;
-  }
-
-  .btn-lg {
-    @apply px-5 py-2.5 text-sm;
-  }
-
-  .btn-icon {
-    @apply p-2;
+    @apply px-3 py-1.5 text-sm;
   }
 }
 
 /* ========================================
-   Navigation - Clean, Structured
+   Navigation - Anchored, Tool-like
    ======================================== */
 
 @layer components {
-  .nav-link {
-    @apply text-sm font-medium text-midnight-600 transition-colors duration-150;
-    @apply hover:text-midnight-900;
+  .sidebar {
+    @apply bg-midnight-900 border-r border-midnight-800;
   }
 
-  .nav-link-active {
-    @apply text-midnight-900;
+  .sidebar-header {
+    @apply h-11 px-3 flex items-center border-b border-midnight-800;
+  }
+
+  .sidebar-nav {
+    @apply p-1.5 space-y-0.5;
+  }
+
+  .sidebar-section-label {
+    @apply text-[10px] font-semibold uppercase tracking-wider text-midnight-500 px-2.5 py-1.5;
   }
 
   .sidebar-item {
-    @apply flex items-center gap-3 px-3 py-2 rounded text-sm font-medium;
-    @apply text-midnight-600 transition-colors duration-150;
-    @apply hover:bg-midnight-100 hover:text-midnight-900;
+    @apply flex items-center gap-2 px-2.5 py-1.5 rounded text-[13px] font-medium;
+    @apply text-midnight-400 transition-colors duration-100;
+    @apply hover:bg-midnight-800 hover:text-midnight-200;
   }
 
   .sidebar-item-active {
-    @apply bg-midnight-100 text-midnight-900;
+    @apply bg-midnight-800 text-white;
   }
 
-  .sidebar-section {
-    @apply text-xs font-medium uppercase tracking-wide text-midnight-400 px-3 mb-2;
+  .sidebar-item-active .sidebar-icon {
+    @apply text-accent-400;
+  }
+
+  .sidebar-icon {
+    @apply h-4 w-4 text-midnight-500;
+  }
+
+  .sidebar-badge {
+    @apply text-[10px] font-semibold px-1.5 py-0.5 rounded bg-midnight-700 text-midnight-300;
+  }
+
+  .sidebar-badge-pro {
+    @apply text-[10px] font-semibold px-1.5 py-0.5 rounded bg-accent-900/50 text-accent-400 border border-accent-800;
+  }
+
+  .sidebar-divider {
+    @apply h-px bg-midnight-800 my-1.5;
   }
 }
 
 /* ========================================
-   Forms - Precise, Controlled
+   Header - Compact operational bar
    ======================================== */
 
 @layer components {
-  .input-base {
-    @apply w-full px-3 py-2 text-sm rounded border border-midnight-300;
+  .topbar {
+    @apply h-11 bg-white border-b border-midnight-200 px-4 flex items-center justify-between;
+  }
+
+  .topbar-search {
+    @apply h-7 pl-7 pr-3 text-xs rounded border border-midnight-200 bg-midnight-50;
+    @apply text-midnight-900 placeholder:text-midnight-400;
+    @apply focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent focus:bg-white;
+  }
+
+  .topbar-status {
+    @apply flex items-center gap-1.5 px-2 py-1 rounded text-[11px] font-medium;
+    @apply bg-secure-50 border border-secure-200 text-secure-700;
+  }
+
+  .topbar-status-dot {
+    @apply w-1.5 h-1.5 rounded-full bg-secure-500;
+  }
+}
+
+/* ========================================
+   Forms - Compact, Precise
+   ======================================== */
+
+@layer components {
+  .input {
+    @apply w-full px-2.5 py-1.5 text-sm rounded border border-midnight-300;
     @apply bg-white text-midnight-900 placeholder:text-midnight-400;
     @apply focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent;
-    @apply transition-colors duration-150;
+    @apply transition-colors duration-100;
+  }
+
+  .input-sm {
+    @apply px-2 py-1 text-xs;
   }
 
   .input-error {
     @apply border-critical-500 focus:ring-critical-500 focus:border-critical-500;
   }
 
+  .form-group {
+    @apply space-y-1;
+  }
+
   .form-label {
-    @apply block text-xs font-medium text-midnight-700 uppercase tracking-wide mb-1.5;
+    @apply block text-[11px] font-semibold text-midnight-600 uppercase tracking-wide;
   }
 
   .form-helper {
-    @apply text-xs text-midnight-500 mt-1;
+    @apply text-[11px] text-midnight-500;
   }
 
   .form-error {
-    @apply text-xs text-critical-700 mt-1;
+    @apply text-[11px] text-critical-700;
+  }
+
+  .form-row {
+    @apply grid gap-3;
+  }
+
+  .form-section {
+    @apply pb-4 mb-4 border-b border-midnight-200;
+  }
+
+  .form-section:last-child {
+    @apply pb-0 mb-0 border-b-0;
+  }
+
+  .form-section-title {
+    @apply text-sm font-semibold text-midnight-900 mb-3;
   }
 }
 
 /* ========================================
-   Badges - Status-driven
+   Badges - Tight, Status-driven
    ======================================== */
 
 @layer components {
   .badge {
-    @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium;
+    @apply inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide;
   }
 
   .badge-secure {
-    @apply bg-secure-50 text-secure-700 border border-secure-200;
+    @apply bg-secure-100 text-secure-800 border border-secure-300;
   }
 
   .badge-warning {
-    @apply bg-warning-50 text-warning-700 border border-warning-200;
+    @apply bg-warning-100 text-warning-800 border border-warning-300;
   }
 
   .badge-critical {
-    @apply bg-critical-50 text-critical-700 border border-critical-200;
+    @apply bg-critical-100 text-critical-800 border border-critical-300;
   }
 
   .badge-neutral {
-    @apply bg-midnight-100 text-midnight-700 border border-midnight-200;
+    @apply bg-midnight-100 text-midnight-700 border border-midnight-300;
   }
 
   .badge-accent {
-    @apply bg-accent-50 text-accent-700 border border-accent-200;
+    @apply bg-accent-100 text-accent-800 border border-accent-300;
+  }
+
+  .badge-outline {
+    @apply bg-transparent text-midnight-600 border border-midnight-300;
   }
 }
 
 /* ========================================
-   Tables - Clean, Data-focused
+   Tables - Dense, Data-focused
    ======================================== */
 
 @layer components {
   .table-container {
-    @apply overflow-x-auto rounded border border-midnight-200 bg-white;
+    @apply overflow-x-auto rounded border border-midnight-300/60 bg-white shadow-sm;
   }
 
   .table-header {
-    @apply bg-midnight-50 border-b border-midnight-200;
+    @apply bg-midnight-100/80 border-b border-midnight-200;
   }
 
   .table-header-cell {
-    @apply px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-midnight-500;
+    @apply px-3 py-2 text-left text-[10px] font-semibold uppercase tracking-wider text-midnight-600;
   }
 
   .table-row {
-    @apply border-b border-midnight-100 transition-colors duration-150;
-    @apply hover:bg-midnight-50;
+    @apply border-b border-midnight-100 transition-colors duration-100;
+    @apply hover:bg-midnight-50/50;
   }
 
   .table-row:last-child {
@@ -318,55 +425,75 @@
   }
 
   .table-cell {
-    @apply px-4 py-3 text-sm text-midnight-900;
+    @apply px-3 py-2 text-[13px] text-midnight-900;
+  }
+
+  .table-cell-mono {
+    @apply font-mono text-xs;
   }
 
   .table-cell-muted {
     @apply text-midnight-500;
   }
+
+  .table-cell-action {
+    @apply px-2 py-1;
+  }
 }
 
 /* ========================================
-   Dashboard Layout - SOC Console
+   Dashboard Layout - Dense SOC Console
    ======================================== */
 
 @layer components {
   .dashboard-container {
-    @apply min-h-screen bg-[#F9FAFB];
+    @apply min-h-screen bg-[#EBEEF2];
   }
 
-  .dashboard-header {
-    @apply bg-white border-b border-midnight-200;
+  .dashboard-main {
+    @apply p-4;
   }
 
-  .dashboard-sidebar {
-    @apply bg-white border-r border-midnight-200 w-60 fixed left-0 top-0 h-screen;
+  .dashboard-grid {
+    @apply grid gap-3;
   }
 
-  .dashboard-content {
-    @apply p-6;
+  .dashboard-section {
+    @apply space-y-3;
+  }
+
+  .dashboard-section-header {
+    @apply flex items-center justify-between;
+  }
+
+  .dashboard-section-title {
+    @apply text-xs font-semibold text-midnight-600 uppercase tracking-wide;
   }
 
   .page-header {
-    @apply mb-6;
+    @apply flex items-center justify-between mb-4;
   }
 
   .page-title {
-    @apply text-xl font-semibold text-midnight-950;
+    @apply text-lg font-bold text-midnight-950;
   }
 
-  .page-description {
-    @apply text-sm text-midnight-500 mt-0.5;
+  .page-subtitle {
+    @apply text-xs text-midnight-500;
   }
 }
 
 /* ========================================
-   Status Indicators - Clear, Reliable
+   Status Indicators
    ======================================== */
 
 @layer components {
-  .status-indicator {
+  .status-dot {
     @apply w-2 h-2 rounded-full;
+  }
+
+  .status-dot-sm {
+    @apply w-1.5 h-1.5 rounded-full;
   }
 
   .status-healthy {
@@ -382,21 +509,33 @@
   }
 
   .status-inactive {
-    @apply bg-midnight-300;
+    @apply bg-midnight-400;
+  }
+
+  .status-row {
+    @apply flex items-center justify-between py-2 px-3 border-b border-midnight-100;
+  }
+
+  .status-row:last-child {
+    @apply border-b-0;
   }
 }
 
 /* ========================================
-   Progress - Minimal, Functional
+   Progress - Compact
    ======================================== */
 
 @layer components {
   .progress-bar {
-    @apply h-1.5 bg-midnight-100 rounded-sm overflow-hidden;
+    @apply h-1 bg-midnight-200 rounded-sm overflow-hidden;
+  }
+
+  .progress-bar-lg {
+    @apply h-1.5 bg-midnight-200 rounded-sm overflow-hidden;
   }
 
   .progress-fill {
-    @apply h-full rounded-sm transition-all duration-300;
+    @apply h-full transition-all duration-300;
   }
 
   .progress-default {
@@ -421,42 +560,76 @@
 }
 
 /* ========================================
-   Alerts - State-driven
+   Charts - Dense, Data-forward
    ======================================== */
 
 @layer components {
-  .alert {
-    @apply p-3 rounded border text-sm;
+  .chart-container {
+    @apply relative;
   }
 
-  .alert-info {
-    @apply bg-accent-50 border-accent-200 text-accent-800;
+  .chart-legend {
+    @apply flex items-center gap-4 text-[11px];
   }
 
-  .alert-success {
-    @apply bg-secure-50 border-secure-200 text-secure-800;
+  .chart-legend-item {
+    @apply flex items-center gap-1.5;
   }
 
-  .alert-warning {
-    @apply bg-warning-50 border-warning-200 text-warning-800;
+  .chart-legend-dot {
+    @apply w-2 h-2 rounded-sm;
   }
 
-  .alert-danger {
-    @apply bg-critical-50 border-critical-200 text-critical-800;
+  .chart-axis-label {
+    @apply text-[10px] text-midnight-500 font-medium tabular-nums;
+  }
+
+  .chart-tooltip {
+    @apply bg-midnight-900 text-white text-xs rounded px-2 py-1.5 shadow-lg;
   }
 }
 
 /* ========================================
-   Scrollbar - Minimal
+   Alerts
+   ======================================== */
+
+@layer components {
+  .alert {
+    @apply p-2.5 rounded border text-[13px] flex items-start gap-2;
+  }
+
+  .alert-icon {
+    @apply w-4 h-4 shrink-0 mt-0.5;
+  }
+
+  .alert-info {
+    @apply bg-accent-50 border-accent-300 text-accent-900;
+  }
+
+  .alert-success {
+    @apply bg-secure-50 border-secure-300 text-secure-900;
+  }
+
+  .alert-warning {
+    @apply bg-warning-50 border-warning-300 text-warning-900;
+  }
+
+  .alert-danger {
+    @apply bg-critical-50 border-critical-300 text-critical-900;
+  }
+}
+
+/* ========================================
+   Scrollbar
    ======================================== */
 
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-midnight-100;
+  @apply bg-transparent;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -480,7 +653,23 @@
     font-variant-numeric: tabular-nums;
   }
 
-  .section-divider {
-    @apply border-t border-midnight-200 my-6;
+  .divide-subtle > * + * {
+    @apply border-t border-midnight-100;
+  }
+
+  .grid-dense {
+    @apply grid gap-2;
+  }
+
+  .stack-tight {
+    @apply space-y-2;
+  }
+
+  .stack-compact {
+    @apply space-y-3;
+  }
+
+  .inline-stat {
+    @apply flex items-center justify-between;
   }
 }

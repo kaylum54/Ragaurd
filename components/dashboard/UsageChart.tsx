@@ -18,16 +18,16 @@ import { Loader2 } from 'lucide-react';
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white border border-midnight-200 rounded p-3">
-        <p className="text-xs font-medium text-midnight-900 mb-2">{label}</p>
+      <div className="bg-midnight-900 border border-midnight-700 rounded px-2.5 py-2 shadow-lg">
+        <p className="text-[10px] font-medium text-midnight-300 mb-1.5">{label}</p>
         {payload.map((entry: any, index: number) => (
-          <div key={index} className="flex items-center gap-2 text-xs">
+          <div key={index} className="flex items-center gap-2 text-[11px]">
             <div
               className="w-2 h-2 rounded-sm"
               style={{ backgroundColor: entry.color }}
             />
-            <span className="text-midnight-500">{entry.name}:</span>
-            <span className="text-midnight-900 tabular-nums font-medium">
+            <span className="text-midnight-400">{entry.name}:</span>
+            <span className="text-white tabular-nums font-semibold">
               {entry.value.toLocaleString()}
             </span>
           </div>
@@ -51,34 +51,36 @@ function ChartContent({ days }: { days: number }) {
 
   if (loading) {
     return (
-      <div className="h-[280px] flex items-center justify-center">
-        <Loader2 className="h-6 w-6 animate-spin text-midnight-400" />
+      <div className="h-[220px] flex items-center justify-center">
+        <Loader2 className="h-5 w-5 animate-spin text-midnight-400" />
       </div>
     );
   }
 
   return (
-    <div className="h-[280px]">
+    <div className="h-[220px]">
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={chartData}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+        <AreaChart data={chartData} margin={{ top: 5, right: 5, left: -15, bottom: 0 }}>
+          <CartesianGrid strokeDasharray="2 2" stroke="#E2E8F0" vertical={false} />
           <XAxis
             dataKey="date"
             stroke="#94A3B8"
-            fontSize={11}
+            fontSize={10}
             tickLine={false}
-            axisLine={{ stroke: '#E2E8F0' }}
+            axisLine={{ stroke: '#CBD5E1' }}
           />
           <YAxis
             stroke="#94A3B8"
-            fontSize={11}
+            fontSize={10}
             tickLine={false}
             axisLine={false}
+            width={35}
           />
           <Tooltip content={<CustomTooltip />} />
           <Legend
+            wrapperStyle={{ paddingTop: '8px' }}
             formatter={(value) => (
-              <span className="text-xs text-midnight-600">{value}</span>
+              <span className="text-[10px] font-medium text-midnight-600">{value}</span>
             )}
           />
           <Area
@@ -88,7 +90,7 @@ function ChartContent({ days }: { days: number }) {
             stroke="#1E293B"
             strokeWidth={1.5}
             fill="#1E293B"
-            fillOpacity={0.1}
+            fillOpacity={0.08}
           />
           <Area
             type="monotone"
@@ -97,7 +99,7 @@ function ChartContent({ days }: { days: number }) {
             stroke="#15803D"
             strokeWidth={1.5}
             fill="#15803D"
-            fillOpacity={0.1}
+            fillOpacity={0.08}
           />
         </AreaChart>
       </ResponsiveContainer>
@@ -109,30 +111,30 @@ export function UsageChart() {
   const [activeTab, setActiveTab] = useState('7d');
 
   return (
-    <div className="bg-white rounded border border-midnight-200 p-5">
-      <div className="flex items-center justify-between mb-5">
-        <div>
-          <h2 className="text-base font-medium text-midnight-950">Request Volume</h2>
-          <p className="text-xs text-midnight-500 mt-0.5">Daily requests and threat detection</p>
-        </div>
+    <div className="bg-white rounded border border-midnight-300/60 overflow-hidden">
+      {/* Header */}
+      <div className="px-3 py-2 bg-midnight-50/80 border-b border-midnight-200/60 flex items-center justify-between">
+        <h2 className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">Request Volume</h2>
         <div className="flex border border-midnight-200 rounded overflow-hidden">
           <button
-            className={`px-3 py-1 text-xs font-medium transition-colors ${activeTab === '7d' ? 'bg-midnight-800 text-white' : 'bg-white text-midnight-600 hover:bg-midnight-50'}`}
+            className={`px-2 py-0.5 text-[10px] font-semibold transition-colors ${activeTab === '7d' ? 'bg-midnight-800 text-white' : 'bg-white text-midnight-500 hover:bg-midnight-50'}`}
             onClick={() => setActiveTab('7d')}
           >
-            7d
+            7D
           </button>
           <button
-            className={`px-3 py-1 text-xs font-medium transition-colors ${activeTab === '30d' ? 'bg-midnight-800 text-white' : 'bg-white text-midnight-600 hover:bg-midnight-50'}`}
+            className={`px-2 py-0.5 text-[10px] font-semibold transition-colors ${activeTab === '30d' ? 'bg-midnight-800 text-white' : 'bg-white text-midnight-500 hover:bg-midnight-50'}`}
             onClick={() => setActiveTab('30d')}
           >
-            30d
+            30D
           </button>
         </div>
       </div>
-
-      {activeTab === '7d' && <ChartContent days={7} />}
-      {activeTab === '30d' && <ChartContent days={30} />}
+      {/* Body */}
+      <div className="p-3">
+        {activeTab === '7d' && <ChartContent days={7} />}
+        {activeTab === '30d' && <ChartContent days={30} />}
+      </div>
     </div>
   );
 }
