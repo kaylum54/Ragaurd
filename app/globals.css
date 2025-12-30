@@ -3,75 +3,78 @@
 @tailwind utilities;
 
 /* ========================================
-   RAGuard Defense-Themed Design System
+   RAGuard V2 Design System
+   Clean, Bold, Professional
    ======================================== */
 
 @layer base {
   :root {
-    /* Base Colors - Defense Navy Palette */
-    --bg-base: #0a0e1a;
-    --bg-card: #111827;
-    --bg-sidebar: #070b14;
-    --bg-elevated: #0d1320;
+    /* Light Theme (Default) */
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
 
-    /* Primary Accent - Electric Blue */
-    --primary: #3b82f6;
-    --primary-hover: #60a5fa;
-    --primary-muted: rgba(59, 130, 246, 0.15);
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
 
-    /* Secondary Accent - Cyan */
-    --secondary: #06b6d4;
-    --secondary-hover: #22d3ee;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
 
-    /* Text Colors */
-    --text-primary: #f1f5f9;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
+    --primary: 263 70% 58%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Borders */
-    --border-default: rgba(59, 130, 246, 0.1);
-    --border-hover: rgba(59, 130, 246, 0.3);
-    --border-focus: rgba(59, 130, 246, 0.5);
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 222 47% 11%;
 
-    /* Semantic Colors */
-    --success: #10b981;
-    --error: #ef4444;
-    --warning: #f59e0b;
-
-    /* Shadows */
-    --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
-    --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.15);
-
-    /* Spacing */
-    --radius: 12px;
-    --radius-sm: 8px;
-
-    /* HSL Variables for shadcn compatibility */
-    --background: 222 47% 5%;
-    --foreground: 210 40% 96%;
-    --card: 222 47% 7%;
-    --card-foreground: 210 40% 96%;
-    --popover: 222 47% 7%;
-    --popover-foreground: 210 40% 96%;
-    --primary-hsl: 217 91% 60%;
-    --primary-foreground: 222 47% 5%;
-    --secondary-hsl: 187 81% 43%;
-    --secondary-foreground: 210 40% 96%;
-    --muted: 217 33% 12%;
+    --muted: 220 14% 96%;
     --muted-foreground: 215 16% 47%;
-    --accent: 217 91% 60%;
-    --accent-foreground: 210 40% 96%;
+
+    --accent: 220 14% 96%;
+    --accent-foreground: 222 47% 11%;
+
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 96%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 263 70% 58%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222 47% 5%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 7%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 7%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 263 70% 58%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+
     --border: 217 33% 17%;
     --input: 217 33% 17%;
-    --ring: 217 91% 60%;
+    --ring: 263 70% 58%;
   }
 }
 
 @layer base {
   * {
-    border-color: var(--border-default);
+    @apply border-border;
   }
 
   html {
@@ -81,326 +84,435 @@
   }
 
   body {
-    background-color: var(--bg-base);
-    color: var(--text-primary);
+    @apply bg-background text-foreground;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
 
   ::selection {
-    background: rgba(59, 130, 246, 0.4);
-    color: var(--text-primary);
+    @apply bg-violet-200 text-violet-900;
+  }
+
+  .dark ::selection {
+    @apply bg-violet-800 text-violet-100;
   }
 }
 
 /* ========================================
-   Typography System
+   Typography
    ======================================== */
 
 @layer components {
-  /* Large metric displays - 32-48px, weight 700 */
-  .metric-display {
-    font-size: 2.5rem;
-    font-weight: 700;
-    line-height: 1.1;
-    color: var(--text-primary);
-    font-variant-numeric: tabular-nums;
+  .heading-1 {
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900;
   }
 
-  .metric-display-lg {
-    font-size: 3rem;
-    font-weight: 700;
-    line-height: 1;
-    color: var(--text-primary);
-    font-variant-numeric: tabular-nums;
+  .heading-2 {
+    @apply text-3xl md:text-4xl font-bold tracking-tight text-slate-900;
   }
 
-  /* Section headers - 14px uppercase, letter-spacing 0.05em */
-  .section-header {
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
+  .heading-3 {
+    @apply text-2xl md:text-3xl font-semibold text-slate-900;
   }
 
-  /* Card titles - 14px uppercase steel blue */
-  .card-title {
-    font-size: 0.875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
+  .heading-4 {
+    @apply text-xl font-semibold text-slate-900;
+  }
+
+  .body-large {
+    @apply text-lg text-slate-600 leading-relaxed;
+  }
+
+  .body {
+    @apply text-base text-slate-600;
+  }
+
+  .body-small {
+    @apply text-sm text-slate-500;
+  }
+
+  .label {
+    @apply text-sm font-medium text-slate-700;
+  }
+
+  .overline {
+    @apply text-xs font-semibold uppercase tracking-wider text-slate-500;
   }
 }
 
 /* ========================================
-   Card System
+   Cards
    ======================================== */
 
 @layer components {
-  .dashboard-card {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-default);
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    box-shadow: var(--shadow-card);
-    transition: border-color 150ms ease, box-shadow 150ms ease;
+  .card-base {
+    @apply bg-white rounded-xl border border-slate-200 shadow-card;
   }
 
-  .dashboard-card:hover {
-    border-color: var(--border-hover);
+  .card-interactive {
+    @apply card-base transition-all duration-200;
   }
 
-  .dashboard-card-interactive:hover {
-    border-color: var(--border-hover);
-    box-shadow: var(--shadow-card), var(--shadow-glow);
-  }
-}
-
-/* ========================================
-   Gradient Utilities
-   ======================================== */
-
-@layer utilities {
-  .gradient-primary {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  .card-interactive:hover {
+    @apply shadow-card-hover border-slate-300;
   }
 
-  .gradient-primary-text {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .card-elevated {
+    @apply bg-white rounded-xl shadow-lg border border-slate-100;
   }
 
-  .gradient-border {
-    position: relative;
+  .card-subtle {
+    @apply bg-slate-50 rounded-xl border border-slate-100;
   }
 
-  .gradient-border::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
+  /* Stat cards for dashboard */
+  .stat-card {
+    @apply card-base p-6;
+  }
+
+  .stat-value {
+    @apply text-3xl font-bold text-slate-900 tabular-nums;
+  }
+
+  .stat-label {
+    @apply text-sm font-medium text-slate-500 mt-1;
+  }
+
+  .stat-change {
+    @apply text-sm font-medium mt-2 flex items-center gap-1;
+  }
+
+  .stat-change-positive {
+    @apply text-emerald-600;
+  }
+
+  .stat-change-negative {
+    @apply text-rose-600;
   }
 }
 
 /* ========================================
-   Button System
+   Buttons
    ======================================== */
 
 @layer components {
+  .btn {
+    @apply inline-flex items-center justify-center font-medium rounded-lg transition-all duration-150;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply disabled:opacity-50 disabled:pointer-events-none;
+  }
+
   .btn-primary {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-    color: white;
-    border-radius: var(--radius-sm);
-    padding: 0.75rem 1.5rem;
-    font-weight: 500;
-    font-size: 0.875rem;
-    transition: filter 150ms ease, transform 150ms ease;
-  }
-
-  .btn-primary:hover {
-    filter: brightness(1.1);
-  }
-
-  .btn-primary:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+    @apply btn bg-violet-600 text-white shadow-button;
+    @apply hover:bg-violet-700 focus:ring-violet-500;
+    @apply active:bg-violet-800;
   }
 
   .btn-secondary {
-    background: transparent;
-    color: var(--primary);
-    border: 1px solid var(--primary);
-    border-radius: var(--radius-sm);
-    padding: 0.75rem 1.5rem;
-    font-weight: 500;
-    font-size: 0.875rem;
-    transition: background-color 150ms ease;
-  }
-
-  .btn-secondary:hover {
-    background-color: var(--primary-muted);
+    @apply btn bg-white text-slate-700 border border-slate-300 shadow-button;
+    @apply hover:bg-slate-50 hover:border-slate-400 focus:ring-slate-500;
   }
 
   .btn-ghost {
-    background: transparent;
-    color: var(--text-muted);
-    padding: 0.75rem 1.5rem;
-    font-weight: 500;
-    font-size: 0.875rem;
-    transition: color 150ms ease;
+    @apply btn text-slate-600;
+    @apply hover:bg-slate-100 hover:text-slate-900;
   }
 
-  .btn-ghost:hover {
-    color: var(--primary);
-  }
-}
-
-/* ========================================
-   Form Elements
-   ======================================== */
-
-@layer components {
-  .input-field {
-    background-color: var(--bg-card);
-    border: 1px solid rgba(59, 130, 246, 0.2);
-    border-radius: var(--radius-sm);
-    padding: 0.75rem 1rem;
-    color: var(--text-primary);
-    font-size: 0.875rem;
-    transition: border-color 150ms ease, box-shadow 150ms ease;
+  .btn-danger {
+    @apply btn bg-rose-600 text-white shadow-button;
+    @apply hover:bg-rose-700 focus:ring-rose-500;
   }
 
-  .input-field::placeholder {
-    color: var(--text-muted);
+  .btn-success {
+    @apply btn bg-emerald-600 text-white shadow-button;
+    @apply hover:bg-emerald-700 focus:ring-emerald-500;
   }
 
-  .input-field:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  .btn-sm {
+    @apply px-3 py-1.5 text-sm;
+  }
+
+  .btn-md {
+    @apply px-4 py-2 text-sm;
+  }
+
+  .btn-lg {
+    @apply px-6 py-3 text-base;
+  }
+
+  .btn-icon {
+    @apply p-2;
   }
 }
 
 /* ========================================
-   Table Styles
+   Navigation
    ======================================== */
 
 @layer components {
-  .table-header {
-    background-color: var(--bg-elevated);
+  .nav-link {
+    @apply text-sm font-medium text-slate-600 transition-colors duration-150;
+    @apply hover:text-slate-900;
   }
 
-  .table-header-cell {
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-    padding: 0.75rem 1rem;
-    text-align: left;
+  .nav-link-active {
+    @apply text-violet-600 font-semibold;
   }
 
-  .table-row {
-    border-bottom: 1px solid var(--border-default);
-    transition: background-color 150ms ease;
+  .sidebar-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium;
+    @apply text-slate-600 transition-all duration-150;
+    @apply hover:bg-slate-100 hover:text-slate-900;
   }
 
-  .table-row:nth-child(even) {
-    background-color: rgba(59, 130, 246, 0.02);
+  .sidebar-item-active {
+    @apply bg-violet-50 text-violet-700;
+    @apply hover:bg-violet-100;
   }
 
-  .table-row:hover {
-    background-color: rgba(59, 130, 246, 0.08);
-  }
-
-  .table-cell {
-    padding: 0.75rem 1rem;
-    font-size: 0.875rem;
-    color: var(--text-primary);
-  }
-
-  .table-cell-numeric {
-    text-align: right;
-    font-variant-numeric: tabular-nums;
+  .sidebar-section {
+    @apply text-xs font-semibold uppercase tracking-wider text-slate-400 px-3 mb-2;
   }
 }
 
 /* ========================================
-   Status Badges
+   Forms
    ======================================== */
 
 @layer components {
+  .input-base {
+    @apply w-full px-4 py-2.5 text-sm rounded-lg border border-slate-300;
+    @apply bg-white text-slate-900 placeholder:text-slate-400;
+    @apply focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500;
+    @apply transition-colors duration-150;
+  }
+
+  .input-error {
+    @apply border-rose-300 focus:ring-rose-500 focus:border-rose-500;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-slate-700 mb-1.5;
+  }
+
+  .form-helper {
+    @apply text-sm text-slate-500 mt-1.5;
+  }
+
+  .form-error {
+    @apply text-sm text-rose-600 mt-1.5;
+  }
+}
+
+/* ========================================
+   Badges & Pills
+   ======================================== */
+
+@layer components {
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-primary {
+    @apply bg-violet-100 text-violet-700;
+  }
+
   .badge-success {
-    background-color: rgba(16, 185, 129, 0.15);
-    color: var(--success);
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 500;
-  }
-
-  .badge-error {
-    background-color: rgba(239, 68, 68, 0.15);
-    color: var(--error);
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 500;
+    @apply bg-emerald-100 text-emerald-700;
   }
 
   .badge-warning {
-    background-color: rgba(245, 158, 11, 0.15);
-    color: var(--warning);
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 500;
+    @apply bg-amber-100 text-amber-700;
   }
 
-  .badge-info {
-    background-color: rgba(59, 130, 246, 0.15);
-    color: var(--primary);
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 500;
+  .badge-danger {
+    @apply bg-rose-100 text-rose-700;
+  }
+
+  .badge-neutral {
+    @apply bg-slate-100 text-slate-700;
+  }
+
+  .badge-outline {
+    @apply bg-transparent border border-current;
+  }
+
+  /* Larger pill style */
+  .pill {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
   }
 }
 
 /* ========================================
-   Navigation System
+   Tables
    ======================================== */
 
 @layer components {
-  .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.625rem 0.875rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text-muted);
-    transition: all 150ms ease;
+  .table-container {
+    @apply overflow-x-auto rounded-xl border border-slate-200 bg-white;
   }
 
-  .nav-item:hover {
-    color: var(--text-primary);
-    background-color: rgba(59, 130, 246, 0.1);
+  .table-header {
+    @apply bg-slate-50 border-b border-slate-200;
   }
 
-  .nav-item.active {
-    color: var(--primary);
-    background-color: rgba(59, 130, 246, 0.15);
-    border-left: 3px solid var(--primary);
-    margin-left: -3px;
-    padding-left: calc(0.875rem + 3px);
+  .table-header-cell {
+    @apply px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500;
   }
 
-  .nav-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-    flex-shrink: 0;
+  .table-row {
+    @apply border-b border-slate-100 transition-colors duration-150;
+    @apply hover:bg-slate-50;
   }
 
-  .nav-divider {
-    font-size: 0.6875rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-    padding: 0 0.875rem;
+  .table-row:last-child {
+    @apply border-b-0;
+  }
+
+  .table-cell {
+    @apply px-6 py-4 text-sm text-slate-900;
+  }
+
+  .table-cell-muted {
+    @apply text-slate-500;
+  }
+}
+
+/* ========================================
+   Dashboard Layout
+   ======================================== */
+
+@layer components {
+  .dashboard-container {
+    @apply min-h-screen bg-slate-50;
+  }
+
+  .dashboard-header {
+    @apply bg-white border-b border-slate-200 sticky top-0 z-40;
+  }
+
+  .dashboard-sidebar {
+    @apply bg-white border-r border-slate-200 w-64 fixed left-0 top-0 h-screen;
+  }
+
+  .dashboard-content {
+    @apply p-6 lg:p-8;
+  }
+
+  .page-header {
+    @apply mb-8;
+  }
+
+  .page-title {
+    @apply text-2xl font-bold text-slate-900;
+  }
+
+  .page-description {
+    @apply text-slate-500 mt-1;
+  }
+}
+
+/* ========================================
+   Progress & Charts
+   ======================================== */
+
+@layer components {
+  .progress-bar {
+    @apply h-2 bg-slate-100 rounded-full overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply h-full rounded-full transition-all duration-300;
+  }
+
+  .progress-violet {
+    @apply bg-violet-600;
+  }
+
+  .progress-emerald {
+    @apply bg-emerald-500;
+  }
+
+  .progress-amber {
+    @apply bg-amber-500;
+  }
+
+  .progress-rose {
+    @apply bg-rose-500;
+  }
+}
+
+/* ========================================
+   Alerts & Notifications
+   ======================================== */
+
+@layer components {
+  .alert {
+    @apply p-4 rounded-lg border;
+  }
+
+  .alert-info {
+    @apply bg-sky-50 border-sky-200 text-sky-800;
+  }
+
+  .alert-success {
+    @apply bg-emerald-50 border-emerald-200 text-emerald-800;
+  }
+
+  .alert-warning {
+    @apply bg-amber-50 border-amber-200 text-amber-800;
+  }
+
+  .alert-danger {
+    @apply bg-rose-50 border-rose-200 text-rose-800;
+  }
+}
+
+/* ========================================
+   Feature Cards (Marketing)
+   ======================================== */
+
+@layer components {
+  .feature-card {
+    @apply card-base p-6 transition-all duration-200;
+    @apply hover:shadow-lg hover:border-slate-300;
+  }
+
+  .feature-icon {
+    @apply w-12 h-12 rounded-xl flex items-center justify-center mb-4;
+  }
+
+  .feature-icon-violet {
+    @apply bg-violet-100 text-violet-600;
+  }
+
+  .feature-icon-emerald {
+    @apply bg-emerald-100 text-emerald-600;
+  }
+
+  .feature-icon-amber {
+    @apply bg-amber-100 text-amber-600;
+  }
+
+  .feature-icon-sky {
+    @apply bg-sky-100 text-sky-600;
+  }
+}
+
+/* ========================================
+   Hero Section
+   ======================================== */
+
+@layer components {
+  .hero-gradient {
+    @apply bg-gradient-to-br from-violet-600 via-violet-700 to-slate-900;
+  }
+
+  .hero-mesh {
+    background-image:
+      radial-gradient(at 40% 20%, rgba(167, 139, 250, 0.3) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, rgba(56, 189, 248, 0.2) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, rgba(167, 139, 250, 0.2) 0px, transparent 50%);
   }
 }
 
@@ -409,58 +521,77 @@
    ======================================== */
 
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-card);
+  @apply bg-slate-100;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(59, 130, 246, 0.5);
-  border-radius: 3px;
+  @apply bg-slate-300 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(59, 130, 246, 0.7);
+  @apply bg-slate-400;
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-track {
+  @apply bg-slate-800;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  @apply bg-slate-600;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-500;
 }
 
 /* ========================================
-   Animations
+   Utilities
    ======================================== */
 
 @layer utilities {
-  .animate-fade-in {
-    animation: fadeIn 300ms ease-out forwards;
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-sky-500;
   }
 
-  .animate-slide-up {
-    animation: slideUp 300ms ease-out forwards;
+  .gradient-border {
+    @apply border-2 border-transparent;
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(135deg, #7c3aed, #0ea5e9) border-box;
   }
 
-  .animate-pulse-glow {
-    animation: pulseGlow 2s ease-in-out infinite;
+  .text-balance {
+    text-wrap: balance;
   }
 
-  .animate-skeleton {
-    animation: skeleton 1.5s ease-in-out infinite;
+  .animate-fade-up {
+    animation: fade-up 0.5s ease-out forwards;
+  }
+
+  .animate-fade-up-delay-1 {
+    animation: fade-up 0.5s ease-out 0.1s forwards;
+    opacity: 0;
+  }
+
+  .animate-fade-up-delay-2 {
+    animation: fade-up 0.5s ease-out 0.2s forwards;
+    opacity: 0;
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
   }
 }
 
-@keyframes fadeIn {
+@keyframes fade-up {
   from {
     opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -468,88 +599,63 @@
   }
 }
 
-@keyframes pulseGlow {
-  0%, 100% {
-    box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
-  }
-}
-
-@keyframes skeleton {
-  0% {
-    background-color: var(--bg-card);
-  }
-  50% {
-    background-color: rgba(59, 130, 246, 0.1);
-  }
-  100% {
-    background-color: var(--bg-card);
-  }
-}
-
 /* ========================================
-   Chart Styles
+   Dark Mode Overrides
    ======================================== */
 
-@layer components {
-  .chart-container {
-    background: transparent;
-  }
-
-  .chart-grid-line {
-    stroke: rgba(148, 163, 184, 0.1);
-  }
-
-  .chart-axis-label {
-    fill: var(--text-muted);
-    font-size: 0.75rem;
-  }
+.dark .card-base {
+  @apply bg-slate-900 border-slate-800;
 }
 
-/* ========================================
-   Semantic Status Colors (Legacy support)
-   ======================================== */
-
-.text-success { color: var(--success); }
-.text-warning { color: var(--warning); }
-.text-danger { color: var(--error); }
-.text-primary-accent { color: var(--primary); }
-.text-secondary-accent { color: var(--secondary); }
-
-.bg-success { background-color: var(--success); }
-.bg-warning { background-color: var(--warning); }
-.bg-danger { background-color: var(--error); }
-
-/* Tabular numbers for data */
-.tabular-nums {
-  font-variant-numeric: tabular-nums;
+.dark .card-subtle {
+  @apply bg-slate-800/50 border-slate-700;
 }
 
-/* Monospace for code/technical data */
-.mono {
-  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
-  font-variant-numeric: tabular-nums;
+.dark .stat-card {
+  @apply bg-slate-900 border-slate-800;
 }
 
-/* ========================================
-   Separators
-   ======================================== */
-
-.separator {
-  height: 1px;
-  background-color: rgba(148, 163, 184, 0.1);
+.dark .stat-value {
+  @apply text-white;
 }
 
-/* ========================================
-   Max Width Container
-   ======================================== */
+.dark .heading-1,
+.dark .heading-2,
+.dark .heading-3,
+.dark .heading-4,
+.dark .page-title {
+  @apply text-white;
+}
 
-.max-content-width {
-  max-width: 1440px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+.dark .body-large,
+.dark .body {
+  @apply text-slate-300;
+}
+
+.dark .input-base {
+  @apply bg-slate-900 border-slate-700 text-white placeholder:text-slate-500;
+}
+
+.dark .sidebar-item {
+  @apply text-slate-400 hover:bg-slate-800 hover:text-white;
+}
+
+.dark .sidebar-item-active {
+  @apply bg-violet-900/50 text-violet-400;
+}
+
+.dark .table-container {
+  @apply bg-slate-900 border-slate-800;
+}
+
+.dark .table-header {
+  @apply bg-slate-800/50 border-slate-700;
+}
+
+.dark .table-row {
+  @apply border-slate-800 hover:bg-slate-800/50;
+}
+
+.dark .table-cell {
+  @apply text-slate-200;
 }

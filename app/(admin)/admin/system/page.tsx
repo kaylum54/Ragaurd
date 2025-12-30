@@ -11,7 +11,6 @@ import {
   Database,
   Globe,
   Cpu,
-  HardDrive,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -25,7 +24,6 @@ interface SystemStatus {
   endpoint?: string;
 }
 
-// These would come from actual health checks in production
 const getSystemStatus = (): SystemStatus[] => [
   {
     name: 'Orchestrator API',
@@ -79,26 +77,26 @@ const getSystemStatus = (): SystemStatus[] => [
 
 const statusConfig = {
   healthy: {
-    color: 'bg-success',
-    textColor: 'text-success',
+    color: 'bg-emerald-600',
+    textColor: 'text-emerald-600',
     label: 'Healthy',
     icon: CheckCircle,
   },
   degraded: {
-    color: 'bg-warning',
-    textColor: 'text-warning',
+    color: 'bg-amber-600',
+    textColor: 'text-amber-600',
     label: 'Degraded',
     icon: AlertTriangle,
   },
   down: {
-    color: 'bg-danger',
-    textColor: 'text-danger',
+    color: 'bg-rose-600',
+    textColor: 'text-rose-600',
     label: 'Down',
     icon: AlertTriangle,
   },
   pending: {
-    color: 'bg-steel-500',
-    textColor: 'text-steel-400',
+    color: 'bg-slate-500',
+    textColor: 'text-slate-500',
     label: 'Pending',
     icon: Clock,
   },
@@ -130,8 +128,8 @@ export default function AdminSystemPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-steel-100">System Status</h1>
-          <p className="text-sm text-steel-500 mt-1">
+          <h1 className="text-2xl font-bold text-slate-900">System Status</h1>
+          <p className="text-sm text-slate-500 mt-1">
             Monitor infrastructure health and performance
           </p>
         </div>
@@ -140,7 +138,7 @@ export default function AdminSystemPage() {
           size="sm"
           onClick={refresh}
           disabled={loading}
-          className="border-[rgba(59,130,246,0.2)] text-steel-300 hover:bg-[rgba(59,130,246,0.1)]"
+          className="border-slate-200 text-slate-600 hover:bg-slate-100"
         >
           <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
           Refresh
@@ -149,26 +147,26 @@ export default function AdminSystemPage() {
 
       {/* Overview */}
       <div className="grid gap-5 md:grid-cols-4">
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <span className="section-header">Overall Status</span>
+            <span className="text-sm font-medium text-slate-500">Overall Status</span>
             <div className={`w-3 h-3 rounded-full ${
-              healthyCount === totalCount ? 'bg-success animate-pulse' :
-              healthyCount > 0 ? 'bg-warning' : 'bg-danger'
+              healthyCount === totalCount ? 'bg-emerald-500 animate-pulse' :
+              healthyCount > 0 ? 'bg-amber-500' : 'bg-rose-500'
             }`} />
           </div>
-          <div className="metric-display">
+          <div className="text-3xl font-bold text-slate-900">
             {healthyCount}/{totalCount}
           </div>
-          <p className="text-xs text-steel-500 mt-2">Services operational</p>
+          <p className="text-xs text-slate-500 mt-2">Services operational</p>
         </div>
 
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <span className="section-header">Avg Latency</span>
-            <Clock className="h-5 w-5 text-electric-500" />
+            <span className="text-sm font-medium text-slate-500">Avg Latency</span>
+            <Clock className="h-5 w-5 text-violet-600" />
           </div>
-          <div className="metric-display">
+          <div className="text-3xl font-bold text-slate-900">
             {Math.round(
               systems
                 .filter((s) => s.latency !== '-')
@@ -176,39 +174,39 @@ export default function AdminSystemPage() {
                 systems.filter((s) => s.latency !== '-').length || 0
             )}ms
           </div>
-          <p className="text-xs text-steel-500 mt-2">Across all services</p>
+          <p className="text-xs text-slate-500 mt-2">Across all services</p>
         </div>
 
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <span className="section-header">Uptime</span>
-            <Activity className="h-5 w-5 text-success" />
+            <span className="text-sm font-medium text-slate-500">Uptime</span>
+            <Activity className="h-5 w-5 text-emerald-600" />
           </div>
-          <div className="metric-display">99.9%</div>
-          <p className="text-xs text-steel-500 mt-2">Last 30 days</p>
+          <div className="text-3xl font-bold text-slate-900">99.9%</div>
+          <p className="text-xs text-slate-500 mt-2">Last 30 days</p>
         </div>
 
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <span className="section-header">Last Check</span>
-            <RefreshCw className="h-5 w-5 text-steel-500" />
+            <span className="text-sm font-medium text-slate-500">Last Check</span>
+            <RefreshCw className="h-5 w-5 text-slate-400" />
           </div>
-          <div className="text-lg font-semibold text-steel-100">
+          <div className="text-lg font-semibold text-slate-900">
             {lastRefresh.toLocaleTimeString()}
           </div>
-          <p className="text-xs text-steel-500 mt-2">
+          <p className="text-xs text-slate-500 mt-2">
             {lastRefresh.toLocaleDateString()}
           </p>
         </div>
       </div>
 
       {/* Service Status */}
-      <div className="dashboard-card p-0 overflow-hidden">
-        <div className="p-6 border-b border-[rgba(59,130,246,0.1)]">
-          <h2 className="section-header mb-1">Service Health</h2>
-          <p className="text-sm text-steel-500">Individual service status</p>
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="p-6 border-b border-slate-100">
+          <h2 className="text-lg font-semibold text-slate-900 mb-1">Service Health</h2>
+          <p className="text-sm text-slate-500">Individual service status</p>
         </div>
-        <div className="divide-y divide-[rgba(59,130,246,0.1)]">
+        <div className="divide-y divide-slate-100">
           {systems.map((system, index) => {
             const config = statusConfig[system.status];
             const StatusIcon = config.icon;
@@ -216,50 +214,48 @@ export default function AdminSystemPage() {
             return (
               <div
                 key={index}
-                className="flex items-center justify-between p-5 hover:bg-[rgba(59,130,246,0.02)] transition-colors"
+                className="flex items-center justify-between p-5 hover:bg-slate-50 transition-colors"
               >
                 <div className="flex items-center gap-4">
                   <div
                     className={`w-12 h-12 rounded-lg flex items-center justify-center ${
                       system.status === 'healthy'
-                        ? 'bg-[rgba(16,185,129,0.1)]'
+                        ? 'bg-emerald-100'
                         : system.status === 'pending'
-                        ? 'bg-[rgba(100,116,139,0.1)]'
-                        : 'bg-[rgba(239,68,68,0.1)]'
+                        ? 'bg-slate-100'
+                        : 'bg-rose-100'
                     }`}
                   >
                     <Server
                       className={`h-6 w-6 ${
                         system.status === 'healthy'
-                          ? 'text-success'
+                          ? 'text-emerald-600'
                           : system.status === 'pending'
-                          ? 'text-steel-500'
-                          : 'text-danger'
+                          ? 'text-slate-500'
+                          : 'text-rose-600'
                       }`}
                     />
                   </div>
                   <div>
                     <div className="flex items-center gap-3">
-                      <span className="font-medium text-steel-100">{system.name}</span>
-                      <Badge
-                        className={`${config.color} text-white text-xs`}
-                      >
+                      <span className="font-medium text-slate-900">{system.name}</span>
+                      <Badge className={`${config.color} text-white text-xs`}>
                         {config.label}
                       </Badge>
                     </div>
-                    <div className="text-sm text-steel-500 mt-1">
+                    <div className="text-sm text-slate-500 mt-1">
                       {system.endpoint}
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-8">
                   <div className="text-right">
-                    <div className="text-sm font-medium text-steel-100">{system.latency}</div>
-                    <div className="text-xs text-steel-500">Latency</div>
+                    <div className="text-sm font-medium text-slate-900">{system.latency}</div>
+                    <div className="text-xs text-slate-500">Latency</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-medium text-steel-100">{system.uptime}</div>
-                    <div className="text-xs text-steel-500">Uptime</div>
+                    <div className="text-sm font-medium text-slate-900">{system.uptime}</div>
+                    <div className="text-xs text-slate-500">Uptime</div>
                   </div>
                   <StatusIcon className={`h-5 w-5 ${config.textColor}`} />
                 </div>
@@ -271,58 +267,58 @@ export default function AdminSystemPage() {
 
       {/* Infrastructure Info */}
       <div className="grid gap-5 lg:grid-cols-3">
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-[rgba(59,130,246,0.1)] rounded-lg flex items-center justify-center">
-              <Globe className="h-5 w-5 text-electric-500" />
+            <div className="w-10 h-10 bg-violet-100 rounded-lg flex items-center justify-center">
+              <Globe className="h-5 w-5 text-violet-600" />
             </div>
             <div>
-              <h3 className="font-medium text-steel-100">Region</h3>
-              <p className="text-sm text-steel-500">us-east-2 (Ohio)</p>
+              <h3 className="font-medium text-slate-900">Region</h3>
+              <p className="text-sm text-slate-500">us-east-2 (Ohio)</p>
             </div>
           </div>
-          <div className="text-sm text-steel-400">
+          <div className="text-sm text-slate-500">
             Primary deployment region for all services
           </div>
         </div>
 
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-[rgba(139,92,246,0.1)] rounded-lg flex items-center justify-center">
-              <Cpu className="h-5 w-5 text-purple-400" />
+            <div className="w-10 h-10 bg-sky-100 rounded-lg flex items-center justify-center">
+              <Cpu className="h-5 w-5 text-sky-600" />
             </div>
             <div>
-              <h3 className="font-medium text-steel-100">Compute</h3>
-              <p className="text-sm text-steel-500">AWS EC2</p>
+              <h3 className="font-medium text-slate-900">Compute</h3>
+              <p className="text-sm text-slate-500">AWS EC2</p>
             </div>
           </div>
-          <div className="text-sm text-steel-400">
+          <div className="text-sm text-slate-500">
             Auto-scaling groups with load balancing
           </div>
         </div>
 
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-[rgba(16,185,129,0.1)] rounded-lg flex items-center justify-center">
-              <Database className="h-5 w-5 text-success" />
+            <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+              <Database className="h-5 w-5 text-emerald-600" />
             </div>
             <div>
-              <h3 className="font-medium text-steel-100">Database</h3>
-              <p className="text-sm text-steel-500">Supabase PostgreSQL</p>
+              <h3 className="font-medium text-slate-900">Database</h3>
+              <p className="text-sm text-slate-500">Supabase PostgreSQL</p>
             </div>
           </div>
-          <div className="text-sm text-steel-400">
+          <div className="text-sm text-slate-500">
             Managed database with automatic backups
           </div>
         </div>
       </div>
 
       {/* Alerts Section */}
-      <div className="dashboard-card">
+      <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="section-header mb-1">Active Alerts</h2>
-            <p className="text-sm text-steel-500">System notifications and warnings</p>
+            <h2 className="text-lg font-semibold text-slate-900 mb-1">Active Alerts</h2>
+            <p className="text-sm text-slate-500">System notifications and warnings</p>
           </div>
         </div>
         <div className="space-y-3">
@@ -332,25 +328,25 @@ export default function AdminSystemPage() {
               .map((system, index) => (
                 <div
                   key={index}
-                  className="flex items-center gap-4 p-4 bg-[rgba(245,158,11,0.05)] border border-[rgba(245,158,11,0.2)] rounded-lg"
+                  className="flex items-center gap-4 p-4 bg-amber-50 border border-amber-200 rounded-lg"
                 >
-                  <AlertTriangle className="h-5 w-5 text-warning shrink-0" />
+                  <AlertTriangle className="h-5 w-5 text-amber-600 shrink-0" />
                   <div>
-                    <p className="text-sm font-medium text-steel-100">
+                    <p className="text-sm font-medium text-slate-900">
                       {system.name} - Configuration Required
                     </p>
-                    <p className="text-xs text-steel-500 mt-1">
+                    <p className="text-xs text-slate-500 mt-1">
                       This service needs to be configured before going live
                     </p>
                   </div>
                 </div>
               ))
           ) : (
-            <div className="flex items-center gap-4 p-4 bg-[rgba(16,185,129,0.05)] border border-[rgba(16,185,129,0.2)] rounded-lg">
-              <CheckCircle className="h-5 w-5 text-success shrink-0" />
+            <div className="flex items-center gap-4 p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+              <CheckCircle className="h-5 w-5 text-emerald-600 shrink-0" />
               <div>
-                <p className="text-sm font-medium text-steel-100">All Systems Operational</p>
-                <p className="text-xs text-steel-500 mt-1">
+                <p className="text-sm font-medium text-slate-900">All Systems Operational</p>
+                <p className="text-xs text-slate-500 mt-1">
                   No active alerts or warnings
                 </p>
               </div>

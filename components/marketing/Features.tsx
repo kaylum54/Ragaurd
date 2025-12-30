@@ -6,9 +6,9 @@ const features = [
     icon: Shield,
     title: 'Text Defense',
     description: '6-layer detection stack: pattern matching, semantic analysis, embedding similarity, LLM guard, context validation, and output filtering.',
-    stat: '99.53%',
+    stat: '99.5%',
     statLabel: 'Detection rate',
-    color: 'blue',
+    color: 'violet',
   },
   {
     icon: Mic,
@@ -16,8 +16,8 @@ const features = [
     description: 'Real-time deepfake detection using AASIST-L and LCNN models. Identify synthetic voices before they reach your agent.',
     stat: '0.83%',
     statLabel: 'Equal error rate',
-    color: 'purple',
-    pro: true,
+    color: 'emerald',
+    badge: 'Pro',
   },
   {
     icon: Target,
@@ -25,68 +25,83 @@ const features = [
     description: 'Automated security scanning with 10,000+ attack vectors. Discover vulnerabilities before attackers do.',
     stat: '10K+',
     statLabel: 'Attack vectors',
-    color: 'rose',
-    pro: true,
+    color: 'amber',
+    badge: 'Pro',
   },
 ];
 
+const colorClasses = {
+  violet: {
+    bg: 'bg-violet-100',
+    icon: 'text-violet-600',
+    stat: 'text-violet-600',
+  },
+  emerald: {
+    bg: 'bg-emerald-100',
+    icon: 'text-emerald-600',
+    stat: 'text-emerald-600',
+  },
+  amber: {
+    bg: 'bg-amber-100',
+    icon: 'text-amber-600',
+    stat: 'text-amber-600',
+  },
+};
+
 export function Features() {
   return (
-    <section className="py-20" id="features">
+    <section className="py-24 bg-white" id="features">
       <div className="container">
         {/* Section Header */}
-        <div className="max-w-2xl mb-16">
-          <h2 className="text-2xl md:text-3xl font-semibold text-white">
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900">
             Complete protection stack
           </h2>
-          <p className="mt-3 text-slate-400">
+          <p className="mt-4 text-lg text-slate-600">
             Multi-layer defense for text and audio, plus automated security testing.
           </p>
         </div>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-3 gap-6">
-          {features.map((feature) => (
-            <div
-              key={feature.title}
-              className="p-6 bg-slate-800/30 border border-slate-700/50 rounded-lg hover:border-slate-600/50 transition-colors"
-            >
-              <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-4 ${
-                feature.color === 'blue' ? 'bg-blue-500/10' :
-                feature.color === 'purple' ? 'bg-purple-500/10' :
-                'bg-rose-500/10'
-              }`}>
-                <feature.icon className={`w-5 h-5 ${
-                  feature.color === 'blue' ? 'text-blue-400' :
-                  feature.color === 'purple' ? 'text-purple-400' :
-                  'text-rose-400'
-                }`} />
-              </div>
+        <div className="grid md:grid-cols-3 gap-8">
+          {features.map((feature) => {
+            const colors = colorClasses[feature.color as keyof typeof colorClasses];
+            return (
+              <div
+                key={feature.title}
+                className="p-8 bg-white border border-slate-200 rounded-2xl hover:shadow-lg hover:border-slate-300 transition-all duration-200"
+              >
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 ${colors.bg}`}>
+                  <feature.icon className={`w-6 h-6 ${colors.icon}`} />
+                </div>
 
-              <div className="flex items-center gap-2 mb-2">
-                <h3 className="text-lg font-medium text-white">{feature.title}</h3>
-                {feature.pro && (
-                  <span className="text-xs px-2 py-0.5 bg-blue-500/10 text-blue-400 rounded">Pro</span>
-                )}
-              </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <h3 className="text-xl font-semibold text-slate-900">{feature.title}</h3>
+                  {feature.badge && (
+                    <span className="text-xs font-medium px-2 py-1 bg-violet-100 text-violet-700 rounded-full">
+                      {feature.badge}
+                    </span>
+                  )}
+                </div>
 
-              <p className="text-sm text-slate-400 mb-6">
-                {feature.description}
-              </p>
+                <p className="text-slate-600 mb-8 leading-relaxed">
+                  {feature.description}
+                </p>
 
-              <div className="pt-4 border-t border-slate-700/50">
-                <div className="text-2xl font-semibold text-white">{feature.stat}</div>
-                <div className="text-xs text-slate-500">{feature.statLabel}</div>
+                <div className="pt-6 border-t border-slate-100">
+                  <div className={`text-3xl font-bold ${colors.stat}`}>{feature.stat}</div>
+                  <div className="text-sm text-slate-500 mt-1">{feature.statLabel}</div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* CTA */}
-        <div className="mt-12">
+        <div className="mt-12 text-center">
           <Link
             href="/docs"
-            className="inline-flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors"
+            className="inline-flex items-center gap-2 text-violet-600 hover:text-violet-700 font-medium transition-colors"
           >
             View full documentation
             <ArrowRight className="w-4 h-4" />

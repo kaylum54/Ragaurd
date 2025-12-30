@@ -4,7 +4,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { useThreatCategories } from '@/hooks/useDashboard';
 import { Loader2 } from 'lucide-react';
 
-const COLORS = ['#3b82f6', '#06b6d4', '#8b5cf6', '#10b981', '#f59e0b', '#64748b'];
+const COLORS = ['#7c3aed', '#10b981', '#f59e0b', '#3b82f6', '#ec4899', '#64748b'];
 
 const categoryLabels: Record<string, string> = {
   prompt_injection: 'Prompt Injection',
@@ -19,15 +19,15 @@ const categoryLabels: Record<string, string> = {
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-elevated border border-[rgba(59,130,246,0.2)] rounded-lg p-3 shadow-card">
+      <div className="bg-white border border-slate-200 rounded-lg p-3 shadow-lg">
         <div className="flex items-center gap-2">
           <div
             className="w-2 h-2 rounded-full"
             style={{ backgroundColor: payload[0].payload.color }}
           />
-          <span className="text-sm text-steel-100">{payload[0].name}</span>
+          <span className="text-sm text-slate-900">{payload[0].name}</span>
         </div>
-        <p className="text-lg font-bold text-steel-100 mt-1">{payload[0].value} blocked</p>
+        <p className="text-lg font-bold text-slate-900 mt-1">{payload[0].value} blocked</p>
       </div>
     );
   }
@@ -58,23 +58,23 @@ export function AttackChart() {
 
   if (loading) {
     return (
-      <div className="dashboard-card">
+      <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
         <div className="mb-6">
-          <h2 className="section-header mb-1">Attack Categories</h2>
-          <p className="text-sm text-steel-500">Breakdown of blocked threats by type</p>
+          <h2 className="text-lg font-semibold text-slate-900 mb-1">Attack Categories</h2>
+          <p className="text-sm text-slate-500">Breakdown of blocked threats by type</p>
         </div>
         <div className="h-[250px] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-electric-500" />
+          <Loader2 className="h-8 w-8 animate-spin text-violet-600" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="dashboard-card">
+    <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
       <div className="mb-6">
-        <h2 className="section-header mb-1">Attack Categories</h2>
-        <p className="text-sm text-steel-500">Breakdown of blocked threats by type</p>
+        <h2 className="text-lg font-semibold text-slate-900 mb-1">Attack Categories</h2>
+        <p className="text-sm text-slate-500">Breakdown of blocked threats by type</p>
       </div>
       <div className="flex items-center gap-6">
         <div className="relative h-[250px] w-[250px] flex-shrink-0">
@@ -98,8 +98,8 @@ export function AttackChart() {
           </ResponsiveContainer>
           {/* Center label */}
           <div className="absolute inset-0 flex items-center justify-center flex-col">
-            <span className="text-3xl font-bold text-steel-100">{total}</span>
-            <span className="text-xs text-steel-500">Blocked</span>
+            <span className="text-3xl font-bold text-slate-900">{total}</span>
+            <span className="text-xs text-slate-500">Blocked</span>
           </div>
         </div>
 
@@ -112,9 +112,9 @@ export function AttackChart() {
                   className="w-3 h-3 rounded-sm"
                   style={{ backgroundColor: entry.color }}
                 />
-                <span className="text-sm text-steel-300">{entry.name}</span>
+                <span className="text-sm text-slate-600">{entry.name}</span>
               </div>
-              <span className="text-sm font-medium text-steel-100 tabular-nums">
+              <span className="text-sm font-medium text-slate-900 tabular-nums">
                 {total > 0 ? Math.round((entry.value / total) * 100) : 0}%
               </span>
             </div>

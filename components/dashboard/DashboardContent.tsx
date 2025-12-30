@@ -30,14 +30,14 @@ export function DashboardContent() {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-steel-100">Dashboard</h1>
-          <p className="text-steel-500">
+          <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
+          <p className="text-slate-500">
             Monitor your Voice AI security in real-time
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="success" className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
+          <Badge className="flex items-center gap-1.5 bg-emerald-100 text-emerald-700 hover:bg-emerald-100">
+            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
             All systems operational
           </Badge>
         </div>
@@ -75,37 +75,37 @@ export function DashboardContent() {
       </div>
 
       {/* Usage Progress */}
-      <div className="dashboard-card">
+      <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
         <div className="mb-6">
-          <h2 className="section-header mb-1">Usage This Month</h2>
-          <p className="text-sm text-steel-500">
+          <h2 className="text-lg font-semibold text-slate-900 mb-1">Usage This Month</h2>
+          <p className="text-sm text-slate-500">
             Current billing period: {formatDate(startOfMonth)} - {formatDate(endOfMonth)}
           </p>
         </div>
         <div className="space-y-6">
           <div>
             <div className="flex items-center justify-between mb-3">
-              <span className="text-sm font-medium text-steel-100">Text Requests</span>
-              <span className="text-sm text-steel-400 tabular-nums">
+              <span className="text-sm font-medium text-slate-700">Text Requests</span>
+              <span className="text-sm text-slate-500 tabular-nums">
                 {data.usage.text.used.toLocaleString()} / {data.usage.text.limit?.toLocaleString() || '∞'}
               </span>
             </div>
-            <Progress value={textUsagePercent} />
+            <Progress value={textUsagePercent} className="h-2" />
           </div>
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-steel-100">Audio Requests</span>
-                <Badge variant="info" className="text-[10px]">Pro+</Badge>
+                <span className="text-sm font-medium text-slate-700">Audio Requests</span>
+                <Badge className="text-[10px] bg-violet-100 text-violet-700 hover:bg-violet-100">Pro+</Badge>
               </div>
-              <span className="text-sm text-steel-400 tabular-nums">
+              <span className="text-sm text-slate-500 tabular-nums">
                 {data.usage.audio.used.toLocaleString()} / {data.usage.audio.limit?.toLocaleString() || '∞'}
               </span>
             </div>
-            <Progress value={audioUsagePercent} />
+            <Progress value={audioUsagePercent} className="h-2" />
           </div>
           <div className="flex justify-between items-center pt-2">
-            <div className="flex items-center gap-4 text-sm text-steel-500">
+            <div className="flex items-center gap-4 text-sm text-slate-500">
               <span className="flex items-center gap-1.5">
                 <Key className="h-4 w-4" />
                 {data.stats.activeApiKeys} API keys

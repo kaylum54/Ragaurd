@@ -89,17 +89,17 @@ export default function AdminUsersPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-steel-100">Users</h1>
-          <p className="text-sm text-steel-500 mt-1">
+          <h1 className="text-2xl font-bold text-slate-900">Users</h1>
+          <p className="text-sm text-slate-500 mt-1">
             {total.toLocaleString()} total users on the platform
           </p>
         </div>
       </div>
 
       {/* Search */}
-      <div className="dashboard-card">
+      <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-steel-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
           <Input
             placeholder="Search by email or name..."
             value={search}
@@ -107,19 +107,19 @@ export default function AdminUsersPage() {
               setSearch(e.target.value);
               setPage(1);
             }}
-            className="pl-10 bg-base border-[rgba(59,130,246,0.2)] text-steel-100 placeholder:text-steel-500"
+            className="pl-10 bg-slate-50 border-slate-200 text-slate-900 placeholder:text-slate-400"
           />
         </div>
       </div>
 
       {/* Users Table */}
-      <div className="dashboard-card p-0 overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center p-12">
-            <Loader2 className="h-8 w-8 animate-spin text-electric-500" />
+            <Loader2 className="h-8 w-8 animate-spin text-rose-600" />
           </div>
         ) : users.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-12 text-steel-500">
+          <div className="flex flex-col items-center justify-center p-12 text-slate-500">
             <Users className="h-12 w-12 mb-4 opacity-50" />
             <p>No users found</p>
           </div>
@@ -127,41 +127,41 @@ export default function AdminUsersPage() {
           <>
             <table className="w-full">
               <thead>
-                <tr className="border-b border-[rgba(59,130,246,0.1)]">
-                  <th className="text-left p-4 text-xs font-medium text-steel-500 uppercase tracking-wider">
+                <tr className="border-b border-slate-200 bg-slate-50">
+                  <th className="text-left p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                     User
                   </th>
-                  <th className="text-left p-4 text-xs font-medium text-steel-500 uppercase tracking-wider">
+                  <th className="text-left p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                     Organizations
                   </th>
-                  <th className="text-left p-4 text-xs font-medium text-steel-500 uppercase tracking-wider">
+                  <th className="text-left p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                     Role
                   </th>
-                  <th className="text-left p-4 text-xs font-medium text-steel-500 uppercase tracking-wider">
+                  <th className="text-left p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                     Joined
                   </th>
                   <th className="w-12"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[rgba(59,130,246,0.1)]">
+              <tbody className="divide-y divide-slate-100">
                 {users.map((user) => (
                   <tr
                     key={user.id}
-                    className="hover:bg-[rgba(59,130,246,0.02)] transition-colors"
+                    className="hover:bg-slate-50 transition-colors"
                   >
                     <td className="p-4">
                       <div className="flex items-center gap-3">
-                        <Avatar className="h-10 w-10 border border-[rgba(59,130,246,0.2)]">
+                        <Avatar className="h-10 w-10 border border-slate-200">
                           <AvatarImage src={user.avatar_url || undefined} />
-                          <AvatarFallback className="bg-[rgba(59,130,246,0.1)] text-electric-400 text-sm">
+                          <AvatarFallback className="bg-violet-100 text-violet-700 text-sm">
                             {getInitials(user.name, user.email)}
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <div className="font-medium text-steel-100">
+                          <div className="font-medium text-slate-900">
                             {user.name || 'No name'}
                           </div>
-                          <div className="text-sm text-steel-500">{user.email}</div>
+                          <div className="text-sm text-slate-500">{user.email}</div>
                         </div>
                       </div>
                     </td>
@@ -172,52 +172,52 @@ export default function AdminUsersPage() {
                             <Badge
                               key={i}
                               variant="outline"
-                              className="text-xs border-[rgba(59,130,246,0.3)] text-steel-300"
+                              className="text-xs border-slate-200 text-slate-600"
                             >
                               <Building className="h-3 w-3 mr-1" />
                               {org.name}
                             </Badge>
                           ))}
                           {user.organizations.length > 2 && (
-                            <Badge variant="outline" className="text-xs border-steel-700 text-steel-500">
+                            <Badge variant="outline" className="text-xs border-slate-200 text-slate-500">
                               +{user.organizations.length - 2}
                             </Badge>
                           )}
                         </div>
                       ) : (
-                        <span className="text-steel-500 text-sm">No organizations</span>
+                        <span className="text-slate-400 text-sm">No organizations</span>
                       )}
                     </td>
                     <td className="p-4">
                       {user.is_admin ? (
-                        <Badge className="bg-danger text-white">Admin</Badge>
+                        <Badge className="bg-rose-100 text-rose-700 hover:bg-rose-100">Admin</Badge>
                       ) : (
-                        <Badge variant="outline" className="border-steel-700 text-steel-400">
+                        <Badge variant="outline" className="border-slate-200 text-slate-600">
                           User
                         </Badge>
                       )}
                     </td>
-                    <td className="p-4 text-steel-400 text-sm">
+                    <td className="p-4 text-slate-500 text-sm">
                       {formatDate(user.created_at)}
                     </td>
                     <td className="p-4">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-steel-500 hover:text-steel-100">
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-slate-900">
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="bg-sidebar border-[rgba(59,130,246,0.2)]">
-                          <DropdownMenuItem className="text-steel-300 focus:text-steel-100 focus:bg-[rgba(59,130,246,0.1)]">
+                        <DropdownMenuContent align="end" className="bg-white border-slate-200">
+                          <DropdownMenuItem className="text-slate-600 focus:text-slate-900 focus:bg-slate-100">
                             <Mail className="mr-2 h-4 w-4" />
                             Send Email
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="text-steel-300 focus:text-steel-100 focus:bg-[rgba(59,130,246,0.1)]">
+                          <DropdownMenuItem className="text-slate-600 focus:text-slate-900 focus:bg-slate-100">
                             <Shield className="mr-2 h-4 w-4" />
                             {user.is_admin ? 'Remove Admin' : 'Make Admin'}
                           </DropdownMenuItem>
-                          <DropdownMenuSeparator className="bg-[rgba(59,130,246,0.1)]" />
-                          <DropdownMenuItem className="text-danger focus:text-danger focus:bg-[rgba(239,68,68,0.1)]">
+                          <DropdownMenuSeparator className="bg-slate-100" />
+                          <DropdownMenuItem className="text-rose-600 focus:text-rose-700 focus:bg-rose-50">
                             <Trash2 className="mr-2 h-4 w-4" />
                             Delete User
                           </DropdownMenuItem>
@@ -230,8 +230,8 @@ export default function AdminUsersPage() {
             </table>
 
             {/* Pagination */}
-            <div className="flex items-center justify-between p-4 border-t border-[rgba(59,130,246,0.1)]">
-              <p className="text-sm text-steel-500">
+            <div className="flex items-center justify-between p-4 border-t border-slate-100">
+              <p className="text-sm text-slate-500">
                 Showing {(page - 1) * 20 + 1} to {Math.min(page * 20, total)} of {total} users
               </p>
               <div className="flex items-center gap-2">
@@ -240,11 +240,11 @@ export default function AdminUsersPage() {
                   size="sm"
                   onClick={() => setPage(p => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="border-[rgba(59,130,246,0.2)] text-steel-300 hover:bg-[rgba(59,130,246,0.1)]"
+                  className="border-slate-200 text-slate-600 hover:bg-slate-100"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
-                <span className="text-sm text-steel-400">
+                <span className="text-sm text-slate-600">
                   Page {page} of {totalPages}
                 </span>
                 <Button
@@ -252,7 +252,7 @@ export default function AdminUsersPage() {
                   size="sm"
                   onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
-                  className="border-[rgba(59,130,246,0.2)] text-steel-300 hover:bg-[rgba(59,130,246,0.1)]"
+                  className="border-slate-200 text-slate-600 hover:bg-slate-100"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </Button>

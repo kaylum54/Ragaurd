@@ -7,11 +7,8 @@ import {
   Clock,
   Zap,
   Loader2,
-  TrendingUp,
-  BarChart3,
   Building,
 } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
 interface PlatformUsage {
@@ -62,24 +59,17 @@ export default function AdminUsagePage() {
     fetchData();
   }, [days]);
 
-  const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-    });
-  };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-electric-500" />
+        <Loader2 className="h-8 w-8 animate-spin text-rose-600" />
       </div>
     );
   }
 
   if (!usage || !growth) {
     return (
-      <div className="text-center text-steel-500 py-12">
+      <div className="text-center text-slate-500 py-12">
         Failed to load usage data
       </div>
     );
@@ -94,8 +84,8 @@ export default function AdminUsagePage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-steel-100">Platform Usage</h1>
-          <p className="text-sm text-steel-500 mt-1">
+          <h1 className="text-2xl font-bold text-slate-900">Platform Usage</h1>
+          <p className="text-sm text-slate-500 mt-1">
             Monitor requests, threats, and growth metrics
           </p>
         </div>
@@ -108,8 +98,8 @@ export default function AdminUsagePage() {
               onClick={() => setDays(d)}
               className={
                 days === d
-                  ? 'bg-electric-600 text-white'
-                  : 'border-[rgba(59,130,246,0.2)] text-steel-300 hover:bg-[rgba(59,130,246,0.1)]'
+                  ? 'bg-rose-600 text-white hover:bg-rose-700'
+                  : 'border-slate-200 text-slate-600 hover:bg-slate-100'
               }
             >
               {d}d
@@ -120,72 +110,71 @@ export default function AdminUsagePage() {
 
       {/* Key Metrics */}
       <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <span className="section-header">Total Requests</span>
-            <div className="w-10 h-10 bg-[rgba(59,130,246,0.1)] rounded-lg flex items-center justify-center">
-              <Activity className="h-5 w-5 text-electric-500" />
+            <span className="text-sm font-medium text-slate-500">Total Requests</span>
+            <div className="w-10 h-10 bg-violet-100 rounded-lg flex items-center justify-center">
+              <Activity className="h-5 w-5 text-violet-600" />
             </div>
           </div>
-          <div className="metric-display">{usage.totalRequests.toLocaleString()}</div>
-          <p className="text-xs text-steel-500 mt-2">
+          <div className="text-3xl font-bold text-slate-900">{usage.totalRequests.toLocaleString()}</div>
+          <p className="text-xs text-slate-500 mt-2">
             Text: {usage.textRequests.toLocaleString()} | Audio: {usage.audioRequests.toLocaleString()}
           </p>
         </div>
 
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <span className="section-header">Threats Blocked</span>
-            <div className="w-10 h-10 bg-[rgba(239,68,68,0.1)] rounded-lg flex items-center justify-center">
-              <Shield className="h-5 w-5 text-danger" />
+            <span className="text-sm font-medium text-slate-500">Threats Blocked</span>
+            <div className="w-10 h-10 bg-rose-100 rounded-lg flex items-center justify-center">
+              <Shield className="h-5 w-5 text-rose-600" />
             </div>
           </div>
-          <div className="metric-display">{usage.blockedCount.toLocaleString()}</div>
-          <p className="text-xs text-steel-500 mt-2">{blockRate}% block rate</p>
+          <div className="text-3xl font-bold text-slate-900">{usage.blockedCount.toLocaleString()}</div>
+          <p className="text-xs text-slate-500 mt-2">{blockRate}% block rate</p>
         </div>
 
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <span className="section-header">Avg Latency</span>
-            <div className="w-10 h-10 bg-[rgba(16,185,129,0.1)] rounded-lg flex items-center justify-center">
-              <Clock className="h-5 w-5 text-success" />
+            <span className="text-sm font-medium text-slate-500">Avg Latency</span>
+            <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+              <Clock className="h-5 w-5 text-emerald-600" />
             </div>
           </div>
-          <div className="metric-display">{usage.avgLatency}ms</div>
-          <p className="text-xs text-steel-500 mt-2">Defense processing time</p>
+          <div className="text-3xl font-bold text-slate-900">{usage.avgLatency}ms</div>
+          <p className="text-xs text-slate-500 mt-2">Defense processing time</p>
         </div>
 
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <span className="section-header">Red Team</span>
-            <div className="w-10 h-10 bg-[rgba(245,158,11,0.1)] rounded-lg flex items-center justify-center">
-              <Zap className="h-5 w-5 text-warning" />
+            <span className="text-sm font-medium text-slate-500">Red Team</span>
+            <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
+              <Zap className="h-5 w-5 text-amber-600" />
             </div>
           </div>
-          <div className="metric-display">{usage.redteamAttacks.toLocaleString()}</div>
-          <p className="text-xs text-steel-500 mt-2">Simulated attacks run</p>
+          <div className="text-3xl font-bold text-slate-900">{usage.redteamAttacks.toLocaleString()}</div>
+          <p className="text-xs text-slate-500 mt-2">Simulated attacks run</p>
         </div>
       </div>
 
       <div className="grid gap-5 lg:grid-cols-2">
         {/* Daily Usage Chart */}
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="mb-6">
-            <h2 className="section-header mb-1">Daily Requests</h2>
-            <p className="text-sm text-steel-500">Request volume over time</p>
+            <h2 className="text-lg font-semibold text-slate-900 mb-1">Daily Requests</h2>
+            <p className="text-sm text-slate-500">Request volume over time</p>
           </div>
           <div className="h-48 flex items-end justify-between gap-0.5">
             {usage.dailyUsage.slice(-30).map((item, index) => {
               const total = item.text + item.audio;
               const maxTotal = Math.max(...usage.dailyUsage.map(d => d.text + d.audio));
               const height = maxTotal > 0 ? (total / maxTotal) * 100 : 0;
-              const blockedHeight = maxTotal > 0 ? (item.blocked / maxTotal) * 100 : 0;
 
               return (
                 <div key={index} className="flex-1 flex flex-col items-center">
                   <div className="w-full flex flex-col-reverse" style={{ height: '100%' }}>
                     <div
-                      className="w-full bg-gradient-to-t from-electric-600 to-electric-400 rounded-t"
+                      className="w-full bg-gradient-to-t from-violet-600 to-violet-400 rounded-t"
                       style={{ height: `${Math.max(height, 1)}%` }}
                       title={`Total: ${total} | Blocked: ${item.blocked}`}
                     />
@@ -194,28 +183,28 @@ export default function AdminUsagePage() {
               );
             })}
           </div>
-          <div className="flex items-center justify-center gap-4 mt-4 text-xs text-steel-500">
+          <div className="flex items-center justify-center gap-4 mt-4 text-xs text-slate-500">
             <span className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-electric-500 rounded" />
+              <div className="w-3 h-3 bg-violet-500 rounded" />
               Requests
             </span>
           </div>
         </div>
 
         {/* User Growth */}
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="mb-6">
-            <h2 className="section-header mb-1">User Growth</h2>
-            <p className="text-sm text-steel-500">New signups over time</p>
+            <h2 className="text-lg font-semibold text-slate-900 mb-1">User Growth</h2>
+            <p className="text-sm text-slate-500">New signups over time</p>
           </div>
           <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="p-4 bg-[rgba(59,130,246,0.05)] rounded-lg">
-              <div className="text-2xl font-bold text-steel-100">{growth.totalUsers}</div>
-              <div className="text-sm text-steel-500">Total Users</div>
+            <div className="p-4 bg-violet-50 rounded-lg">
+              <div className="text-2xl font-bold text-slate-900">{growth.totalUsers}</div>
+              <div className="text-sm text-slate-500">Total Users</div>
             </div>
-            <div className="p-4 bg-[rgba(139,92,246,0.05)] rounded-lg">
-              <div className="text-2xl font-bold text-steel-100">{growth.totalOrgs}</div>
-              <div className="text-sm text-steel-500">Total Orgs</div>
+            <div className="p-4 bg-sky-50 rounded-lg">
+              <div className="text-2xl font-bold text-slate-900">{growth.totalOrgs}</div>
+              <div className="text-sm text-slate-500">Total Orgs</div>
             </div>
           </div>
           <div className="h-32 flex items-end justify-between gap-0.5">
@@ -226,7 +215,7 @@ export default function AdminUsagePage() {
               return (
                 <div key={index} className="flex-1 flex flex-col items-center">
                   <div
-                    className="w-full bg-gradient-to-t from-purple-600 to-purple-400 rounded-t transition-all"
+                    className="w-full bg-gradient-to-t from-sky-600 to-sky-400 rounded-t transition-all"
                     style={{ height: `${Math.max(height, item.count > 0 ? 10 : 2)}%` }}
                     title={`${item.count} new users`}
                   />
@@ -238,13 +227,13 @@ export default function AdminUsagePage() {
       </div>
 
       {/* Top Organizations */}
-      <div className="dashboard-card p-0 overflow-hidden">
-        <div className="p-6 border-b border-[rgba(59,130,246,0.1)]">
-          <h2 className="section-header mb-1">Top Organizations by Usage</h2>
-          <p className="text-sm text-steel-500">Most active organizations</p>
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="p-6 border-b border-slate-100">
+          <h2 className="text-lg font-semibold text-slate-900 mb-1">Top Organizations by Usage</h2>
+          <p className="text-sm text-slate-500">Most active organizations</p>
         </div>
         {usage.topOrgs.length > 0 ? (
-          <div className="divide-y divide-[rgba(59,130,246,0.1)]">
+          <div className="divide-y divide-slate-100">
             {usage.topOrgs.map((org, index) => {
               const maxRequests = usage.topOrgs[0]?.requests || 1;
               const percentage = (org.requests / maxRequests) * 100;
@@ -252,19 +241,19 @@ export default function AdminUsagePage() {
               return (
                 <div
                   key={index}
-                  className="flex items-center gap-4 p-4 hover:bg-[rgba(59,130,246,0.02)] transition-colors"
+                  className="flex items-center gap-4 p-4 hover:bg-slate-50 transition-colors"
                 >
-                  <div className="w-8 h-8 bg-[rgba(59,130,246,0.1)] rounded-lg flex items-center justify-center text-sm font-medium text-electric-400">
+                  <div className="w-8 h-8 bg-violet-100 rounded-lg flex items-center justify-center text-sm font-medium text-violet-700">
                     {index + 1}
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium text-steel-100">{org.name}</span>
-                      <span className="text-sm text-steel-400">{org.requests.toLocaleString()} requests</span>
+                      <span className="font-medium text-slate-900">{org.name}</span>
+                      <span className="text-sm text-slate-500">{org.requests.toLocaleString()} requests</span>
                     </div>
-                    <div className="h-1.5 bg-steel-800 rounded-full overflow-hidden">
+                    <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-electric-600 to-electric-400 transition-all"
+                        className="h-full bg-gradient-to-r from-violet-600 to-violet-400 transition-all"
                         style={{ width: `${percentage}%` }}
                       />
                     </div>
@@ -274,7 +263,7 @@ export default function AdminUsagePage() {
             })}
           </div>
         ) : (
-          <div className="p-12 text-center text-steel-500">
+          <div className="p-12 text-center text-slate-500">
             <Building className="h-12 w-12 mx-auto mb-4 opacity-50" />
             No usage data yet
           </div>

@@ -32,30 +32,30 @@ const actions = [
 
 export function QuickActions() {
   return (
-    <div className="dashboard-card">
+    <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
       <div className="mb-6">
-        <h2 className="section-header mb-1">Quick Actions</h2>
-        <p className="text-sm text-steel-500">Common tasks and shortcuts</p>
+        <h2 className="text-lg font-semibold text-slate-900 mb-1">Quick Actions</h2>
+        <p className="text-sm text-slate-500">Common tasks and shortcuts</p>
       </div>
       <div className="grid grid-cols-2 gap-3">
         {actions.map((action) => (
           <Link
             key={action.title}
             href={action.href}
-            className="group p-4 rounded-lg border border-[rgba(59,130,246,0.1)] bg-[rgba(59,130,246,0.02)] hover:border-[rgba(59,130,246,0.3)] hover:bg-[rgba(59,130,246,0.05)] transition-all duration-150"
+            className="group p-4 rounded-lg border border-slate-200 bg-slate-50 hover:border-violet-300 hover:bg-violet-50 transition-all duration-150"
           >
-            <div className="h-10 w-10 rounded-lg bg-[rgba(59,130,246,0.1)] flex items-center justify-center mb-3 group-hover:bg-[rgba(59,130,246,0.2)] transition-colors">
-              <action.icon className="h-5 w-5 text-electric-500" />
+            <div className="h-10 w-10 rounded-lg bg-violet-100 flex items-center justify-center mb-3 group-hover:bg-violet-200 transition-colors">
+              <action.icon className="h-5 w-5 text-violet-600" />
             </div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="font-medium text-sm text-steel-100">{action.title}</span>
+              <span className="font-medium text-sm text-slate-900">{action.title}</span>
               {action.badge && (
-                <Badge variant="info" className="text-[10px] px-1.5 py-0">
+                <Badge className="text-[10px] px-1.5 py-0 bg-violet-100 text-violet-700 hover:bg-violet-100">
                   {action.badge}
                 </Badge>
               )}
             </div>
-            <p className="text-xs text-steel-500">{action.description}</p>
+            <p className="text-xs text-slate-500">{action.description}</p>
           </Link>
         ))}
       </div>

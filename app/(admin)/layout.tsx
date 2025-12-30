@@ -11,11 +11,12 @@ import {
   BarChart3,
   Server,
   ChevronLeft,
+  ChevronRight,
   LogOut,
+  Shield,
+  ArrowLeft,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Logo } from '@/components/shared/Logo';
-import { Badge } from '@/components/ui/badge';
 
 const adminNavItems = [
   { title: 'Overview', href: '/admin', icon: LayoutDashboard },
@@ -40,51 +41,78 @@ export default function AdminLayout({
   };
 
   return (
-    <div className="min-h-screen bg-base">
+    <div className="min-h-screen bg-slate-50">
       {/* Sidebar */}
       <aside
         className={cn(
-          'fixed left-0 top-0 z-40 h-screen bg-sidebar border-r border-[rgba(59,130,246,0.1)] transition-all duration-200',
-          collapsed ? 'w-16' : 'w-[260px]'
+          'fixed left-0 top-0 z-40 h-screen bg-slate-900 transition-all duration-300',
+          collapsed ? 'w-16' : 'w-64'
         )}
       >
         <div className="flex h-full flex-col">
           {/* Logo */}
-          <div className="flex h-16 items-center justify-between px-4 border-b border-[rgba(59,130,246,0.1)]">
+          <div className="flex h-16 items-center justify-between px-4 border-b border-slate-800">
             {!collapsed && (
-              <div className="flex items-center gap-2 animate-pulse-glow rounded-lg p-1">
-                <Logo variant="light" size="sm" />
-                <Badge variant="destructive" className="text-[10px]">ADMIN</Badge>
-              </div>
+              <Link href="/admin" className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-rose-600 flex items-center justify-center">
+                  <Shield className="w-5 h-5 text-white" />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-lg text-white">RAGuard</span>
+                  <span className="text-[10px] font-bold px-1.5 py-0.5 bg-rose-600 text-white rounded">
+                    ADMIN
+                  </span>
+                </div>
+              </Link>
             )}
             {collapsed && (
-              <div className="mx-auto animate-pulse-glow rounded-lg p-1">
-                <Logo showText={false} variant="light" size="sm" />
-              </div>
+              <Link href="/admin" className="mx-auto">
+                <div className="w-8 h-8 rounded-lg bg-rose-600 flex items-center justify-center">
+                  <Shield className="w-5 h-5 text-white" />
+                </div>
+              </Link>
             )}
             <button
-              className={cn('p-1.5 rounded-md text-steel-500 hover:text-steel-100 hover:bg-[rgba(59,130,246,0.1)] transition-all duration-150', collapsed && 'mx-auto')}
+              className={cn(
+                'p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all duration-150',
+                collapsed && 'mx-auto mt-2'
+              )}
               onClick={() => setCollapsed(!collapsed)}
             >
-              <ChevronLeft className={cn('h-4 w-4 transition-transform', collapsed && 'rotate-180')} />
+              {collapsed ? (
+                <ChevronRight className="h-4 w-4" />
+              ) : (
+                <ChevronLeft className="h-4 w-4" />
+              )}
             </button>
           </div>
 
           {/* Navigation */}
           <nav className="flex-1 overflow-y-auto p-3 space-y-1">
-            <div className="nav-divider">Admin</div>
+            {!collapsed && (
+              <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 px-3 mb-3">
+                Admin
+              </div>
+            )}
             {adminNavItems.map((item) => {
               const isActive = pathname === item.href;
               return (
                 <Link key={item.href} href={item.href}>
                   <div
                     className={cn(
-                      'nav-item',
-                      isActive && 'active'
+                      'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150',
+                      isActive
+                        ? 'bg-rose-600 text-white'
+                        : 'text-slate-400 hover:bg-slate-800 hover:text-white'
                     )}
                   >
-                    <item.icon className="nav-icon" />
-                    {!collapsed && <span className="text-sm">{item.title}</span>}
+                    <item.icon
+                      className={cn(
+                        'h-5 w-5 shrink-0',
+                        isActive ? 'text-white' : 'text-slate-500'
+                      )}
+                    />
+                    {!collapsed && <span className="flex-1">{item.title}</span>}
                   </div>
                 </Link>
               );
@@ -92,24 +120,24 @@ export default function AdminLayout({
           </nav>
 
           {/* Footer */}
-          <div className="p-3 border-t border-[rgba(59,130,246,0.1)] space-y-1">
+          <div className="p-3 border-t border-slate-800 space-y-1">
             {!collapsed && (
               <Link href="/dashboard">
-                <div className="nav-item">
-                  <ChevronLeft className="nav-icon" />
-                  <span className="text-sm">Dashboard</span>
+                <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition-all duration-150">
+                  <ArrowLeft className="h-5 w-5 text-slate-500" />
+                  <span className="flex-1">Back to Dashboard</span>
                 </div>
               </Link>
             )}
             <button
               onClick={handleLogout}
               className={cn(
-                'nav-item w-full text-danger hover:text-danger hover:bg-[rgba(239,68,68,0.1)]',
+                'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium w-full text-rose-400 hover:bg-rose-950 hover:text-rose-300 transition-all duration-150',
                 collapsed && 'justify-center'
               )}
             >
-              <LogOut className="nav-icon" />
-              {!collapsed && <span className="text-sm">Logout</span>}
+              <LogOut className="h-5 w-5" />
+              {!collapsed && <span className="flex-1 text-left">Logout</span>}
             </button>
           </div>
         </div>
@@ -118,14 +146,16 @@ export default function AdminLayout({
       {/* Header */}
       <header
         className={cn(
-          'fixed top-0 right-0 z-30 h-16 bg-base border-b border-[rgba(59,130,246,0.1)] transition-all duration-200',
-          collapsed ? 'left-16' : 'left-[260px]'
+          'fixed top-0 right-0 z-30 h-16 bg-white border-b border-slate-200 transition-all duration-300',
+          collapsed ? 'left-16' : 'left-64'
         )}
       >
         <div className="flex h-full items-center justify-between px-6">
-          <div className="text-sm text-steel-100 font-medium">Admin Dashboard</div>
+          <div className="text-sm font-medium text-slate-900">Admin Dashboard</div>
           <div className="flex items-center gap-4">
-            <Badge variant="destructive">ADMIN MODE</Badge>
+            <span className="text-xs font-bold px-2.5 py-1 bg-rose-100 text-rose-700 rounded-full">
+              ADMIN MODE
+            </span>
           </div>
         </div>
       </header>
@@ -133,11 +163,11 @@ export default function AdminLayout({
       {/* Main Content */}
       <main
         className={cn(
-          'pt-16 min-h-screen transition-all duration-200',
-          collapsed ? 'pl-16' : 'pl-[260px]'
+          'pt-16 min-h-screen transition-all duration-300',
+          collapsed ? 'pl-16' : 'pl-64'
         )}
       >
-        <div className="p-6 max-w-[1440px] mx-auto animate-fade-in">{children}</div>
+        <div className="p-6 lg:p-8 max-w-[1400px] mx-auto">{children}</div>
       </main>
     </div>
   );

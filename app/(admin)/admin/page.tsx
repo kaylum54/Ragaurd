@@ -33,7 +33,6 @@ export default function AdminPage() {
         setStats(data);
       } catch (error) {
         console.error('Failed to fetch admin stats:', error);
-        // Use fallback data if API fails
         setStats({
           totalUsers: 0,
           totalOrgs: 0,
@@ -55,7 +54,7 @@ export default function AdminPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-electric-500" />
+        <Loader2 className="h-8 w-8 animate-spin text-rose-600" />
       </div>
     );
   }
@@ -77,70 +76,70 @@ export default function AdminPage() {
     <div className="space-y-8">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-semibold text-steel-100">Overview</h1>
-        <p className="text-sm text-steel-500 mt-1">Platform metrics and system health</p>
+        <h1 className="text-2xl font-bold text-slate-900">Overview</h1>
+        <p className="text-sm text-slate-500 mt-1">Platform metrics and system health</p>
       </div>
 
       {/* Key Metrics */}
       <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <span className="section-header">Users</span>
-            <div className="w-10 h-10 bg-[rgba(59,130,246,0.1)] rounded-lg flex items-center justify-center">
-              <Users className="h-5 w-5 text-electric-500" />
+            <span className="text-sm font-medium text-slate-500">Users</span>
+            <div className="w-10 h-10 bg-violet-100 rounded-lg flex items-center justify-center">
+              <Users className="h-5 w-5 text-violet-600" />
             </div>
           </div>
-          <div className="metric-display">
+          <div className="text-3xl font-bold text-slate-900">
             {(stats?.totalUsers || 0).toLocaleString()}
           </div>
-          <p className="text-xs text-success flex items-center gap-1 mt-2">
+          <p className="text-xs text-emerald-600 flex items-center gap-1 mt-2">
             <TrendingUp className="h-3 w-3" />
             +{stats?.newUsersToday || 0} today
           </p>
         </div>
 
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <span className="section-header">Organizations</span>
-            <div className="w-10 h-10 bg-[rgba(139,92,246,0.1)] rounded-lg flex items-center justify-center">
-              <Building className="h-5 w-5 text-purple-400" />
+            <span className="text-sm font-medium text-slate-500">Organizations</span>
+            <div className="w-10 h-10 bg-sky-100 rounded-lg flex items-center justify-center">
+              <Building className="h-5 w-5 text-sky-600" />
             </div>
           </div>
-          <div className="metric-display">
+          <div className="text-3xl font-bold text-slate-900">
             {(stats?.totalOrgs || 0).toLocaleString()}
           </div>
-          <p className="text-xs text-success flex items-center gap-1 mt-2">
+          <p className="text-xs text-emerald-600 flex items-center gap-1 mt-2">
             <TrendingUp className="h-3 w-3" />
             +{stats?.newOrgsToday || 0} today
           </p>
         </div>
 
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <span className="section-header">MRR</span>
-            <div className="w-10 h-10 bg-[rgba(16,185,129,0.1)] rounded-lg flex items-center justify-center">
-              <DollarSign className="h-5 w-5 text-success" />
+            <span className="text-sm font-medium text-slate-500">MRR</span>
+            <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+              <DollarSign className="h-5 w-5 text-emerald-600" />
             </div>
           </div>
-          <div className="metric-display">
+          <div className="text-3xl font-bold text-slate-900">
             ${((stats?.mrr || 0) / 100).toLocaleString()}
           </div>
-          <p className="text-xs text-steel-500 mt-2">
+          <p className="text-xs text-slate-500 mt-2">
             {stats?.activeSubscriptions || 0} active subscriptions
           </p>
         </div>
 
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <span className="section-header">Requests</span>
-            <div className="w-10 h-10 bg-[rgba(6,182,212,0.1)] rounded-lg flex items-center justify-center">
-              <Activity className="h-5 w-5 text-cyan-400" />
+            <span className="text-sm font-medium text-slate-500">Requests</span>
+            <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
+              <Activity className="h-5 w-5 text-amber-600" />
             </div>
           </div>
-          <div className="metric-display">
+          <div className="text-3xl font-bold text-slate-900">
             {formatNumber(stats?.totalRequests || 0)}
           </div>
-          <p className="text-xs text-steel-500 mt-2">
+          <p className="text-xs text-slate-500 mt-2">
             {(stats?.blockedThreats || 0).toLocaleString()} threats blocked
           </p>
         </div>
@@ -148,27 +147,27 @@ export default function AdminPage() {
 
       <div className="grid gap-5 lg:grid-cols-2">
         {/* System Status */}
-        <div className="dashboard-card p-0 overflow-hidden">
-          <div className="p-6 border-b border-[rgba(59,130,246,0.1)]">
-            <h2 className="section-header mb-1">System Status</h2>
-            <p className="text-sm text-steel-500">AWS instance health</p>
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="p-6 border-b border-slate-100">
+            <h2 className="text-lg font-semibold text-slate-900 mb-1">System Status</h2>
+            <p className="text-sm text-slate-500">AWS instance health</p>
           </div>
-          <div className="divide-y divide-[rgba(59,130,246,0.1)]">
+          <div className="divide-y divide-slate-100">
             {systemStatus.map((system) => (
-              <div key={system.name} className="flex items-center justify-between p-4 hover:bg-[rgba(59,130,246,0.02)] transition-colors">
+              <div key={system.name} className="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors">
                 <div className="flex items-center gap-3">
                   <div
                     className={`h-2.5 w-2.5 rounded-full ${
-                      system.status === 'healthy' ? 'bg-success animate-pulse' :
-                      system.status === 'pending' ? 'bg-warning' : 'bg-danger'
+                      system.status === 'healthy' ? 'bg-emerald-500 animate-pulse' :
+                      system.status === 'pending' ? 'bg-amber-500' : 'bg-rose-500'
                     }`}
                   />
-                  <span className="text-sm text-steel-100">{system.name}</span>
+                  <span className="text-sm text-slate-900">{system.name}</span>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="text-xs text-steel-500 font-mono tabular-nums">{system.latency}</span>
+                  <span className="text-xs text-slate-500 font-mono tabular-nums">{system.latency}</span>
                   <span className={`text-xs uppercase tracking-wider font-medium ${
-                    system.status === 'healthy' ? 'text-success' : 'text-warning'
+                    system.status === 'healthy' ? 'text-emerald-600' : 'text-amber-600'
                   }`}>
                     {system.status}
                   </span>
@@ -179,35 +178,35 @@ export default function AdminPage() {
         </div>
 
         {/* Platform Summary */}
-        <div className="dashboard-card p-0 overflow-hidden">
-          <div className="p-6 border-b border-[rgba(59,130,246,0.1)]">
-            <h2 className="section-header mb-1">Platform Summary</h2>
-            <p className="text-sm text-steel-500">Key platform metrics</p>
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="p-6 border-b border-slate-100">
+            <h2 className="text-lg font-semibold text-slate-900 mb-1">Platform Summary</h2>
+            <p className="text-sm text-slate-500">Key platform metrics</p>
           </div>
-          <div className="divide-y divide-[rgba(59,130,246,0.1)]">
+          <div className="divide-y divide-slate-100">
             {recentActivity.map((activity, index) => (
-              <div key={index} className="flex items-start gap-4 p-4 hover:bg-[rgba(59,130,246,0.02)] transition-colors">
+              <div key={index} className="flex items-start gap-4 p-4 hover:bg-slate-50 transition-colors">
                 <div
                   className={`w-10 h-10 flex items-center justify-center shrink-0 rounded-lg ${
-                    activity.type === 'signup' ? 'bg-[rgba(59,130,246,0.1)]' :
-                    activity.type === 'upgrade' ? 'bg-[rgba(16,185,129,0.1)]' :
-                    activity.type === 'downgrade' ? 'bg-[rgba(245,158,11,0.1)]' :
-                    'bg-[rgba(239,68,68,0.1)]'
+                    activity.type === 'signup' ? 'bg-violet-100' :
+                    activity.type === 'upgrade' ? 'bg-emerald-100' :
+                    activity.type === 'downgrade' ? 'bg-amber-100' :
+                    'bg-rose-100'
                   }`}
                 >
                   {activity.type === 'alert' ? (
-                    <AlertTriangle className="h-4 w-4 text-danger" />
+                    <AlertTriangle className="h-4 w-4 text-rose-600" />
                   ) : activity.type === 'upgrade' ? (
-                    <CheckCircle className="h-4 w-4 text-success" />
+                    <CheckCircle className="h-4 w-4 text-emerald-600" />
                   ) : (
                     <Users className={`h-4 w-4 ${
-                      activity.type === 'signup' ? 'text-electric-500' : 'text-warning'
+                      activity.type === 'signup' ? 'text-violet-600' : 'text-amber-600'
                     }`} />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-steel-100">{activity.message}</p>
-                  <p className="text-xs text-steel-500 mt-1">{activity.time}</p>
+                  <p className="text-sm text-slate-900">{activity.message}</p>
+                  <p className="text-xs text-slate-500 mt-1">{activity.time}</p>
                 </div>
               </div>
             ))}

@@ -13,9 +13,10 @@ import {
   Settings,
   HelpCircle,
   ChevronLeft,
+  ChevronRight,
+  ExternalLink,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Logo } from '@/components/shared/Logo';
 
 const mainNavItems = [
   {
@@ -29,14 +30,14 @@ const mainNavItems = [
     icon: Shield,
     children: [
       { title: 'Text Defense', href: '/dashboard/defense/text' },
-      { title: 'Audio Defense', href: '/dashboard/defense/audio', badge: 'Pro+' },
+      { title: 'Audio Defense', href: '/dashboard/defense/audio', badge: 'Pro' },
     ],
   },
   {
     title: 'Red Team',
     href: '/dashboard/redteam',
     icon: Target,
-    badge: 'Pro+',
+    badge: 'Pro',
   },
   {
     title: 'API Keys',
@@ -60,7 +61,6 @@ const bottomNavItems = [
     title: 'Team',
     href: '/dashboard/team',
     icon: Users,
-    badge: 'Starter+',
   },
   {
     title: 'Settings',
@@ -80,39 +80,50 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 z-40 h-screen bg-sidebar border-r border-[rgba(59,130,246,0.1)] transition-all duration-300',
-        collapsed ? 'w-16' : 'w-[260px]'
+        'fixed left-0 top-0 z-40 h-screen bg-white border-r border-slate-200 transition-all duration-300',
+        collapsed ? 'w-16' : 'w-64'
       )}
     >
       <div className="flex h-full flex-col">
-        {/* Logo with glow effect */}
-        <div className="flex h-16 items-center justify-between px-4 border-b border-[rgba(59,130,246,0.1)]">
+        {/* Logo */}
+        <div className="flex h-16 items-center justify-between px-4 border-b border-slate-100">
           {!collapsed && (
-            <div className="animate-pulse-glow rounded-lg p-1">
-              <Logo variant="light" />
-            </div>
+            <Link href="/dashboard" className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center">
+                <Shield className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-bold text-lg text-slate-900">RAGuard</span>
+            </Link>
           )}
           {collapsed && (
-            <div className="mx-auto animate-pulse-glow rounded-lg p-1">
-              <Logo showText={false} variant="light" />
-            </div>
+            <Link href="/dashboard" className="mx-auto">
+              <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center">
+                <Shield className="w-5 h-5 text-white" />
+              </div>
+            </Link>
           )}
           <button
             className={cn(
-              'p-1.5 rounded-md text-steel-500 hover:text-steel-100 hover:bg-[rgba(59,130,246,0.1)] transition-all duration-150',
-              collapsed && 'mx-auto'
+              'p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all duration-150',
+              collapsed && 'mx-auto mt-2'
             )}
             onClick={onToggle}
           >
-            <ChevronLeft
-              className={cn('h-4 w-4 transition-transform', collapsed && 'rotate-180')}
-            />
+            {collapsed ? (
+              <ChevronRight className="h-4 w-4" />
+            ) : (
+              <ChevronLeft className="h-4 w-4" />
+            )}
           </button>
         </div>
 
         {/* Main Navigation */}
         <nav className="flex-1 overflow-y-auto p-3 space-y-1">
-          <div className="nav-divider">Main</div>
+          {!collapsed && (
+            <div className="text-xs font-semibold uppercase tracking-wider text-slate-400 px-3 mb-3">
+              Main
+            </div>
+          )}
           {mainNavItems.map((item) => {
             const isActive =
               pathname === item.href || pathname.startsWith(item.href + '/');
@@ -122,16 +133,21 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
                 <Link href={item.href}>
                   <div
                     className={cn(
-                      'nav-item',
-                      isActive && 'active'
+                      'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150',
+                      isActive
+                        ? 'bg-violet-50 text-violet-700'
+                        : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                     )}
                   >
-                    <item.icon className="nav-icon" />
+                    <item.icon className={cn(
+                      'h-5 w-5 shrink-0',
+                      isActive ? 'text-violet-600' : 'text-slate-400'
+                    )} />
                     {!collapsed && (
                       <>
-                        <span className="flex-1 text-sm">{item.title}</span>
+                        <span className="flex-1">{item.title}</span>
                         {item.badge && (
-                          <span className="badge-info text-[10px] px-1.5 py-0.5">
+                          <span className="text-xs font-medium px-2 py-0.5 bg-violet-100 text-violet-700 rounded-full">
                             {item.badge}
                           </span>
                         )}
@@ -147,15 +163,15 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
                         <Link key={child.href} href={child.href}>
                           <div
                             className={cn(
-                              'flex items-center gap-3 rounded-md px-3 py-1.5 text-sm transition-all duration-150',
+                              'flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-150',
                               isChildActive
-                                ? 'text-electric-500 font-medium'
-                                : 'text-steel-500 hover:text-steel-100'
+                                ? 'text-violet-700 font-medium bg-violet-50/50'
+                                : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
                             )}
                           >
                             <span className="flex-1">{child.title}</span>
                             {child.badge && (
-                              <span className="badge-info text-[10px] px-1.5 py-0.5">
+                              <span className="text-xs font-medium px-1.5 py-0.5 bg-violet-100 text-violet-700 rounded">
                                 {child.badge}
                               </span>
                             )}
@@ -171,8 +187,12 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
         </nav>
 
         {/* Bottom Navigation */}
-        <div className="p-3 border-t border-[rgba(59,130,246,0.1)] space-y-1">
-          <div className="nav-divider">Account</div>
+        <div className="p-3 border-t border-slate-100 space-y-1">
+          {!collapsed && (
+            <div className="text-xs font-semibold uppercase tracking-wider text-slate-400 px-3 mb-3">
+              Account
+            </div>
+          )}
           {bottomNavItems.map((item) => {
             const isActive = pathname === item.href;
 
@@ -180,21 +200,17 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
               <Link key={item.href} href={item.href}>
                 <div
                   className={cn(
-                    'nav-item',
-                    isActive && 'active'
+                    'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150',
+                    isActive
+                      ? 'bg-violet-50 text-violet-700'
+                      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                   )}
                 >
-                  <item.icon className="nav-icon" />
-                  {!collapsed && (
-                    <>
-                      <span className="flex-1 text-sm">{item.title}</span>
-                      {item.badge && (
-                        <span className="badge-info text-[10px] px-1.5 py-0.5">
-                          {item.badge}
-                        </span>
-                      )}
-                    </>
-                  )}
+                  <item.icon className={cn(
+                    'h-5 w-5 shrink-0',
+                    isActive ? 'text-violet-600' : 'text-slate-400'
+                  )} />
+                  {!collapsed && <span className="flex-1">{item.title}</span>}
                 </div>
               </Link>
             );
@@ -202,11 +218,12 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
 
           {!collapsed && (
             <>
-              <div className="separator my-3" />
-              <Link href="/docs">
-                <div className="nav-item">
-                  <HelpCircle className="nav-icon" />
-                  <span className="text-sm">Documentation</span>
+              <div className="h-px bg-slate-100 my-3" />
+              <Link href="/docs" target="_blank">
+                <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all duration-150">
+                  <HelpCircle className="h-5 w-5 text-slate-400" />
+                  <span className="flex-1">Documentation</span>
+                  <ExternalLink className="h-4 w-4 text-slate-400" />
                 </div>
               </Link>
             </>

@@ -1,92 +1,103 @@
 import Link from 'next/link';
-import { ArrowRight, CheckCircle } from 'lucide-react';
+import { ArrowRight, Shield, Zap, Lock } from 'lucide-react';
 
 export function Hero() {
   return (
-    <section className="min-h-screen flex flex-col justify-center pt-24 pb-20 relative overflow-hidden">
-      {/* Background glow effects */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-electric-500/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl" />
+    <section className="relative pt-32 pb-20 overflow-hidden">
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-violet-50/50 to-white" />
+
+      {/* Mesh gradient overlay */}
+      <div className="absolute inset-0 hero-mesh opacity-60" />
 
       <div className="container relative">
-        <div className="max-w-3xl">
+        <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[rgba(59,130,246,0.1)] border border-[rgba(59,130,246,0.2)] rounded-full mb-8 animate-fade-in">
-            <span className="w-1.5 h-1.5 bg-electric-500 rounded-full animate-pulse" />
-            <span className="text-sm text-electric-400">
-              Protecting 50M+ API calls monthly
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-violet-100 rounded-full mb-8 animate-fade-up">
+            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+            <span className="text-sm font-medium text-violet-700">
+              Trusted by 500+ voice AI companies
             </span>
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-steel-100 leading-[1.1] animate-slide-up">
-            Security layer for
-            <span className="gradient-primary-text"> Voice AI</span>
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[1.1] animate-fade-up">
+            Secure your
+            <span className="gradient-text"> Voice AI</span>
+            <br />
+            in minutes
           </h1>
 
           {/* Subheadline */}
-          <p className="mt-6 text-lg text-steel-400 max-w-xl leading-relaxed animate-slide-up" style={{ animationDelay: '100ms' }}>
-            Protect your voice agents from prompt injection, jailbreaking, and deepfake attacks.
-            One API call, complete protection.
+          <p className="mt-6 text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed animate-fade-up-delay-1">
+            Stop prompt injections, jailbreaks, and deepfakes before they reach your voice agents.
+            One API. Complete protection.
           </p>
 
           {/* CTA Buttons */}
-          <div className="mt-10 flex flex-wrap items-center gap-4 animate-slide-up" style={{ animationDelay: '200ms' }}>
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4 animate-fade-up-delay-2">
             <Link
               href="/signup"
-              className="btn-primary inline-flex items-center gap-2"
+              className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-medium px-6 py-3 rounded-lg transition-all hover:shadow-lg hover:shadow-violet-500/25"
             >
               Start for free
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
-              href="/docs"
-              className="btn-secondary inline-flex items-center gap-2"
+              href="/demo"
+              className="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 font-medium px-6 py-3 rounded-lg border border-slate-200 transition-colors"
             >
-              View documentation
+              See it in action
             </Link>
           </div>
 
           {/* Trust Indicators */}
-          <div className="mt-10 flex flex-wrap items-center gap-6 text-sm text-steel-500 animate-slide-up" style={{ animationDelay: '300ms' }}>
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm text-slate-500">
             <span className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-success" />
+              <Shield className="w-4 h-4 text-emerald-500" />
+              SOC2 Compliant
+            </span>
+            <span className="flex items-center gap-2">
+              <Zap className="w-4 h-4 text-amber-500" />
+              &lt;200ms latency
+            </span>
+            <span className="flex items-center gap-2">
+              <Lock className="w-4 h-4 text-violet-500" />
               No credit card required
             </span>
-            <span className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-success" />
-              5 minute setup
-            </span>
-            <span className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-success" />
-              SOC2 compliant
-            </span>
           </div>
         </div>
 
-        {/* Stats Section */}
-        <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 pt-10 border-t border-[rgba(59,130,246,0.1)]">
-          <div className="animate-slide-up" style={{ animationDelay: '400ms' }}>
-            <div className="text-3xl md:text-4xl font-bold text-steel-100 tabular-nums">99.53%</div>
-            <div className="text-sm text-steel-500 mt-1">Attack block rate</div>
+        {/* Stats Grid */}
+        <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+          <div className="text-center">
+            <div className="text-4xl md:text-5xl font-bold text-slate-900 tabular-nums">99.5%</div>
+            <div className="text-sm text-slate-500 mt-2">Block rate</div>
           </div>
-          <div className="animate-slide-up" style={{ animationDelay: '500ms' }}>
-            <div className="text-3xl md:text-4xl font-bold text-steel-100 tabular-nums">&lt;200ms</div>
-            <div className="text-sm text-steel-500 mt-1">Average latency</div>
+          <div className="text-center">
+            <div className="text-4xl md:text-5xl font-bold text-slate-900 tabular-nums">&lt;200ms</div>
+            <div className="text-sm text-slate-500 mt-2">Avg latency</div>
           </div>
-          <div className="animate-slide-up" style={{ animationDelay: '600ms' }}>
-            <div className="text-3xl md:text-4xl font-bold text-success tabular-nums">0%</div>
-            <div className="text-sm text-steel-500 mt-1">False positive rate</div>
+          <div className="text-center">
+            <div className="text-4xl md:text-5xl font-bold text-emerald-600 tabular-nums">0%</div>
+            <div className="text-sm text-slate-500 mt-2">False positives</div>
           </div>
-          <div className="animate-slide-up" style={{ animationDelay: '700ms' }}>
-            <div className="text-3xl md:text-4xl font-bold gradient-primary-text tabular-nums">6</div>
-            <div className="text-sm text-steel-500 mt-1">Defense layers</div>
+          <div className="text-center">
+            <div className="text-4xl md:text-5xl font-bold gradient-text tabular-nums">6</div>
+            <div className="text-sm text-slate-500 mt-2">Defense layers</div>
           </div>
         </div>
 
-        {/* Platform Support */}
-        <div className="mt-12 text-sm text-steel-600 animate-fade-in" style={{ animationDelay: '800ms' }}>
-          Works with Vapi, Retell, Bland AI, and any voice platform
+        {/* Platform Logos */}
+        <div className="mt-16 text-center">
+          <p className="text-sm text-slate-400 mb-6">Works with your favorite voice platforms</p>
+          <div className="flex flex-wrap items-center justify-center gap-8 text-slate-400">
+            <span className="font-semibold">Vapi</span>
+            <span className="font-semibold">Retell</span>
+            <span className="font-semibold">Bland AI</span>
+            <span className="font-semibold">ElevenLabs</span>
+            <span className="font-semibold">+ more</span>
+          </div>
         </div>
       </div>
     </section>

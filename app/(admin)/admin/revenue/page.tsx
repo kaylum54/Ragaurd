@@ -21,10 +21,10 @@ interface RevenueData {
 }
 
 const planColors: Record<string, string> = {
-  starter: 'bg-electric-500',
-  pro: 'bg-purple-500',
-  business: 'bg-success',
-  enterprise: 'bg-warning',
+  starter: 'bg-violet-600',
+  pro: 'bg-sky-600',
+  business: 'bg-emerald-600',
+  enterprise: 'bg-amber-600',
 };
 
 export default function AdminRevenuePage() {
@@ -65,14 +65,14 @@ export default function AdminRevenuePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-electric-500" />
+        <Loader2 className="h-8 w-8 animate-spin text-rose-600" />
       </div>
     );
   }
 
   if (!data) {
     return (
-      <div className="text-center text-steel-500 py-12">
+      <div className="text-center text-slate-500 py-12">
         Failed to load revenue data
       </div>
     );
@@ -87,21 +87,21 @@ export default function AdminRevenuePage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-semibold text-steel-100">Revenue</h1>
-        <p className="text-sm text-steel-500 mt-1">Track MRR, ARR, and subscription metrics</p>
+        <h1 className="text-2xl font-bold text-slate-900">Revenue</h1>
+        <p className="text-sm text-slate-500 mt-1">Track MRR, ARR, and subscription metrics</p>
       </div>
 
       {/* Key Metrics */}
       <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <span className="section-header">MRR</span>
-            <div className="w-10 h-10 bg-[rgba(16,185,129,0.1)] rounded-lg flex items-center justify-center">
-              <DollarSign className="h-5 w-5 text-success" />
+            <span className="text-sm font-medium text-slate-500">MRR</span>
+            <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+              <DollarSign className="h-5 w-5 text-emerald-600" />
             </div>
           </div>
-          <div className="metric-display">{formatCurrency(data.mrr)}</div>
-          <p className={`text-xs flex items-center gap-1 mt-2 ${growth >= 0 ? 'text-success' : 'text-danger'}`}>
+          <div className="text-3xl font-bold text-slate-900">{formatCurrency(data.mrr)}</div>
+          <p className={`text-xs flex items-center gap-1 mt-2 ${growth >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
             {growth >= 0 ? (
               <ArrowUpRight className="h-3 w-3" />
             ) : (
@@ -111,54 +111,54 @@ export default function AdminRevenuePage() {
           </p>
         </div>
 
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <span className="section-header">ARR</span>
-            <div className="w-10 h-10 bg-[rgba(59,130,246,0.1)] rounded-lg flex items-center justify-center">
-              <TrendingUp className="h-5 w-5 text-electric-500" />
+            <span className="text-sm font-medium text-slate-500">ARR</span>
+            <div className="w-10 h-10 bg-violet-100 rounded-lg flex items-center justify-center">
+              <TrendingUp className="h-5 w-5 text-violet-600" />
             </div>
           </div>
-          <div className="metric-display">{formatCurrency(data.arr)}</div>
-          <p className="text-xs text-steel-500 mt-2">Annual recurring revenue</p>
+          <div className="text-3xl font-bold text-slate-900">{formatCurrency(data.arr)}</div>
+          <p className="text-xs text-slate-500 mt-2">Annual recurring revenue</p>
         </div>
 
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <span className="section-header">Subscriptions</span>
-            <div className="w-10 h-10 bg-[rgba(139,92,246,0.1)] rounded-lg flex items-center justify-center">
-              <CreditCard className="h-5 w-5 text-purple-400" />
+            <span className="text-sm font-medium text-slate-500">Subscriptions</span>
+            <div className="w-10 h-10 bg-sky-100 rounded-lg flex items-center justify-center">
+              <CreditCard className="h-5 w-5 text-sky-600" />
             </div>
           </div>
-          <div className="metric-display">
+          <div className="text-3xl font-bold text-slate-900">
             {data.planBreakdown.reduce((acc, p) => acc + p.count, 0)}
           </div>
-          <p className="text-xs text-steel-500 mt-2">Active paid subscriptions</p>
+          <p className="text-xs text-slate-500 mt-2">Active paid subscriptions</p>
         </div>
 
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <span className="section-header">Avg Revenue</span>
-            <div className="w-10 h-10 bg-[rgba(245,158,11,0.1)] rounded-lg flex items-center justify-center">
-              <PieChart className="h-5 w-5 text-warning" />
+            <span className="text-sm font-medium text-slate-500">Avg Revenue</span>
+            <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
+              <PieChart className="h-5 w-5 text-amber-600" />
             </div>
           </div>
-          <div className="metric-display">
+          <div className="text-3xl font-bold text-slate-900">
             {formatCurrency(
               data.planBreakdown.reduce((acc, p) => acc + p.count, 0) > 0
                 ? data.mrr / data.planBreakdown.reduce((acc, p) => acc + p.count, 0)
                 : 0
             )}
           </div>
-          <p className="text-xs text-steel-500 mt-2">Per customer (ARPU)</p>
+          <p className="text-xs text-slate-500 mt-2">Per customer (ARPU)</p>
         </div>
       </div>
 
       <div className="grid gap-5 lg:grid-cols-2">
         {/* MRR Chart */}
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="mb-6">
-            <h2 className="section-header mb-1">MRR Over Time</h2>
-            <p className="text-sm text-steel-500">Last 12 months</p>
+            <h2 className="text-lg font-semibold text-slate-900 mb-1">MRR Over Time</h2>
+            <p className="text-sm text-slate-500">Last 12 months</p>
           </div>
           <div className="h-48 flex items-end justify-between gap-1">
             {data.mrrHistory.map((item, index) => {
@@ -167,11 +167,11 @@ export default function AdminRevenuePage() {
               return (
                 <div key={index} className="flex-1 flex flex-col items-center gap-2">
                   <div
-                    className="w-full bg-gradient-to-t from-electric-600 to-electric-400 rounded-t transition-all hover:from-electric-500 hover:to-electric-300"
+                    className="w-full bg-gradient-to-t from-emerald-600 to-emerald-400 rounded-t transition-all hover:from-emerald-500 hover:to-emerald-300"
                     style={{ height: `${Math.max(height, 2)}%` }}
                     title={`${formatCurrency(item.mrr)}`}
                   />
-                  <span className="text-[10px] text-steel-500">
+                  <span className="text-[10px] text-slate-500">
                     {formatDate(item.date)}
                   </span>
                 </div>
@@ -181,10 +181,10 @@ export default function AdminRevenuePage() {
         </div>
 
         {/* Plan Breakdown */}
-        <div className="dashboard-card">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="mb-6">
-            <h2 className="section-header mb-1">Revenue by Plan</h2>
-            <p className="text-sm text-steel-500">Current distribution</p>
+            <h2 className="text-lg font-semibold text-slate-900 mb-1">Revenue by Plan</h2>
+            <p className="text-sm text-slate-500">Current distribution</p>
           </div>
           <div className="space-y-4">
             {data.planBreakdown.length > 0 ? (
@@ -194,18 +194,18 @@ export default function AdminRevenuePage() {
                   <div key={plan.plan} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <Badge className={`${planColors[plan.plan] || 'bg-steel-600'} text-white capitalize`}>
+                        <Badge className={`${planColors[plan.plan] || 'bg-slate-600'} text-white capitalize`}>
                           {plan.plan}
                         </Badge>
-                        <span className="text-sm text-steel-400">{plan.count} customers</span>
+                        <span className="text-sm text-slate-500">{plan.count} customers</span>
                       </div>
-                      <span className="text-sm font-medium text-steel-100">
+                      <span className="text-sm font-medium text-slate-900">
                         {formatCurrency(plan.revenue)}
                       </span>
                     </div>
-                    <div className="h-2 bg-steel-800 rounded-full overflow-hidden">
+                    <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
                       <div
-                        className={`h-full ${planColors[plan.plan] || 'bg-steel-600'} transition-all`}
+                        className={`h-full ${planColors[plan.plan] || 'bg-slate-600'} transition-all`}
                         style={{ width: `${percentage}%` }}
                       />
                     </div>
@@ -213,43 +213,43 @@ export default function AdminRevenuePage() {
                 );
               })
             ) : (
-              <p className="text-steel-500 text-center py-8">No paid subscriptions yet</p>
+              <p className="text-slate-500 text-center py-8">No paid subscriptions yet</p>
             )}
           </div>
         </div>
       </div>
 
       {/* Recent Transactions */}
-      <div className="dashboard-card p-0 overflow-hidden">
-        <div className="p-6 border-b border-[rgba(59,130,246,0.1)]">
-          <h2 className="section-header mb-1">Recent Transactions</h2>
-          <p className="text-sm text-steel-500">Latest subscription activity</p>
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="p-6 border-b border-slate-100">
+          <h2 className="text-lg font-semibold text-slate-900 mb-1">Recent Transactions</h2>
+          <p className="text-sm text-slate-500">Latest subscription activity</p>
         </div>
         {data.recentTransactions.length > 0 ? (
-          <div className="divide-y divide-[rgba(59,130,246,0.1)]">
+          <div className="divide-y divide-slate-100">
             {data.recentTransactions.map((tx, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-4 hover:bg-[rgba(59,130,246,0.02)] transition-colors"
+                className="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-[rgba(16,185,129,0.1)] rounded-lg flex items-center justify-center">
-                    <DollarSign className="h-5 w-5 text-success" />
+                  <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+                    <DollarSign className="h-5 w-5 text-emerald-600" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-steel-100">{tx.org}</p>
-                    <p className="text-xs text-steel-500 capitalize">{tx.type}</p>
+                    <p className="text-sm font-medium text-slate-900">{tx.org}</p>
+                    <p className="text-xs text-slate-500 capitalize">{tx.type}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium text-success">+{formatCurrency(tx.amount)}</p>
-                  <p className="text-xs text-steel-500">{formatDate(tx.date)}</p>
+                  <p className="text-sm font-medium text-emerald-600">+{formatCurrency(tx.amount)}</p>
+                  <p className="text-xs text-slate-500">{formatDate(tx.date)}</p>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="p-12 text-center text-steel-500">
+          <div className="p-12 text-center text-slate-500">
             No transactions yet
           </div>
         )}

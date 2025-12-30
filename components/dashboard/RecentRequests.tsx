@@ -23,76 +23,80 @@ export function RecentRequests() {
   const { data: requests, loading } = useRecentRequests(8);
 
   return (
-    <div className="dashboard-card">
+    <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
       <div className="mb-6">
-        <h2 className="section-header mb-1">Recent Requests</h2>
-        <p className="text-sm text-steel-500">Latest API requests and their status</p>
+        <h2 className="text-lg font-semibold text-slate-900 mb-1">Recent Requests</h2>
+        <p className="text-sm text-slate-500">Latest API requests and their status</p>
       </div>
 
       {loading ? (
         <div className="h-[300px] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-electric-500" />
+          <Loader2 className="h-8 w-8 animate-spin text-violet-600" />
         </div>
       ) : (
-        <div className="overflow-hidden rounded-lg border border-[rgba(59,130,246,0.1)]">
+        <div className="overflow-hidden rounded-lg border border-slate-200">
           <table className="w-full">
-            <thead className="table-header">
+            <thead className="bg-slate-50 border-b border-slate-200">
               <tr>
-                <th className="table-header-cell">Status</th>
-                <th className="table-header-cell">Type</th>
-                <th className="table-header-cell">Details</th>
-                <th className="table-header-cell text-right">Latency</th>
-                <th className="table-header-cell text-right">Time</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Status</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Type</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Details</th>
+                <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">Latency</th>
+                <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">Time</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-slate-100">
               {requests.map((request) => (
-                <tr key={request.id} className="table-row">
-                  <td className="table-cell">
+                <tr key={request.id} className="hover:bg-slate-50 transition-colors">
+                  <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
                       <div
                         className={cn(
                           'h-8 w-8 rounded-lg flex items-center justify-center',
-                          request.status === 'blocked' && 'bg-[rgba(239,68,68,0.1)]',
-                          request.status === 'passed' && 'bg-[rgba(16,185,129,0.1)]',
-                          request.status === 'error' && 'bg-[rgba(245,158,11,0.1)]'
+                          request.status === 'blocked' && 'bg-rose-100',
+                          request.status === 'passed' && 'bg-emerald-100',
+                          request.status === 'error' && 'bg-amber-100'
                         )}
                       >
                         {request.status === 'blocked' ? (
-                          <AlertTriangle className="h-4 w-4 text-danger" />
+                          <AlertTriangle className="h-4 w-4 text-rose-600" />
                         ) : (
-                          <Shield className="h-4 w-4 text-success" />
+                          <Shield className="h-4 w-4 text-emerald-600" />
                         )}
                       </div>
                       <Badge
-                        variant={request.status === 'blocked' ? 'destructive' : 'success'}
-                        className="capitalize"
+                        className={cn(
+                          'capitalize',
+                          request.status === 'blocked'
+                            ? 'bg-rose-100 text-rose-700 hover:bg-rose-100'
+                            : 'bg-emerald-100 text-emerald-700 hover:bg-emerald-100'
+                        )}
                       >
                         {request.status}
                       </Badge>
                     </div>
                   </td>
-                  <td className="table-cell">
-                    <Badge variant="secondary" className="capitalize">
+                  <td className="px-4 py-3">
+                    <Badge variant="secondary" className="capitalize bg-slate-100 text-slate-700">
                       {request.type}
                     </Badge>
                   </td>
-                  <td className="table-cell">
+                  <td className="px-4 py-3">
                     {request.threatCategory ? (
-                      <span className="text-sm text-steel-400">
+                      <span className="text-sm text-slate-600">
                         {request.blockedBy?.replace(/_/g, ' ')} - {request.threatCategory.replace(/_/g, ' ')}
                       </span>
                     ) : (
-                      <span className="text-sm text-steel-500">—</span>
+                      <span className="text-sm text-slate-400">—</span>
                     )}
                   </td>
-                  <td className="table-cell table-cell-numeric">
-                    <span className="text-sm font-medium text-steel-100">
+                  <td className="px-4 py-3 text-right">
+                    <span className="text-sm font-medium text-slate-900">
                       {request.latencyMs ? `${request.latencyMs}ms` : '—'}
                     </span>
                   </td>
-                  <td className="table-cell table-cell-numeric">
-                    <div className="flex items-center gap-1 justify-end text-steel-500">
+                  <td className="px-4 py-3 text-right">
+                    <div className="flex items-center gap-1 justify-end text-slate-500">
                       <Clock className="h-3 w-3" />
                       <span className="text-xs">{formatTimeAgo(request.timestamp)}</span>
                     </div>
