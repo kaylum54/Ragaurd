@@ -5,15 +5,23 @@ import { getUsageLimits, getCurrentMonthUsage } from '@/lib/services/db/usage';
 import { getApiKeyCount } from '@/lib/services/db/api-keys';
 import { getMemberCount } from '@/lib/services/db/organizations';
 
+// Demo mode for development without auth
+const isDemoMode = () => process.env.NODE_ENV === 'development' || !process.env.AUTH0_CLIENT_ID;
+
 export async function GET() {
   try {
-    const session = await getSession();
+    let orgId: string;
 
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (isDemoMode()) {
+      // Allow unauthenticated access in demo mode
+      orgId = getDemoOrgId();
+    } else {
+      const session = await getSession();
+      if (!session) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+      orgId = session.orgId || getDemoOrgId();
     }
-
-    const orgId = session.orgId || getDemoOrgId();
     const plan = 'pro'; // In production, get from org record
 
     // Fetch all stats in parallel

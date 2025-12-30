@@ -3,6 +3,9 @@ import { z } from 'zod';
 import { getSession, getDemoOrgId } from '@/lib/services/auth/session';
 import { getRedteamScans, getRedteamStats, createRedteamScan } from '@/lib/services/db/redteam';
 
+// Demo mode for development without auth
+const isDemoMode = () => process.env.NODE_ENV === 'development' || !process.env.AUTH0_CLIENT_ID;
+
 const ATTACK_COUNTS: Record<string, number> = {
   basic: 50,
   standard: 200,
@@ -19,13 +22,17 @@ const createScanSchema = z.object({
 // List scans and stats
 export async function GET(request: NextRequest) {
   try {
-    const session = await getSession();
+    let orgId: string;
 
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (isDemoMode()) {
+      orgId = getDemoOrgId();
+    } else {
+      const session = await getSession();
+      if (!session) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+      orgId = session.orgId || getDemoOrgId();
     }
-
-    const orgId = session.orgId || getDemoOrgId();
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type');
 
@@ -65,13 +72,17 @@ export async function GET(request: NextRequest) {
 // Create new scan
 export async function POST(request: NextRequest) {
   try {
-    const session = await getSession();
+    let orgId: string;
 
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (isDemoMode()) {
+      orgId = getDemoOrgId();
+    } else {
+      const session = await getSession();
+      if (!session) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+      orgId = session.orgId || getDemoOrgId();
     }
-
-    const orgId = session.orgId || getDemoOrgId();
 
     const body = await request.json();
     const validationResult = createScanSchema.safeParse(body);

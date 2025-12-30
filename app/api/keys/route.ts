@@ -3,6 +3,9 @@ import { z } from 'zod';
 import { getSession, getDemoOrgId } from '@/lib/services/auth/session';
 import { createApiKey, getApiKeysByOrg } from '@/lib/services/db/api-keys';
 
+// Demo mode for development without auth
+const isDemoMode = () => process.env.NODE_ENV === 'development' || !process.env.AUTH0_CLIENT_ID;
+
 const createKeySchema = z.object({
   name: z.string().min(1, 'Name is required').max(100),
   scopes: z.array(z.string()).optional(),
@@ -12,13 +15,17 @@ const createKeySchema = z.object({
 // List API keys
 export async function GET() {
   try {
-    const session = await getSession();
+    let orgId: string;
 
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (isDemoMode()) {
+      orgId = getDemoOrgId();
+    } else {
+      const session = await getSession();
+      if (!session) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+      orgId = session.orgId || getDemoOrgId();
     }
-
-    const orgId = session.orgId || getDemoOrgId();
     const keys = await getApiKeysByOrg(orgId);
 
     // Don't expose the hash
@@ -46,13 +53,17 @@ export async function GET() {
 // Create new API key
 export async function POST(request: NextRequest) {
   try {
-    const session = await getSession();
+    let orgId: string;
 
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (isDemoMode()) {
+      orgId = getDemoOrgId();
+    } else {
+      const session = await getSession();
+      if (!session) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+      orgId = session.orgId || getDemoOrgId();
     }
-
-    const orgId = session.orgId || getDemoOrgId();
 
     const body = await request.json();
     const validationResult = createKeySchema.safeParse(body);
