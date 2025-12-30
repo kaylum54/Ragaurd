@@ -4,3 +4,4 @@ export * from './organizations';
 export * from './api-keys';
 export * from './usage';
 export * from './request-log';
+export * from './redteam';

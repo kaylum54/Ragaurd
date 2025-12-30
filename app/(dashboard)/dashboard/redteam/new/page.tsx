@@ -10,10 +10,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { useRedteamScans, useRedteamStats } from '@/hooks/useRedteam';
 
 const attackSuites = [
   {
-    id: 'basic',
+    id: 'basic' as const,
     name: 'Basic',
     description: 'Quick vulnerability check',
     attacks: 50,
@@ -21,7 +22,7 @@ const attackSuites = [
     features: ['Prompt injection', 'Jailbreak attempts', 'Role confusion'],
   },
   {
-    id: 'standard',
+    id: 'standard' as const,
     name: 'Standard',
     description: 'Comprehensive security scan',
     attacks: 200,
@@ -30,7 +31,7 @@ const attackSuites = [
     recommended: true,
   },
   {
-    id: 'comprehensive',
+    id: 'comprehensive' as const,
     name: 'Comprehensive',
     description: 'Full security audit',
     attacks: 500,
@@ -41,22 +42,50 @@ const attackSuites = [
 
 export default function NewScanPage() {
   const router = useRouter();
+  const { createScan } = useRedteamScans();
+  const { stats, loading: statsLoading } = useRedteamStats();
   const [name, setName] = useState('');
   const [targetEndpoint, setTargetEndpoint] = useState('');
-  const [selectedSuite, setSelectedSuite] = useState('standard');
+  const [selectedSuite, setSelectedSuite] = useState<'basic' | 'standard' | 'comprehensive'>('standard');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async () => {
-    if (!targetEndpoint) return;
+    if (!targetEndpoint) {
+      setError('Please enter a target endpoint');
+      return;
+    }
 
+    // Validate URL
+    try {
+      new URL(targetEndpoint);
+    } catch {
+      setError('Please enter a valid URL');
+      return;
+    }
+
+    setError(null);
     setIsSubmitting(true);
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    try {
+      const scan = await createScan({
+        name: name || undefined,
+        targetEndpoint,
+        attackSuite: selectedSuite,
+      });
 
-    // Redirect to scan page (in real app, would redirect to the new scan ID)
-    router.push('/dashboard/redteam');
+      if (scan) {
+        router.push('/dashboard/redteam');
+      }
+    } catch (err) {
+      console.error('Error creating scan:', err);
+      setError('Failed to create scan. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  const selectedSuiteInfo = attackSuites.find(s => s.id === selectedSuite);
 
   return (
     <div className="space-y-6">
@@ -103,12 +132,19 @@ export default function NewScanPage() {
                   id="target"
                   placeholder="https://api.example.com/chat"
                   value={targetEndpoint}
-                  onChange={(e) => setTargetEndpoint(e.target.value)}
-                  className="mt-1"
+                  onChange={(e) => {
+                    setTargetEndpoint(e.target.value);
+                    setError(null);
+                  }}
+                  className={cn('mt-1', error && 'border-danger')}
                 />
-                <p className="text-xs text-muted-foreground mt-1">
-                  The API endpoint to test. Must be accessible and protected by Ragaurd.
-                </p>
+                {error ? (
+                  <p className="text-xs text-danger mt-1">{error}</p>
+                ) : (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    The API endpoint to test. Must be accessible and protected by RAGuard.
+                  </p>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -188,13 +224,13 @@ export default function NewScanPage() {
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Attacks</span>
                 <span className="font-medium">
-                  {attackSuites.find(s => s.id === selectedSuite)?.attacks}
+                  {selectedSuiteInfo?.attacks}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Est. Duration</span>
                 <span className="font-medium">
-                  {attackSuites.find(s => s.id === selectedSuite)?.duration}
+                  {selectedSuiteInfo?.duration}
                 </span>
               </div>
               <div className="flex justify-between">
@@ -213,7 +249,7 @@ export default function NewScanPage() {
                 {isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Starting Scan...
+                    Creating Scan...
                   </>
                 ) : (
                   <>
@@ -230,13 +266,44 @@ export default function NewScanPage() {
               <CardTitle className="text-base">Usage This Month</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Attacks Used</span>
-                <span>234 / 1,000</span>
-              </div>
-              <div className="w-full h-2 bg-slate-100 rounded-full">
-                <div className="h-full bg-primary-600 rounded-full" style={{ width: '23.4%' }} />
-              </div>
+              {statsLoading ? (
+                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+              ) : (
+                <>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Attacks Used</span>
+                    <span>{stats.totalAttacks.toLocaleString()} / 10,000</span>
+                  </div>
+                  <div className="w-full h-2 bg-slate-100 rounded-full">
+                    <div
+                      className="h-full bg-primary-600 rounded-full transition-all"
+                      style={{ width: `${Math.min((stats.totalAttacks / 10000) * 100, 100)}%` }}
+                    />
+                  </div>
+                </>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">How It Works</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ol className="space-y-3 text-sm text-muted-foreground">
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-xs font-medium">1</span>
+                  <span>We send attack payloads to your endpoint</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-xs font-medium">2</span>
+                  <span>RAGuard defenses analyze and block threats</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-xs font-medium">3</span>
+                  <span>We report which attacks were blocked vs passed</span>
+                </li>
+              </ol>
             </CardContent>
           </Card>
         </div>
