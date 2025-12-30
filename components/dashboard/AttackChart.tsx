@@ -4,7 +4,8 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { useThreatCategories } from '@/hooks/useDashboard';
 import { Loader2 } from 'lucide-react';
 
-const COLORS = ['#7c3aed', '#10b981', '#f59e0b', '#3b82f6', '#ec4899', '#64748b'];
+// Muted, enterprise colors
+const COLORS = ['#1E293B', '#475569', '#64748B', '#94A3B8', '#CBD5E1', '#E2E8F0'];
 
 const categoryLabels: Record<string, string> = {
   prompt_injection: 'Prompt Injection',
@@ -19,15 +20,15 @@ const categoryLabels: Record<string, string> = {
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white border border-slate-200 rounded-lg p-3 shadow-lg">
+      <div className="bg-white border border-midnight-200 rounded p-3">
         <div className="flex items-center gap-2">
           <div
-            className="w-2 h-2 rounded-full"
+            className="w-2 h-2 rounded-sm"
             style={{ backgroundColor: payload[0].payload.color }}
           />
-          <span className="text-sm text-slate-900">{payload[0].name}</span>
+          <span className="text-xs text-midnight-900">{payload[0].name}</span>
         </div>
-        <p className="text-lg font-bold text-slate-900 mt-1">{payload[0].value} blocked</p>
+        <p className="text-sm font-semibold text-midnight-900 mt-1">{payload[0].value} blocked</p>
       </div>
     );
   }
@@ -58,35 +59,35 @@ export function AttackChart() {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-        <div className="mb-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-1">Attack Categories</h2>
-          <p className="text-sm text-slate-500">Breakdown of blocked threats by type</p>
+      <div className="bg-white rounded border border-midnight-200 p-5">
+        <div className="mb-5">
+          <h2 className="text-base font-medium text-midnight-950">Threat Categories</h2>
+          <p className="text-xs text-midnight-500 mt-0.5">Blocked threats by type</p>
         </div>
-        <div className="h-[250px] flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-violet-600" />
+        <div className="h-[230px] flex items-center justify-center">
+          <Loader2 className="h-6 w-6 animate-spin text-midnight-400" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-      <div className="mb-6">
-        <h2 className="text-lg font-semibold text-slate-900 mb-1">Attack Categories</h2>
-        <p className="text-sm text-slate-500">Breakdown of blocked threats by type</p>
+    <div className="bg-white rounded border border-midnight-200 p-5">
+      <div className="mb-5">
+        <h2 className="text-base font-medium text-midnight-950">Threat Categories</h2>
+        <p className="text-xs text-midnight-500 mt-0.5">Blocked threats by type</p>
       </div>
       <div className="flex items-center gap-6">
-        <div className="relative h-[250px] w-[250px] flex-shrink-0">
+        <div className="relative h-[200px] w-[200px] flex-shrink-0">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={chartData}
                 cx="50%"
                 cy="50%"
-                innerRadius={70}
-                outerRadius={100}
-                paddingAngle={2}
+                innerRadius={60}
+                outerRadius={85}
+                paddingAngle={1}
                 dataKey="value"
               >
                 {chartData.map((entry, index) => (
@@ -98,23 +99,23 @@ export function AttackChart() {
           </ResponsiveContainer>
           {/* Center label */}
           <div className="absolute inset-0 flex items-center justify-center flex-col">
-            <span className="text-3xl font-bold text-slate-900">{total}</span>
-            <span className="text-xs text-slate-500">Blocked</span>
+            <span className="text-2xl font-semibold text-midnight-950 tabular-nums">{total}</span>
+            <span className="text-xs text-midnight-500 uppercase tracking-wide">Blocked</span>
           </div>
         </div>
 
         {/* Legend */}
-        <div className="flex-1 space-y-3">
+        <div className="flex-1 space-y-2">
           {chartData.map((entry) => (
             <div key={entry.name} className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div
-                  className="w-3 h-3 rounded-sm"
+                  className="w-2.5 h-2.5 rounded-sm"
                   style={{ backgroundColor: entry.color }}
                 />
-                <span className="text-sm text-slate-600">{entry.name}</span>
+                <span className="text-xs text-midnight-600">{entry.name}</span>
               </div>
-              <span className="text-sm font-medium text-slate-900 tabular-nums">
+              <span className="text-xs font-medium text-midnight-900 tabular-nums">
                 {total > 0 ? Math.round((entry.value / total) * 100) : 0}%
               </span>
             </div>

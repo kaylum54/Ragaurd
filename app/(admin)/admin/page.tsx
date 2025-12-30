@@ -54,7 +54,7 @@ export default function AdminPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-rose-600" />
+        <Loader2 className="h-6 w-6 animate-spin text-midnight-400" />
       </div>
     );
   }
@@ -73,101 +73,109 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Overview</h1>
-        <p className="text-sm text-slate-500 mt-1">Platform metrics and system health</p>
+        <h1 className="text-xl font-semibold text-midnight-950">Overview</h1>
+        <p className="text-sm text-midnight-500 mt-0.5">Platform metrics and system health</p>
       </div>
 
       {/* Key Metrics */}
-      <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-slate-500">Users</span>
-            <div className="w-10 h-10 bg-violet-100 rounded-lg flex items-center justify-center">
-              <Users className="h-5 w-5 text-violet-600" />
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="text-xs font-medium text-midnight-500 uppercase tracking-wide">Users</div>
+              <div className="text-2xl font-semibold text-midnight-950 mt-2 tabular-nums">
+                {(stats?.totalUsers || 0).toLocaleString()}
+              </div>
+              <p className="text-xs text-secure-700 flex items-center gap-1 mt-1.5">
+                <TrendingUp className="h-3 w-3" />
+                +{stats?.newUsersToday || 0} today
+              </p>
+            </div>
+            <div className="w-9 h-9 bg-midnight-100 rounded flex items-center justify-center">
+              <Users className="h-4 w-4 text-midnight-600" />
             </div>
           </div>
-          <div className="text-3xl font-bold text-slate-900">
-            {(stats?.totalUsers || 0).toLocaleString()}
-          </div>
-          <p className="text-xs text-emerald-600 flex items-center gap-1 mt-2">
-            <TrendingUp className="h-3 w-3" />
-            +{stats?.newUsersToday || 0} today
-          </p>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-slate-500">Organizations</span>
-            <div className="w-10 h-10 bg-sky-100 rounded-lg flex items-center justify-center">
-              <Building className="h-5 w-5 text-sky-600" />
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="text-xs font-medium text-midnight-500 uppercase tracking-wide">Organizations</div>
+              <div className="text-2xl font-semibold text-midnight-950 mt-2 tabular-nums">
+                {(stats?.totalOrgs || 0).toLocaleString()}
+              </div>
+              <p className="text-xs text-secure-700 flex items-center gap-1 mt-1.5">
+                <TrendingUp className="h-3 w-3" />
+                +{stats?.newOrgsToday || 0} today
+              </p>
+            </div>
+            <div className="w-9 h-9 bg-midnight-100 rounded flex items-center justify-center">
+              <Building className="h-4 w-4 text-midnight-600" />
             </div>
           </div>
-          <div className="text-3xl font-bold text-slate-900">
-            {(stats?.totalOrgs || 0).toLocaleString()}
-          </div>
-          <p className="text-xs text-emerald-600 flex items-center gap-1 mt-2">
-            <TrendingUp className="h-3 w-3" />
-            +{stats?.newOrgsToday || 0} today
-          </p>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-slate-500">MRR</span>
-            <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-              <DollarSign className="h-5 w-5 text-emerald-600" />
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="text-xs font-medium text-midnight-500 uppercase tracking-wide">MRR</div>
+              <div className="text-2xl font-semibold text-midnight-950 mt-2 tabular-nums">
+                ${((stats?.mrr || 0) / 100).toLocaleString()}
+              </div>
+              <p className="text-xs text-midnight-500 mt-1.5">
+                {stats?.activeSubscriptions || 0} subscriptions
+              </p>
+            </div>
+            <div className="w-9 h-9 bg-secure-50 rounded flex items-center justify-center">
+              <DollarSign className="h-4 w-4 text-secure-600" />
             </div>
           </div>
-          <div className="text-3xl font-bold text-slate-900">
-            ${((stats?.mrr || 0) / 100).toLocaleString()}
-          </div>
-          <p className="text-xs text-slate-500 mt-2">
-            {stats?.activeSubscriptions || 0} active subscriptions
-          </p>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-slate-500">Requests</span>
-            <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
-              <Activity className="h-5 w-5 text-amber-600" />
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="text-xs font-medium text-midnight-500 uppercase tracking-wide">Requests</div>
+              <div className="text-2xl font-semibold text-midnight-950 mt-2 tabular-nums">
+                {formatNumber(stats?.totalRequests || 0)}
+              </div>
+              <p className="text-xs text-midnight-500 mt-1.5">
+                {(stats?.blockedThreats || 0).toLocaleString()} blocked
+              </p>
+            </div>
+            <div className="w-9 h-9 bg-midnight-100 rounded flex items-center justify-center">
+              <Activity className="h-4 w-4 text-midnight-600" />
             </div>
           </div>
-          <div className="text-3xl font-bold text-slate-900">
-            {formatNumber(stats?.totalRequests || 0)}
-          </div>
-          <p className="text-xs text-slate-500 mt-2">
-            {(stats?.blockedThreats || 0).toLocaleString()} threats blocked
-          </p>
         </div>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2">
         {/* System Status */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="p-6 border-b border-slate-100">
-            <h2 className="text-lg font-semibold text-slate-900 mb-1">System Status</h2>
-            <p className="text-sm text-slate-500">AWS instance health</p>
+        <div className="bg-white rounded border border-midnight-200 overflow-hidden">
+          <div className="p-5 border-b border-midnight-100">
+            <h2 className="text-base font-medium text-midnight-950">System Status</h2>
+            <p className="text-xs text-midnight-500 mt-0.5">AWS instance health</p>
           </div>
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-midnight-100">
             {systemStatus.map((system) => (
-              <div key={system.name} className="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors">
-                <div className="flex items-center gap-3">
+              <div key={system.name} className="flex items-center justify-between p-4 hover:bg-midnight-50 transition-colors">
+                <div className="flex items-center gap-2.5">
                   <div
-                    className={`h-2.5 w-2.5 rounded-full ${
-                      system.status === 'healthy' ? 'bg-emerald-500 animate-pulse' :
-                      system.status === 'pending' ? 'bg-amber-500' : 'bg-rose-500'
+                    className={`h-2 w-2 rounded-full ${
+                      system.status === 'healthy' ? 'bg-secure-500' :
+                      system.status === 'pending' ? 'bg-warning-500' : 'bg-critical-500'
                     }`}
                   />
-                  <span className="text-sm text-slate-900">{system.name}</span>
+                  <span className="text-sm text-midnight-900">{system.name}</span>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="text-xs text-slate-500 font-mono tabular-nums">{system.latency}</span>
-                  <span className={`text-xs uppercase tracking-wider font-medium ${
-                    system.status === 'healthy' ? 'text-emerald-600' : 'text-amber-600'
+                  <span className="text-xs text-midnight-500 font-mono tabular-nums">{system.latency}</span>
+                  <span className={`text-xs uppercase tracking-wide font-medium ${
+                    system.status === 'healthy' ? 'text-secure-700' : 'text-warning-700'
                   }`}>
                     {system.status}
                   </span>
@@ -178,35 +186,35 @@ export default function AdminPage() {
         </div>
 
         {/* Platform Summary */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="p-6 border-b border-slate-100">
-            <h2 className="text-lg font-semibold text-slate-900 mb-1">Platform Summary</h2>
-            <p className="text-sm text-slate-500">Key platform metrics</p>
+        <div className="bg-white rounded border border-midnight-200 overflow-hidden">
+          <div className="p-5 border-b border-midnight-100">
+            <h2 className="text-base font-medium text-midnight-950">Platform Summary</h2>
+            <p className="text-xs text-midnight-500 mt-0.5">Key platform metrics</p>
           </div>
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-midnight-100">
             {recentActivity.map((activity, index) => (
-              <div key={index} className="flex items-start gap-4 p-4 hover:bg-slate-50 transition-colors">
+              <div key={index} className="flex items-start gap-3 p-4 hover:bg-midnight-50 transition-colors">
                 <div
-                  className={`w-10 h-10 flex items-center justify-center shrink-0 rounded-lg ${
-                    activity.type === 'signup' ? 'bg-violet-100' :
-                    activity.type === 'upgrade' ? 'bg-emerald-100' :
-                    activity.type === 'downgrade' ? 'bg-amber-100' :
-                    'bg-rose-100'
+                  className={`w-8 h-8 flex items-center justify-center shrink-0 rounded ${
+                    activity.type === 'signup' ? 'bg-midnight-100' :
+                    activity.type === 'upgrade' ? 'bg-secure-50' :
+                    activity.type === 'downgrade' ? 'bg-warning-50' :
+                    'bg-critical-50'
                   }`}
                 >
                   {activity.type === 'alert' ? (
-                    <AlertTriangle className="h-4 w-4 text-rose-600" />
+                    <AlertTriangle className="h-4 w-4 text-critical-600" />
                   ) : activity.type === 'upgrade' ? (
-                    <CheckCircle className="h-4 w-4 text-emerald-600" />
+                    <CheckCircle className="h-4 w-4 text-secure-600" />
                   ) : (
                     <Users className={`h-4 w-4 ${
-                      activity.type === 'signup' ? 'text-violet-600' : 'text-amber-600'
+                      activity.type === 'signup' ? 'text-midnight-600' : 'text-warning-600'
                     }`} />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-slate-900">{activity.message}</p>
-                  <p className="text-xs text-slate-500 mt-1">{activity.time}</p>
+                  <p className="text-sm text-midnight-900">{activity.message}</p>
+                  <p className="text-xs text-midnight-500 mt-0.5">{activity.time}</p>
                 </div>
               </div>
             ))}

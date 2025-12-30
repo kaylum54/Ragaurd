@@ -13,9 +13,6 @@ import {
   Loader2,
   Building,
 } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -87,81 +84,66 @@ export default function AdminUsersPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Users</h1>
-          <p className="text-sm text-slate-500 mt-1">
-            {total.toLocaleString()} total users on the platform
-          </p>
-        </div>
+      <div>
+        <h1 className="text-xl font-semibold text-midnight-950">Users</h1>
+        <p className="text-sm text-midnight-500 mt-0.5">
+          {total.toLocaleString()} total users
+        </p>
       </div>
 
       {/* Search */}
-      <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+      <div className="bg-white rounded border border-midnight-200 p-4">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-          <Input
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-midnight-400" />
+          <input
             placeholder="Search by email or name..."
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
               setPage(1);
             }}
-            className="pl-10 bg-slate-50 border-slate-200 text-slate-900 placeholder:text-slate-400"
+            className="w-full pl-9 pr-4 py-2 text-sm rounded border border-midnight-200 bg-midnight-50 text-midnight-900 placeholder:text-midnight-400 focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
           />
         </div>
       </div>
 
       {/* Users Table */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded border border-midnight-200 overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center p-12">
-            <Loader2 className="h-8 w-8 animate-spin text-rose-600" />
+            <Loader2 className="h-6 w-6 animate-spin text-midnight-400" />
           </div>
         ) : users.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-12 text-slate-500">
-            <Users className="h-12 w-12 mb-4 opacity-50" />
-            <p>No users found</p>
+          <div className="flex flex-col items-center justify-center p-12 text-midnight-500">
+            <Users className="h-10 w-10 mb-4 opacity-50" />
+            <p className="text-sm">No users found</p>
           </div>
         ) : (
           <>
             <table className="w-full">
               <thead>
-                <tr className="border-b border-slate-200 bg-slate-50">
-                  <th className="text-left p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                    User
-                  </th>
-                  <th className="text-left p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                    Organizations
-                  </th>
-                  <th className="text-left p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                    Role
-                  </th>
-                  <th className="text-left p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                    Joined
-                  </th>
+                <tr className="border-b border-midnight-200 bg-midnight-50">
+                  <th className="text-left p-4 text-xs font-medium text-midnight-500 uppercase tracking-wide">User</th>
+                  <th className="text-left p-4 text-xs font-medium text-midnight-500 uppercase tracking-wide">Organizations</th>
+                  <th className="text-left p-4 text-xs font-medium text-midnight-500 uppercase tracking-wide">Role</th>
+                  <th className="text-left p-4 text-xs font-medium text-midnight-500 uppercase tracking-wide">Joined</th>
                   <th className="w-12"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-midnight-100">
                 {users.map((user) => (
-                  <tr
-                    key={user.id}
-                    className="hover:bg-slate-50 transition-colors"
-                  >
+                  <tr key={user.id} className="hover:bg-midnight-50 transition-colors">
                     <td className="p-4">
                       <div className="flex items-center gap-3">
-                        <Avatar className="h-10 w-10 border border-slate-200">
+                        <Avatar className="h-8 w-8 border border-midnight-200">
                           <AvatarImage src={user.avatar_url || undefined} />
-                          <AvatarFallback className="bg-violet-100 text-violet-700 text-sm">
+                          <AvatarFallback className="bg-midnight-100 text-midnight-700 text-xs font-medium">
                             {getInitials(user.name, user.email)}
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <div className="font-medium text-slate-900">
-                            {user.name || 'No name'}
-                          </div>
-                          <div className="text-sm text-slate-500">{user.email}</div>
+                          <div className="text-sm font-medium text-midnight-900">{user.name || 'No name'}</div>
+                          <div className="text-xs text-midnight-500">{user.email}</div>
                         </div>
                       </div>
                     </td>
@@ -169,55 +151,49 @@ export default function AdminUsersPage() {
                       {user.organizations && user.organizations.length > 0 ? (
                         <div className="flex flex-wrap gap-1">
                           {user.organizations.slice(0, 2).map((org, i) => (
-                            <Badge
-                              key={i}
-                              variant="outline"
-                              className="text-xs border-slate-200 text-slate-600"
-                            >
+                            <span key={i} className="inline-flex items-center text-xs px-1.5 py-0.5 bg-midnight-100 text-midnight-600 border border-midnight-200 rounded">
                               <Building className="h-3 w-3 mr-1" />
                               {org.name}
-                            </Badge>
+                            </span>
                           ))}
                           {user.organizations.length > 2 && (
-                            <Badge variant="outline" className="text-xs border-slate-200 text-slate-500">
+                            <span className="text-xs px-1.5 py-0.5 bg-midnight-100 text-midnight-500 border border-midnight-200 rounded">
                               +{user.organizations.length - 2}
-                            </Badge>
+                            </span>
                           )}
                         </div>
                       ) : (
-                        <span className="text-slate-400 text-sm">No organizations</span>
+                        <span className="text-midnight-400 text-xs">No organizations</span>
                       )}
                     </td>
                     <td className="p-4">
                       {user.is_admin ? (
-                        <Badge className="bg-rose-100 text-rose-700 hover:bg-rose-100">Admin</Badge>
+                        <span className="text-xs font-medium px-1.5 py-0.5 bg-critical-50 text-critical-700 border border-critical-200 rounded">Admin</span>
                       ) : (
-                        <Badge variant="outline" className="border-slate-200 text-slate-600">
-                          User
-                        </Badge>
+                        <span className="text-xs font-medium px-1.5 py-0.5 bg-midnight-100 text-midnight-600 border border-midnight-200 rounded">User</span>
                       )}
                     </td>
-                    <td className="p-4 text-slate-500 text-sm">
+                    <td className="p-4 text-midnight-500 text-sm">
                       {formatDate(user.created_at)}
                     </td>
                     <td className="p-4">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-slate-900">
+                          <button className="p-1.5 rounded text-midnight-500 hover:text-midnight-900 hover:bg-midnight-100 transition-colors">
                             <MoreHorizontal className="h-4 w-4" />
-                          </Button>
+                          </button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="bg-white border-slate-200">
-                          <DropdownMenuItem className="text-slate-600 focus:text-slate-900 focus:bg-slate-100">
+                        <DropdownMenuContent align="end" className="bg-white border-midnight-200">
+                          <DropdownMenuItem className="text-midnight-600 focus:text-midnight-900 focus:bg-midnight-50 text-sm">
                             <Mail className="mr-2 h-4 w-4" />
                             Send Email
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="text-slate-600 focus:text-slate-900 focus:bg-slate-100">
+                          <DropdownMenuItem className="text-midnight-600 focus:text-midnight-900 focus:bg-midnight-50 text-sm">
                             <Shield className="mr-2 h-4 w-4" />
                             {user.is_admin ? 'Remove Admin' : 'Make Admin'}
                           </DropdownMenuItem>
-                          <DropdownMenuSeparator className="bg-slate-100" />
-                          <DropdownMenuItem className="text-rose-600 focus:text-rose-700 focus:bg-rose-50">
+                          <DropdownMenuSeparator className="bg-midnight-100" />
+                          <DropdownMenuItem className="text-critical-700 focus:text-critical-800 focus:bg-critical-50 text-sm">
                             <Trash2 className="mr-2 h-4 w-4" />
                             Delete User
                           </DropdownMenuItem>
@@ -230,32 +206,28 @@ export default function AdminUsersPage() {
             </table>
 
             {/* Pagination */}
-            <div className="flex items-center justify-between p-4 border-t border-slate-100">
-              <p className="text-sm text-slate-500">
-                Showing {(page - 1) * 20 + 1} to {Math.min(page * 20, total)} of {total} users
+            <div className="flex items-center justify-between p-4 border-t border-midnight-100">
+              <p className="text-xs text-midnight-500">
+                {(page - 1) * 20 + 1} - {Math.min(page * 20, total)} of {total}
               </p>
               <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
+                <button
                   onClick={() => setPage(p => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="border-slate-200 text-slate-600 hover:bg-slate-100"
+                  className="p-1.5 rounded border border-midnight-200 text-midnight-600 hover:bg-midnight-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <span className="text-sm text-slate-600">
-                  Page {page} of {totalPages}
+                </button>
+                <span className="text-xs text-midnight-600 tabular-nums">
+                  {page} / {totalPages}
                 </span>
-                <Button
-                  variant="outline"
-                  size="sm"
+                <button
                   onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
-                  className="border-slate-200 text-slate-600 hover:bg-slate-100"
+                  className="p-1.5 rounded border border-midnight-200 text-midnight-600 hover:bg-midnight-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   <ChevronRight className="h-4 w-4" />
-                </Button>
+                </button>
               </div>
             </div>
           </>

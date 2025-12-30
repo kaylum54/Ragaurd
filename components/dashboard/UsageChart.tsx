@@ -18,16 +18,16 @@ import { Loader2 } from 'lucide-react';
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white border border-slate-200 rounded-lg p-3 shadow-lg">
-        <p className="text-sm font-medium text-slate-900 mb-2">{label}</p>
+      <div className="bg-white border border-midnight-200 rounded p-3">
+        <p className="text-xs font-medium text-midnight-900 mb-2">{label}</p>
         {payload.map((entry: any, index: number) => (
-          <div key={index} className="flex items-center gap-2 text-sm">
+          <div key={index} className="flex items-center gap-2 text-xs">
             <div
-              className="w-2 h-2 rounded-full"
+              className="w-2 h-2 rounded-sm"
               style={{ backgroundColor: entry.color }}
             />
-            <span className="text-slate-500">{entry.name}:</span>
-            <span className="text-slate-900 tabular-nums font-medium">
+            <span className="text-midnight-500">{entry.name}:</span>
+            <span className="text-midnight-900 tabular-nums font-medium">
               {entry.value.toLocaleString()}
             </span>
           </div>
@@ -51,50 +51,53 @@ function ChartContent({ days }: { days: number }) {
 
   if (loading) {
     return (
-      <div className="h-[300px] flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-violet-600" />
+      <div className="h-[280px] flex items-center justify-center">
+        <Loader2 className="h-6 w-6 animate-spin text-midnight-400" />
       </div>
     );
   }
 
   return (
-    <div className="h-[300px]">
+    <div className="h-[280px]">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={chartData}>
-          <defs>
-            <linearGradient id={`passedGradient${days}`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#7c3aed" stopOpacity={0.3} />
-              <stop offset="95%" stopColor="#7c3aed" stopOpacity={0} />
-            </linearGradient>
-            <linearGradient id={`blockedGradient${days}`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
-              <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
-            </linearGradient>
-          </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-          <XAxis dataKey="date" stroke="#64748b" fontSize={12} tickLine={false} />
-          <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
+          <XAxis
+            dataKey="date"
+            stroke="#94A3B8"
+            fontSize={11}
+            tickLine={false}
+            axisLine={{ stroke: '#E2E8F0' }}
+          />
+          <YAxis
+            stroke="#94A3B8"
+            fontSize={11}
+            tickLine={false}
+            axisLine={false}
+          />
           <Tooltip content={<CustomTooltip />} />
           <Legend
             formatter={(value) => (
-              <span className="text-sm text-slate-600">{value}</span>
+              <span className="text-xs text-midnight-600">{value}</span>
             )}
           />
           <Area
             type="monotone"
             dataKey="passed"
             name="Passed"
-            stroke="#7c3aed"
-            strokeWidth={2}
-            fill={`url(#passedGradient${days})`}
+            stroke="#1E293B"
+            strokeWidth={1.5}
+            fill="#1E293B"
+            fillOpacity={0.1}
           />
           <Area
             type="monotone"
             dataKey="blocked"
             name="Blocked"
-            stroke="#10b981"
-            strokeWidth={2}
-            fill={`url(#blockedGradient${days})`}
+            stroke="#15803D"
+            strokeWidth={1.5}
+            fill="#15803D"
+            fillOpacity={0.1}
           />
         </AreaChart>
       </ResponsiveContainer>
@@ -106,35 +109,30 @@ export function UsageChart() {
   const [activeTab, setActiveTab] = useState('7d');
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-      <div className="mb-6">
-        <h2 className="text-lg font-semibold text-slate-900 mb-1">Request Volume</h2>
-        <p className="text-sm text-slate-500">Daily requests and threat detection</p>
+    <div className="bg-white rounded border border-midnight-200 p-5">
+      <div className="flex items-center justify-between mb-5">
+        <div>
+          <h2 className="text-base font-medium text-midnight-950">Request Volume</h2>
+          <p className="text-xs text-midnight-500 mt-0.5">Daily requests and threat detection</p>
+        </div>
+        <div className="flex border border-midnight-200 rounded overflow-hidden">
+          <button
+            className={`px-3 py-1 text-xs font-medium transition-colors ${activeTab === '7d' ? 'bg-midnight-800 text-white' : 'bg-white text-midnight-600 hover:bg-midnight-50'}`}
+            onClick={() => setActiveTab('7d')}
+          >
+            7d
+          </button>
+          <button
+            className={`px-3 py-1 text-xs font-medium transition-colors ${activeTab === '30d' ? 'bg-midnight-800 text-white' : 'bg-white text-midnight-600 hover:bg-midnight-50'}`}
+            onClick={() => setActiveTab('30d')}
+          >
+            30d
+          </button>
+        </div>
       </div>
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="mb-4 bg-slate-100">
-          <TabsTrigger
-            value="7d"
-            className="data-[state=active]:bg-violet-600 data-[state=active]:text-white"
-          >
-            7 days
-          </TabsTrigger>
-          <TabsTrigger
-            value="30d"
-            className="data-[state=active]:bg-violet-600 data-[state=active]:text-white"
-          >
-            30 days
-          </TabsTrigger>
-        </TabsList>
 
-        <TabsContent value="7d">
-          <ChartContent days={7} />
-        </TabsContent>
-
-        <TabsContent value="30d">
-          <ChartContent days={30} />
-        </TabsContent>
-      </Tabs>
+      {activeTab === '7d' && <ChartContent days={7} />}
+      {activeTab === '30d' && <ChartContent days={30} />}
     </div>
   );
 }

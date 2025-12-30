@@ -12,8 +12,6 @@ import {
   Globe,
   Cpu,
 } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 
 interface SystemStatus {
   name: string;
@@ -77,26 +75,26 @@ const getSystemStatus = (): SystemStatus[] => [
 
 const statusConfig = {
   healthy: {
-    color: 'bg-emerald-600',
-    textColor: 'text-emerald-600',
+    color: 'bg-secure-600',
+    textColor: 'text-secure-600',
     label: 'Healthy',
     icon: CheckCircle,
   },
   degraded: {
-    color: 'bg-amber-600',
-    textColor: 'text-amber-600',
+    color: 'bg-warning-600',
+    textColor: 'text-warning-600',
     label: 'Degraded',
     icon: AlertTriangle,
   },
   down: {
-    color: 'bg-rose-600',
-    textColor: 'text-rose-600',
+    color: 'bg-critical-600',
+    textColor: 'text-critical-600',
     label: 'Down',
     icon: AlertTriangle,
   },
   pending: {
-    color: 'bg-slate-500',
-    textColor: 'text-slate-500',
+    color: 'bg-midnight-400',
+    textColor: 'text-midnight-400',
     label: 'Pending',
     icon: Clock,
   },
@@ -128,85 +126,97 @@ export default function AdminSystemPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">System Status</h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Monitor infrastructure health and performance
+          <h1 className="text-xl font-semibold text-midnight-950">System Status</h1>
+          <p className="text-sm text-midnight-500 mt-0.5">
+            Infrastructure health and performance
           </p>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
+        <button
           onClick={refresh}
           disabled={loading}
-          className="border-slate-200 text-slate-600 hover:bg-slate-100"
+          className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded border border-midnight-200 text-midnight-600 hover:bg-midnight-50 disabled:opacity-50 transition-colors"
         >
-          <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
           Refresh
-        </Button>
+        </button>
       </div>
 
       {/* Overview */}
-      <div className="grid gap-5 md:grid-cols-4">
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-slate-500">Overall Status</span>
-            <div className={`w-3 h-3 rounded-full ${
-              healthyCount === totalCount ? 'bg-emerald-500 animate-pulse' :
-              healthyCount > 0 ? 'bg-amber-500' : 'bg-rose-500'
+      <div className="grid gap-4 md:grid-cols-4">
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="text-xs font-medium text-midnight-500 uppercase tracking-wide">Status</div>
+              <div className="text-2xl font-semibold text-midnight-950 mt-2 tabular-nums">
+                {healthyCount}/{totalCount}
+              </div>
+              <p className="text-xs text-midnight-500 mt-1.5">Operational</p>
+            </div>
+            <div className={`w-3 h-3 rounded-full mt-1 ${
+              healthyCount === totalCount ? 'bg-secure-500' :
+              healthyCount > 0 ? 'bg-warning-500' : 'bg-critical-500'
             }`} />
           </div>
-          <div className="text-3xl font-bold text-slate-900">
-            {healthyCount}/{totalCount}
-          </div>
-          <p className="text-xs text-slate-500 mt-2">Services operational</p>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-slate-500">Avg Latency</span>
-            <Clock className="h-5 w-5 text-violet-600" />
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="text-xs font-medium text-midnight-500 uppercase tracking-wide">Avg Latency</div>
+              <div className="text-2xl font-semibold text-midnight-950 mt-2 tabular-nums">
+                {Math.round(
+                  systems
+                    .filter((s) => s.latency !== '-')
+                    .reduce((acc, s) => acc + parseInt(s.latency), 0) /
+                    systems.filter((s) => s.latency !== '-').length || 0
+                )}ms
+              </div>
+              <p className="text-xs text-midnight-500 mt-1.5">All services</p>
+            </div>
+            <div className="w-9 h-9 bg-midnight-100 rounded flex items-center justify-center">
+              <Clock className="h-4 w-4 text-midnight-600" />
+            </div>
           </div>
-          <div className="text-3xl font-bold text-slate-900">
-            {Math.round(
-              systems
-                .filter((s) => s.latency !== '-')
-                .reduce((acc, s) => acc + parseInt(s.latency), 0) /
-                systems.filter((s) => s.latency !== '-').length || 0
-            )}ms
-          </div>
-          <p className="text-xs text-slate-500 mt-2">Across all services</p>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-slate-500">Uptime</span>
-            <Activity className="h-5 w-5 text-emerald-600" />
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="text-xs font-medium text-midnight-500 uppercase tracking-wide">Uptime</div>
+              <div className="text-2xl font-semibold text-midnight-950 mt-2 tabular-nums">99.9%</div>
+              <p className="text-xs text-midnight-500 mt-1.5">Last 30 days</p>
+            </div>
+            <div className="w-9 h-9 bg-secure-50 rounded flex items-center justify-center">
+              <Activity className="h-4 w-4 text-secure-600" />
+            </div>
           </div>
-          <div className="text-3xl font-bold text-slate-900">99.9%</div>
-          <p className="text-xs text-slate-500 mt-2">Last 30 days</p>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-slate-500">Last Check</span>
-            <RefreshCw className="h-5 w-5 text-slate-400" />
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="text-xs font-medium text-midnight-500 uppercase tracking-wide">Last Check</div>
+              <div className="text-base font-semibold text-midnight-950 mt-2">
+                {lastRefresh.toLocaleTimeString()}
+              </div>
+              <p className="text-xs text-midnight-500 mt-1.5">
+                {lastRefresh.toLocaleDateString()}
+              </p>
+            </div>
+            <div className="w-9 h-9 bg-midnight-100 rounded flex items-center justify-center">
+              <RefreshCw className="h-4 w-4 text-midnight-600" />
+            </div>
           </div>
-          <div className="text-lg font-semibold text-slate-900">
-            {lastRefresh.toLocaleTimeString()}
-          </div>
-          <p className="text-xs text-slate-500 mt-2">
-            {lastRefresh.toLocaleDateString()}
-          </p>
         </div>
       </div>
 
       {/* Service Status */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="p-6 border-b border-slate-100">
-          <h2 className="text-lg font-semibold text-slate-900 mb-1">Service Health</h2>
-          <p className="text-sm text-slate-500">Individual service status</p>
+      <div className="bg-white rounded border border-midnight-200 overflow-hidden">
+        <div className="p-5 border-b border-midnight-100">
+          <h2 className="text-base font-medium text-midnight-950">Service Health</h2>
+          <p className="text-xs text-midnight-500 mt-0.5">Individual service status</p>
         </div>
-        <div className="divide-y divide-slate-100">
+        <div className="divide-y divide-midnight-100">
           {systems.map((system, index) => {
             const config = statusConfig[system.status];
             const StatusIcon = config.icon;
@@ -214,50 +224,50 @@ export default function AdminSystemPage() {
             return (
               <div
                 key={index}
-                className="flex items-center justify-between p-5 hover:bg-slate-50 transition-colors"
+                className="flex items-center justify-between p-4 hover:bg-midnight-50 transition-colors"
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                   <div
-                    className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                    className={`w-10 h-10 rounded flex items-center justify-center ${
                       system.status === 'healthy'
-                        ? 'bg-emerald-100'
+                        ? 'bg-secure-50'
                         : system.status === 'pending'
-                        ? 'bg-slate-100'
-                        : 'bg-rose-100'
+                        ? 'bg-midnight-100'
+                        : 'bg-critical-50'
                     }`}
                   >
                     <Server
-                      className={`h-6 w-6 ${
+                      className={`h-5 w-5 ${
                         system.status === 'healthy'
-                          ? 'text-emerald-600'
+                          ? 'text-secure-600'
                           : system.status === 'pending'
-                          ? 'text-slate-500'
-                          : 'text-rose-600'
+                          ? 'text-midnight-500'
+                          : 'text-critical-600'
                       }`}
                     />
                   </div>
                   <div>
-                    <div className="flex items-center gap-3">
-                      <span className="font-medium text-slate-900">{system.name}</span>
-                      <Badge className={`${config.color} text-white text-xs`}>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-midnight-900">{system.name}</span>
+                      <span className={`text-xs font-medium px-1.5 py-0.5 rounded text-white ${config.color}`}>
                         {config.label}
-                      </Badge>
+                      </span>
                     </div>
-                    <div className="text-sm text-slate-500 mt-1">
+                    <div className="text-xs text-midnight-500 mt-0.5">
                       {system.endpoint}
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-8">
+                <div className="flex items-center gap-6">
                   <div className="text-right">
-                    <div className="text-sm font-medium text-slate-900">{system.latency}</div>
-                    <div className="text-xs text-slate-500">Latency</div>
+                    <div className="text-sm font-medium text-midnight-900 tabular-nums">{system.latency}</div>
+                    <div className="text-xs text-midnight-500">Latency</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-medium text-slate-900">{system.uptime}</div>
-                    <div className="text-xs text-slate-500">Uptime</div>
+                    <div className="text-sm font-medium text-midnight-900 tabular-nums">{system.uptime}</div>
+                    <div className="text-xs text-midnight-500">Uptime</div>
                   </div>
-                  <StatusIcon className={`h-5 w-5 ${config.textColor}`} />
+                  <StatusIcon className={`h-4 w-4 ${config.textColor}`} />
                 </div>
               </div>
             );
@@ -266,60 +276,58 @@ export default function AdminSystemPage() {
       </div>
 
       {/* Infrastructure Info */}
-      <div className="grid gap-5 lg:grid-cols-3">
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-violet-100 rounded-lg flex items-center justify-center">
-              <Globe className="h-5 w-5 text-violet-600" />
+      <div className="grid gap-4 lg:grid-cols-3">
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-9 h-9 bg-midnight-100 rounded flex items-center justify-center">
+              <Globe className="h-4 w-4 text-midnight-600" />
             </div>
             <div>
-              <h3 className="font-medium text-slate-900">Region</h3>
-              <p className="text-sm text-slate-500">us-east-2 (Ohio)</p>
+              <h3 className="text-sm font-medium text-midnight-900">Region</h3>
+              <p className="text-xs text-midnight-500">us-east-2 (Ohio)</p>
             </div>
           </div>
-          <div className="text-sm text-slate-500">
-            Primary deployment region for all services
+          <div className="text-xs text-midnight-500">
+            Primary deployment region
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-sky-100 rounded-lg flex items-center justify-center">
-              <Cpu className="h-5 w-5 text-sky-600" />
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-9 h-9 bg-midnight-100 rounded flex items-center justify-center">
+              <Cpu className="h-4 w-4 text-midnight-600" />
             </div>
             <div>
-              <h3 className="font-medium text-slate-900">Compute</h3>
-              <p className="text-sm text-slate-500">AWS EC2</p>
+              <h3 className="text-sm font-medium text-midnight-900">Compute</h3>
+              <p className="text-xs text-midnight-500">AWS EC2</p>
             </div>
           </div>
-          <div className="text-sm text-slate-500">
-            Auto-scaling groups with load balancing
+          <div className="text-xs text-midnight-500">
+            Auto-scaling with load balancing
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-              <Database className="h-5 w-5 text-emerald-600" />
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-9 h-9 bg-secure-50 rounded flex items-center justify-center">
+              <Database className="h-4 w-4 text-secure-600" />
             </div>
             <div>
-              <h3 className="font-medium text-slate-900">Database</h3>
-              <p className="text-sm text-slate-500">Supabase PostgreSQL</p>
+              <h3 className="text-sm font-medium text-midnight-900">Database</h3>
+              <p className="text-xs text-midnight-500">Supabase PostgreSQL</p>
             </div>
           </div>
-          <div className="text-sm text-slate-500">
-            Managed database with automatic backups
+          <div className="text-xs text-midnight-500">
+            Managed with automatic backups
           </div>
         </div>
       </div>
 
-      {/* Alerts Section */}
-      <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-lg font-semibold text-slate-900 mb-1">Active Alerts</h2>
-            <p className="text-sm text-slate-500">System notifications and warnings</p>
-          </div>
+      {/* Alerts */}
+      <div className="bg-white rounded border border-midnight-200 p-5">
+        <div className="mb-5">
+          <h2 className="text-base font-medium text-midnight-950">Active Alerts</h2>
+          <p className="text-xs text-midnight-500 mt-0.5">System notifications</p>
         </div>
         <div className="space-y-3">
           {systems.filter((s) => s.status === 'pending').length > 0 ? (
@@ -328,26 +336,26 @@ export default function AdminSystemPage() {
               .map((system, index) => (
                 <div
                   key={index}
-                  className="flex items-center gap-4 p-4 bg-amber-50 border border-amber-200 rounded-lg"
+                  className="flex items-center gap-3 p-3 bg-warning-50 border border-warning-200 rounded"
                 >
-                  <AlertTriangle className="h-5 w-5 text-amber-600 shrink-0" />
+                  <AlertTriangle className="h-4 w-4 text-warning-600 shrink-0" />
                   <div>
-                    <p className="text-sm font-medium text-slate-900">
+                    <p className="text-sm font-medium text-midnight-900">
                       {system.name} - Configuration Required
                     </p>
-                    <p className="text-xs text-slate-500 mt-1">
-                      This service needs to be configured before going live
+                    <p className="text-xs text-midnight-500 mt-0.5">
+                      Configure before going live
                     </p>
                   </div>
                 </div>
               ))
           ) : (
-            <div className="flex items-center gap-4 p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
-              <CheckCircle className="h-5 w-5 text-emerald-600 shrink-0" />
+            <div className="flex items-center gap-3 p-3 bg-secure-50 border border-secure-200 rounded">
+              <CheckCircle className="h-4 w-4 text-secure-600 shrink-0" />
               <div>
-                <p className="text-sm font-medium text-slate-900">All Systems Operational</p>
-                <p className="text-xs text-slate-500 mt-1">
-                  No active alerts or warnings
+                <p className="text-sm font-medium text-midnight-900">All Systems Operational</p>
+                <p className="text-xs text-midnight-500 mt-0.5">
+                  No active alerts
                 </p>
               </div>
             </div>

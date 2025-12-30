@@ -1,30 +1,29 @@
 import Link from 'next/link';
 import { Key, Target, FileText, Settings } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 
 const actions = [
   {
     title: 'Create API Key',
-    description: 'Generate a new API key',
+    description: 'Generate a new key',
     icon: Key,
     href: '/dashboard/api-keys',
   },
   {
     title: 'Run Red Team',
-    description: 'Start a security scan',
+    description: 'Start security scan',
     icon: Target,
     href: '/dashboard/redteam/new',
-    badge: 'Pro+',
+    badge: 'Pro',
   },
   {
     title: 'View Reports',
-    description: 'Download security reports',
+    description: 'Download reports',
     icon: FileText,
     href: '/dashboard/usage',
   },
   {
     title: 'Settings',
-    description: 'Configure your account',
+    description: 'Configure account',
     icon: Settings,
     href: '/dashboard/settings',
   },
@@ -32,30 +31,30 @@ const actions = [
 
 export function QuickActions() {
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-      <div className="mb-6">
-        <h2 className="text-lg font-semibold text-slate-900 mb-1">Quick Actions</h2>
-        <p className="text-sm text-slate-500">Common tasks and shortcuts</p>
+    <div className="bg-white rounded border border-midnight-200 p-5">
+      <div className="mb-5">
+        <h2 className="text-base font-medium text-midnight-950">Quick Actions</h2>
+        <p className="text-xs text-midnight-500 mt-0.5">Common tasks</p>
       </div>
       <div className="grid grid-cols-2 gap-3">
         {actions.map((action) => (
           <Link
             key={action.title}
             href={action.href}
-            className="group p-4 rounded-lg border border-slate-200 bg-slate-50 hover:border-violet-300 hover:bg-violet-50 transition-all duration-150"
+            className="group p-3 rounded border border-midnight-200 bg-midnight-50 hover:border-midnight-300 transition-colors"
           >
-            <div className="h-10 w-10 rounded-lg bg-violet-100 flex items-center justify-center mb-3 group-hover:bg-violet-200 transition-colors">
-              <action.icon className="h-5 w-5 text-violet-600" />
+            <div className="h-8 w-8 rounded bg-midnight-200 flex items-center justify-center mb-2 group-hover:bg-midnight-300 transition-colors">
+              <action.icon className="h-4 w-4 text-midnight-700" />
             </div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="font-medium text-sm text-slate-900">{action.title}</span>
+            <div className="flex items-center gap-1.5 mb-0.5">
+              <span className="font-medium text-xs text-midnight-900">{action.title}</span>
               {action.badge && (
-                <Badge className="text-[10px] px-1.5 py-0 bg-violet-100 text-violet-700 hover:bg-violet-100">
+                <span className="text-[10px] px-1 py-0 bg-accent-50 text-accent-700 border border-accent-200 rounded">
                   {action.badge}
-                </Badge>
+                </span>
               )}
             </div>
-            <p className="text-xs text-slate-500">{action.description}</p>
+            <p className="text-xs text-midnight-500">{action.description}</p>
           </Link>
         ))}
       </div>

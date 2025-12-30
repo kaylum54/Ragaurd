@@ -9,7 +9,6 @@ import {
   Loader2,
   Building,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 interface PlatformUsage {
   totalRequests: number;
@@ -62,14 +61,14 @@ export default function AdminUsagePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-rose-600" />
+        <Loader2 className="h-6 w-6 animate-spin text-midnight-400" />
       </div>
     );
   }
 
   if (!usage || !growth) {
     return (
-      <div className="text-center text-slate-500 py-12">
+      <div className="text-center text-midnight-500 py-12">
         Failed to load usage data
       </div>
     );
@@ -84,87 +83,93 @@ export default function AdminUsagePage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Platform Usage</h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Monitor requests, threats, and growth metrics
+          <h1 className="text-xl font-semibold text-midnight-950">Platform Usage</h1>
+          <p className="text-sm text-midnight-500 mt-0.5">
+            Requests, threats, and growth metrics
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex border border-midnight-200 rounded overflow-hidden">
           {[7, 30, 90].map((d) => (
-            <Button
+            <button
               key={d}
-              variant={days === d ? 'default' : 'outline'}
-              size="sm"
               onClick={() => setDays(d)}
-              className={
+              className={`px-3 py-1.5 text-xs font-medium transition-colors ${
                 days === d
-                  ? 'bg-rose-600 text-white hover:bg-rose-700'
-                  : 'border-slate-200 text-slate-600 hover:bg-slate-100'
-              }
+                  ? 'bg-midnight-800 text-white'
+                  : 'bg-white text-midnight-600 hover:bg-midnight-50'
+              }`}
             >
               {d}d
-            </Button>
+            </button>
           ))}
         </div>
       </div>
 
       {/* Key Metrics */}
-      <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-slate-500">Total Requests</span>
-            <div className="w-10 h-10 bg-violet-100 rounded-lg flex items-center justify-center">
-              <Activity className="h-5 w-5 text-violet-600" />
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="text-xs font-medium text-midnight-500 uppercase tracking-wide">Total Requests</div>
+              <div className="text-2xl font-semibold text-midnight-950 mt-2 tabular-nums">{usage.totalRequests.toLocaleString()}</div>
+              <p className="text-xs text-midnight-500 mt-1.5">
+                Text: {usage.textRequests.toLocaleString()} | Audio: {usage.audioRequests.toLocaleString()}
+              </p>
+            </div>
+            <div className="w-9 h-9 bg-midnight-100 rounded flex items-center justify-center">
+              <Activity className="h-4 w-4 text-midnight-600" />
             </div>
           </div>
-          <div className="text-3xl font-bold text-slate-900">{usage.totalRequests.toLocaleString()}</div>
-          <p className="text-xs text-slate-500 mt-2">
-            Text: {usage.textRequests.toLocaleString()} | Audio: {usage.audioRequests.toLocaleString()}
-          </p>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-slate-500">Threats Blocked</span>
-            <div className="w-10 h-10 bg-rose-100 rounded-lg flex items-center justify-center">
-              <Shield className="h-5 w-5 text-rose-600" />
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="text-xs font-medium text-midnight-500 uppercase tracking-wide">Threats Blocked</div>
+              <div className="text-2xl font-semibold text-midnight-950 mt-2 tabular-nums">{usage.blockedCount.toLocaleString()}</div>
+              <p className="text-xs text-midnight-500 mt-1.5">{blockRate}% block rate</p>
+            </div>
+            <div className="w-9 h-9 bg-critical-50 rounded flex items-center justify-center">
+              <Shield className="h-4 w-4 text-critical-600" />
             </div>
           </div>
-          <div className="text-3xl font-bold text-slate-900">{usage.blockedCount.toLocaleString()}</div>
-          <p className="text-xs text-slate-500 mt-2">{blockRate}% block rate</p>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-slate-500">Avg Latency</span>
-            <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-              <Clock className="h-5 w-5 text-emerald-600" />
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="text-xs font-medium text-midnight-500 uppercase tracking-wide">Avg Latency</div>
+              <div className="text-2xl font-semibold text-midnight-950 mt-2 tabular-nums">{usage.avgLatency}ms</div>
+              <p className="text-xs text-midnight-500 mt-1.5">Defense processing</p>
+            </div>
+            <div className="w-9 h-9 bg-secure-50 rounded flex items-center justify-center">
+              <Clock className="h-4 w-4 text-secure-600" />
             </div>
           </div>
-          <div className="text-3xl font-bold text-slate-900">{usage.avgLatency}ms</div>
-          <p className="text-xs text-slate-500 mt-2">Defense processing time</p>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-slate-500">Red Team</span>
-            <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
-              <Zap className="h-5 w-5 text-amber-600" />
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="text-xs font-medium text-midnight-500 uppercase tracking-wide">Red Team</div>
+              <div className="text-2xl font-semibold text-midnight-950 mt-2 tabular-nums">{usage.redteamAttacks.toLocaleString()}</div>
+              <p className="text-xs text-midnight-500 mt-1.5">Simulated attacks</p>
+            </div>
+            <div className="w-9 h-9 bg-warning-50 rounded flex items-center justify-center">
+              <Zap className="h-4 w-4 text-warning-600" />
             </div>
           </div>
-          <div className="text-3xl font-bold text-slate-900">{usage.redteamAttacks.toLocaleString()}</div>
-          <p className="text-xs text-slate-500 mt-2">Simulated attacks run</p>
         </div>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2">
         {/* Daily Usage Chart */}
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="mb-6">
-            <h2 className="text-lg font-semibold text-slate-900 mb-1">Daily Requests</h2>
-            <p className="text-sm text-slate-500">Request volume over time</p>
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="mb-5">
+            <h2 className="text-base font-medium text-midnight-950">Daily Requests</h2>
+            <p className="text-xs text-midnight-500 mt-0.5">Request volume over time</p>
           </div>
-          <div className="h-48 flex items-end justify-between gap-0.5">
+          <div className="h-44 flex items-end justify-between gap-0.5">
             {usage.dailyUsage.slice(-30).map((item, index) => {
               const total = item.text + item.audio;
               const maxTotal = Math.max(...usage.dailyUsage.map(d => d.text + d.audio));
@@ -174,7 +179,7 @@ export default function AdminUsagePage() {
                 <div key={index} className="flex-1 flex flex-col items-center">
                   <div className="w-full flex flex-col-reverse" style={{ height: '100%' }}>
                     <div
-                      className="w-full bg-gradient-to-t from-violet-600 to-violet-400 rounded-t"
+                      className="w-full bg-midnight-600 rounded-t hover:bg-midnight-500 transition-colors"
                       style={{ height: `${Math.max(height, 1)}%` }}
                       title={`Total: ${total} | Blocked: ${item.blocked}`}
                     />
@@ -183,31 +188,31 @@ export default function AdminUsagePage() {
               );
             })}
           </div>
-          <div className="flex items-center justify-center gap-4 mt-4 text-xs text-slate-500">
-            <span className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-violet-500 rounded" />
+          <div className="flex items-center justify-center gap-4 mt-4 text-xs text-midnight-500">
+            <span className="flex items-center gap-1.5">
+              <div className="w-2.5 h-2.5 bg-midnight-600 rounded-sm" />
               Requests
             </span>
           </div>
         </div>
 
         {/* User Growth */}
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="mb-6">
-            <h2 className="text-lg font-semibold text-slate-900 mb-1">User Growth</h2>
-            <p className="text-sm text-slate-500">New signups over time</p>
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="mb-5">
+            <h2 className="text-base font-medium text-midnight-950">User Growth</h2>
+            <p className="text-xs text-midnight-500 mt-0.5">New signups over time</p>
           </div>
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="p-4 bg-violet-50 rounded-lg">
-              <div className="text-2xl font-bold text-slate-900">{growth.totalUsers}</div>
-              <div className="text-sm text-slate-500">Total Users</div>
+          <div className="grid grid-cols-2 gap-3 mb-5">
+            <div className="p-3 bg-midnight-50 border border-midnight-200 rounded">
+              <div className="text-xl font-semibold text-midnight-950 tabular-nums">{growth.totalUsers}</div>
+              <div className="text-xs text-midnight-500">Total Users</div>
             </div>
-            <div className="p-4 bg-sky-50 rounded-lg">
-              <div className="text-2xl font-bold text-slate-900">{growth.totalOrgs}</div>
-              <div className="text-sm text-slate-500">Total Orgs</div>
+            <div className="p-3 bg-midnight-50 border border-midnight-200 rounded">
+              <div className="text-xl font-semibold text-midnight-950 tabular-nums">{growth.totalOrgs}</div>
+              <div className="text-xs text-midnight-500">Total Orgs</div>
             </div>
           </div>
-          <div className="h-32 flex items-end justify-between gap-0.5">
+          <div className="h-28 flex items-end justify-between gap-0.5">
             {growth.usersByDay.slice(-30).map((item, index) => {
               const maxCount = Math.max(...growth.usersByDay.map(d => d.count), 1);
               const height = (item.count / maxCount) * 100;
@@ -215,7 +220,7 @@ export default function AdminUsagePage() {
               return (
                 <div key={index} className="flex-1 flex flex-col items-center">
                   <div
-                    className="w-full bg-gradient-to-t from-sky-600 to-sky-400 rounded-t transition-all"
+                    className="w-full bg-accent-600 rounded-t hover:bg-accent-500 transition-colors"
                     style={{ height: `${Math.max(height, item.count > 0 ? 10 : 2)}%` }}
                     title={`${item.count} new users`}
                   />
@@ -227,13 +232,13 @@ export default function AdminUsagePage() {
       </div>
 
       {/* Top Organizations */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="p-6 border-b border-slate-100">
-          <h2 className="text-lg font-semibold text-slate-900 mb-1">Top Organizations by Usage</h2>
-          <p className="text-sm text-slate-500">Most active organizations</p>
+      <div className="bg-white rounded border border-midnight-200 overflow-hidden">
+        <div className="p-5 border-b border-midnight-100">
+          <h2 className="text-base font-medium text-midnight-950">Top Organizations</h2>
+          <p className="text-xs text-midnight-500 mt-0.5">Most active by usage</p>
         </div>
         {usage.topOrgs.length > 0 ? (
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-midnight-100">
             {usage.topOrgs.map((org, index) => {
               const maxRequests = usage.topOrgs[0]?.requests || 1;
               const percentage = (org.requests / maxRequests) * 100;
@@ -241,19 +246,19 @@ export default function AdminUsagePage() {
               return (
                 <div
                   key={index}
-                  className="flex items-center gap-4 p-4 hover:bg-slate-50 transition-colors"
+                  className="flex items-center gap-4 p-4 hover:bg-midnight-50 transition-colors"
                 >
-                  <div className="w-8 h-8 bg-violet-100 rounded-lg flex items-center justify-center text-sm font-medium text-violet-700">
+                  <div className="w-7 h-7 bg-midnight-100 rounded flex items-center justify-center text-xs font-medium text-midnight-700">
                     {index + 1}
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium text-slate-900">{org.name}</span>
-                      <span className="text-sm text-slate-500">{org.requests.toLocaleString()} requests</span>
+                      <span className="text-sm font-medium text-midnight-900">{org.name}</span>
+                      <span className="text-xs text-midnight-500 tabular-nums">{org.requests.toLocaleString()} requests</span>
                     </div>
-                    <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-1.5 bg-midnight-100 rounded-sm overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-violet-600 to-violet-400 transition-all"
+                        className="h-full bg-midnight-600 transition-all"
                         style={{ width: `${percentage}%` }}
                       />
                     </div>
@@ -263,9 +268,9 @@ export default function AdminUsagePage() {
             })}
           </div>
         ) : (
-          <div className="p-12 text-center text-slate-500">
-            <Building className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            No usage data yet
+          <div className="p-12 text-center text-midnight-500">
+            <Building className="h-10 w-10 mx-auto mb-4 opacity-50" />
+            <p className="text-sm">No usage data yet</p>
           </div>
         )}
       </div>

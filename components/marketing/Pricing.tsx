@@ -1,12 +1,12 @@
 import Link from 'next/link';
-import { Check, ArrowRight, Zap } from 'lucide-react';
+import { Check, ArrowRight } from 'lucide-react';
 
 const plans = [
   {
     name: 'Free',
     price: '$0',
     period: '/month',
-    description: 'Get started with basic protection',
+    description: 'Basic protection to get started',
     requests: '500 requests/mo',
     features: [
       'Text defense (6 layers)',
@@ -57,66 +57,63 @@ const plans = [
 
 export function Pricing() {
   return (
-    <section className="py-24 bg-white" id="pricing">
+    <section className="py-16 bg-white border-t border-midnight-200" id="pricing">
       <div className="container">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900">
-            Simple, transparent pricing
+        <div className="max-w-xl mb-12">
+          <h2 className="text-2xl font-semibold text-midnight-950">
+            Pricing
           </h2>
-          <p className="mt-4 text-lg text-slate-600 max-w-xl mx-auto">
+          <p className="mt-2 text-sm text-midnight-600">
             Start free, scale as you grow. No hidden fees.
           </p>
         </div>
 
         {/* Plans Grid */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-6 max-w-4xl">
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`relative flex flex-col p-8 rounded-2xl border-2 transition-all duration-200 ${
+              className={`relative flex flex-col p-6 rounded border transition-colors ${
                 plan.featured
-                  ? 'border-violet-500 shadow-xl shadow-violet-500/10 scale-105'
-                  : 'border-slate-200 hover:border-slate-300 hover:shadow-lg'
+                  ? 'border-accent-600 bg-accent-50/30'
+                  : 'border-midnight-200 hover:border-midnight-300'
               }`}
             >
               {plan.featured && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <span className="inline-flex items-center gap-1 px-3 py-1.5 bg-violet-600 text-white text-xs font-semibold rounded-full shadow-lg">
-                    <Zap className="w-3 h-3" />
-                    Most popular
+                <div className="absolute -top-3 left-4">
+                  <span className="inline-flex items-center px-2 py-0.5 bg-accent-600 text-white text-xs font-medium rounded">
+                    Recommended
                   </span>
                 </div>
               )}
 
-              <div className={plan.featured ? 'pt-2' : ''}>
-                <h3 className="text-xl font-semibold text-slate-900">{plan.name}</h3>
-                <p className="text-slate-500 text-sm mt-1">{plan.description}</p>
+              <div className={plan.featured ? 'pt-1' : ''}>
+                <h3 className="text-base font-medium text-midnight-950">{plan.name}</h3>
+                <p className="text-xs text-midnight-500 mt-0.5">{plan.description}</p>
               </div>
 
-              <div className="mt-6 mb-8">
-                <span className="text-5xl font-bold text-slate-900">{plan.price}</span>
-                <span className="text-slate-500">{plan.period}</span>
-                <div className="text-sm text-violet-600 font-medium mt-2">{plan.requests}</div>
+              <div className="mt-4 mb-6">
+                <span className="text-3xl font-semibold text-midnight-950">{plan.price}</span>
+                <span className="text-sm text-midnight-500">{plan.period}</span>
+                <div className="text-xs font-medium text-accent-600 mt-1">{plan.requests}</div>
               </div>
 
-              <ul className="space-y-4 flex-1">
+              <ul className="space-y-2.5 flex-1">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 mt-0.5">
-                      <Check className="w-3 h-3 text-emerald-600" />
-                    </div>
-                    <span className="text-slate-600">{feature}</span>
+                  <li key={feature} className="flex items-start gap-2">
+                    <Check className="w-4 h-4 text-secure-600 shrink-0 mt-0.5" />
+                    <span className="text-sm text-midnight-600">{feature}</span>
                   </li>
                 ))}
               </ul>
 
               <Link
                 href={plan.href}
-                className={`mt-8 w-full py-3 px-4 rounded-lg font-medium text-center transition-colors ${
+                className={`mt-6 w-full py-2 px-4 rounded text-sm font-medium text-center transition-colors ${
                   plan.featured
-                    ? 'bg-violet-600 hover:bg-violet-700 text-white'
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-900'
+                    ? 'bg-midnight-800 hover:bg-midnight-900 text-white'
+                    : 'bg-midnight-100 hover:bg-midnight-200 text-midnight-900'
                 }`}
               >
                 {plan.cta}
@@ -126,18 +123,18 @@ export function Pricing() {
         </div>
 
         {/* Enterprise */}
-        <div className="mt-16 max-w-5xl mx-auto">
-          <div className="bg-gradient-to-r from-violet-600 to-sky-500 rounded-2xl p-8 md:p-12">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="text-center md:text-left">
-                <h3 className="text-2xl font-bold text-white">Enterprise</h3>
-                <p className="text-violet-100 mt-2 max-w-md">
-                  Unlimited requests, custom SLA, dedicated support, and on-premise options.
+        <div className="mt-10 max-w-4xl">
+          <div className="bg-midnight-800 rounded p-6 md:p-8">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-lg font-semibold text-white">Enterprise</h3>
+                <p className="text-sm text-midnight-400 mt-1 max-w-md">
+                  Unlimited requests, custom SLA, dedicated support, on-premise options.
                 </p>
               </div>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-violet-700 font-medium px-6 py-3 rounded-lg transition-colors shrink-0"
+                className="inline-flex items-center gap-2 bg-white hover:bg-midnight-50 text-midnight-900 font-medium px-4 py-2 rounded transition-colors shrink-0 text-sm"
               >
                 Contact sales
                 <ArrowRight className="w-4 h-4" />
@@ -147,7 +144,7 @@ export function Pricing() {
         </div>
 
         {/* Guarantee */}
-        <p className="text-center mt-10 text-slate-500">
+        <p className="mt-8 text-xs text-midnight-500 max-w-4xl">
           14-day free trial on all paid plans. No credit card required.
         </p>
       </div>

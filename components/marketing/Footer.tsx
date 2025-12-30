@@ -21,29 +21,29 @@ const links = {
 
 export function Footer() {
   return (
-    <footer className="py-16 bg-white border-t border-slate-200">
+    <footer className="py-12 bg-white border-t border-midnight-200">
       <div className="container">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center">
-                <Shield className="w-5 h-5 text-white" />
+              <div className="w-7 h-7 rounded bg-midnight-800 flex items-center justify-center">
+                <Shield className="w-4 h-4 text-white" />
               </div>
-              <span className="font-bold text-xl text-slate-900">RAGuard</span>
+              <span className="font-semibold text-lg text-midnight-950">RAGuard</span>
             </Link>
-            <p className="mt-4 text-sm text-slate-500 max-w-xs">
-              Enterprise-grade security for voice AI systems.
+            <p className="mt-3 text-xs text-midnight-500 max-w-xs">
+              Voice AI security infrastructure for enterprise.
             </p>
           </div>
 
           {/* Product */}
           <div>
-            <h4 className="text-sm font-semibold text-slate-900 mb-4">Product</h4>
-            <ul className="space-y-3">
+            <h4 className="text-xs font-medium text-midnight-950 uppercase tracking-wide mb-3">Product</h4>
+            <ul className="space-y-2">
               {links.product.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-slate-500 hover:text-slate-900 transition-colors">
+                  <Link href={link.href} className="text-sm text-midnight-500 hover:text-midnight-900 transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -53,11 +53,11 @@ export function Footer() {
 
           {/* Company */}
           <div>
-            <h4 className="text-sm font-semibold text-slate-900 mb-4">Company</h4>
-            <ul className="space-y-3">
+            <h4 className="text-xs font-medium text-midnight-950 uppercase tracking-wide mb-3">Company</h4>
+            <ul className="space-y-2">
               {links.company.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-slate-500 hover:text-slate-900 transition-colors">
+                  <Link href={link.href} className="text-sm text-midnight-500 hover:text-midnight-900 transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -67,11 +67,11 @@ export function Footer() {
 
           {/* Legal */}
           <div>
-            <h4 className="text-sm font-semibold text-slate-900 mb-4">Legal</h4>
-            <ul className="space-y-3">
+            <h4 className="text-xs font-medium text-midnight-950 uppercase tracking-wide mb-3">Legal</h4>
+            <ul className="space-y-2">
               {links.legal.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-slate-500 hover:text-slate-900 transition-colors">
+                  <Link href={link.href} className="text-sm text-midnight-500 hover:text-midnight-900 transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -81,13 +81,13 @@ export function Footer() {
         </div>
 
         {/* Bottom */}
-        <div className="mt-16 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-slate-500">
+        <div className="mt-10 pt-6 border-t border-midnight-200 flex flex-col md:flex-row justify-between items-center gap-3">
+          <p className="text-xs text-midnight-500">
             &copy; {new Date().getFullYear()} RAGuard. All rights reserved.
           </p>
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-            <span className="text-sm text-slate-500">All systems operational</span>
+          <div className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 bg-secure-500 rounded-full" />
+            <span className="text-xs text-midnight-500">All systems operational</span>
           </div>
         </div>
       </div>

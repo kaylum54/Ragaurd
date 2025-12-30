@@ -10,7 +10,6 @@ import {
   ArrowUpRight,
   ArrowDownRight,
 } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 
 interface RevenueData {
   mrr: number;
@@ -21,10 +20,10 @@ interface RevenueData {
 }
 
 const planColors: Record<string, string> = {
-  starter: 'bg-violet-600',
-  pro: 'bg-sky-600',
-  business: 'bg-emerald-600',
-  enterprise: 'bg-amber-600',
+  starter: 'bg-accent-600',
+  pro: 'bg-accent-700',
+  business: 'bg-secure-600',
+  enterprise: 'bg-midnight-700',
 };
 
 export default function AdminRevenuePage() {
@@ -65,14 +64,14 @@ export default function AdminRevenuePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-rose-600" />
+        <Loader2 className="h-6 w-6 animate-spin text-midnight-400" />
       </div>
     );
   }
 
   if (!data) {
     return (
-      <div className="text-center text-slate-500 py-12">
+      <div className="text-center text-midnight-500 py-12">
         Failed to load revenue data
       </div>
     );
@@ -87,91 +86,95 @@ export default function AdminRevenuePage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Revenue</h1>
-        <p className="text-sm text-slate-500 mt-1">Track MRR, ARR, and subscription metrics</p>
+        <h1 className="text-xl font-semibold text-midnight-950">Revenue</h1>
+        <p className="text-sm text-midnight-500 mt-0.5">MRR, ARR, and subscription metrics</p>
       </div>
 
       {/* Key Metrics */}
-      <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-slate-500">MRR</span>
-            <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-              <DollarSign className="h-5 w-5 text-emerald-600" />
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="text-xs font-medium text-midnight-500 uppercase tracking-wide">MRR</div>
+              <div className="text-2xl font-semibold text-midnight-950 mt-2 tabular-nums">{formatCurrency(data.mrr)}</div>
+              <p className={`text-xs flex items-center gap-1 mt-1.5 ${growth >= 0 ? 'text-secure-700' : 'text-critical-700'}`}>
+                {growth >= 0 ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
+                {Math.abs(growth).toFixed(1)}% vs last month
+              </p>
+            </div>
+            <div className="w-9 h-9 bg-secure-50 rounded flex items-center justify-center">
+              <DollarSign className="h-4 w-4 text-secure-600" />
             </div>
           </div>
-          <div className="text-3xl font-bold text-slate-900">{formatCurrency(data.mrr)}</div>
-          <p className={`text-xs flex items-center gap-1 mt-2 ${growth >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
-            {growth >= 0 ? (
-              <ArrowUpRight className="h-3 w-3" />
-            ) : (
-              <ArrowDownRight className="h-3 w-3" />
-            )}
-            {Math.abs(growth).toFixed(1)}% from last month
-          </p>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-slate-500">ARR</span>
-            <div className="w-10 h-10 bg-violet-100 rounded-lg flex items-center justify-center">
-              <TrendingUp className="h-5 w-5 text-violet-600" />
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="text-xs font-medium text-midnight-500 uppercase tracking-wide">ARR</div>
+              <div className="text-2xl font-semibold text-midnight-950 mt-2 tabular-nums">{formatCurrency(data.arr)}</div>
+              <p className="text-xs text-midnight-500 mt-1.5">Annual recurring revenue</p>
+            </div>
+            <div className="w-9 h-9 bg-midnight-100 rounded flex items-center justify-center">
+              <TrendingUp className="h-4 w-4 text-midnight-600" />
             </div>
           </div>
-          <div className="text-3xl font-bold text-slate-900">{formatCurrency(data.arr)}</div>
-          <p className="text-xs text-slate-500 mt-2">Annual recurring revenue</p>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-slate-500">Subscriptions</span>
-            <div className="w-10 h-10 bg-sky-100 rounded-lg flex items-center justify-center">
-              <CreditCard className="h-5 w-5 text-sky-600" />
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="text-xs font-medium text-midnight-500 uppercase tracking-wide">Subscriptions</div>
+              <div className="text-2xl font-semibold text-midnight-950 mt-2 tabular-nums">
+                {data.planBreakdown.reduce((acc, p) => acc + p.count, 0)}
+              </div>
+              <p className="text-xs text-midnight-500 mt-1.5">Active paid</p>
+            </div>
+            <div className="w-9 h-9 bg-midnight-100 rounded flex items-center justify-center">
+              <CreditCard className="h-4 w-4 text-midnight-600" />
             </div>
           </div>
-          <div className="text-3xl font-bold text-slate-900">
-            {data.planBreakdown.reduce((acc, p) => acc + p.count, 0)}
-          </div>
-          <p className="text-xs text-slate-500 mt-2">Active paid subscriptions</p>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-slate-500">Avg Revenue</span>
-            <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
-              <PieChart className="h-5 w-5 text-amber-600" />
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="text-xs font-medium text-midnight-500 uppercase tracking-wide">ARPU</div>
+              <div className="text-2xl font-semibold text-midnight-950 mt-2 tabular-nums">
+                {formatCurrency(
+                  data.planBreakdown.reduce((acc, p) => acc + p.count, 0) > 0
+                    ? data.mrr / data.planBreakdown.reduce((acc, p) => acc + p.count, 0)
+                    : 0
+                )}
+              </div>
+              <p className="text-xs text-midnight-500 mt-1.5">Per customer</p>
+            </div>
+            <div className="w-9 h-9 bg-midnight-100 rounded flex items-center justify-center">
+              <PieChart className="h-4 w-4 text-midnight-600" />
             </div>
           </div>
-          <div className="text-3xl font-bold text-slate-900">
-            {formatCurrency(
-              data.planBreakdown.reduce((acc, p) => acc + p.count, 0) > 0
-                ? data.mrr / data.planBreakdown.reduce((acc, p) => acc + p.count, 0)
-                : 0
-            )}
-          </div>
-          <p className="text-xs text-slate-500 mt-2">Per customer (ARPU)</p>
         </div>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2">
         {/* MRR Chart */}
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="mb-6">
-            <h2 className="text-lg font-semibold text-slate-900 mb-1">MRR Over Time</h2>
-            <p className="text-sm text-slate-500">Last 12 months</p>
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="mb-5">
+            <h2 className="text-base font-medium text-midnight-950">MRR Over Time</h2>
+            <p className="text-xs text-midnight-500 mt-0.5">Last 12 months</p>
           </div>
-          <div className="h-48 flex items-end justify-between gap-1">
+          <div className="h-44 flex items-end justify-between gap-1">
             {data.mrrHistory.map((item, index) => {
               const maxMrr = Math.max(...data.mrrHistory.map(h => h.mrr));
               const height = maxMrr > 0 ? (item.mrr / maxMrr) * 100 : 0;
               return (
                 <div key={index} className="flex-1 flex flex-col items-center gap-2">
                   <div
-                    className="w-full bg-gradient-to-t from-emerald-600 to-emerald-400 rounded-t transition-all hover:from-emerald-500 hover:to-emerald-300"
+                    className="w-full bg-secure-600 rounded-t transition-colors hover:bg-secure-500"
                     style={{ height: `${Math.max(height, 2)}%` }}
                     title={`${formatCurrency(item.mrr)}`}
                   />
-                  <span className="text-[10px] text-slate-500">
+                  <span className="text-[10px] text-midnight-500 tabular-nums">
                     {formatDate(item.date)}
                   </span>
                 </div>
@@ -181,10 +184,10 @@ export default function AdminRevenuePage() {
         </div>
 
         {/* Plan Breakdown */}
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-          <div className="mb-6">
-            <h2 className="text-lg font-semibold text-slate-900 mb-1">Revenue by Plan</h2>
-            <p className="text-sm text-slate-500">Current distribution</p>
+        <div className="bg-white rounded border border-midnight-200 p-5">
+          <div className="mb-5">
+            <h2 className="text-base font-medium text-midnight-950">Revenue by Plan</h2>
+            <p className="text-xs text-midnight-500 mt-0.5">Current distribution</p>
           </div>
           <div className="space-y-4">
             {data.planBreakdown.length > 0 ? (
@@ -194,18 +197,18 @@ export default function AdminRevenuePage() {
                   <div key={plan.plan} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <Badge className={`${planColors[plan.plan] || 'bg-slate-600'} text-white capitalize`}>
+                        <span className={`text-xs font-medium px-1.5 py-0.5 rounded text-white capitalize ${planColors[plan.plan] || 'bg-midnight-600'}`}>
                           {plan.plan}
-                        </Badge>
-                        <span className="text-sm text-slate-500">{plan.count} customers</span>
+                        </span>
+                        <span className="text-xs text-midnight-500">{plan.count} customers</span>
                       </div>
-                      <span className="text-sm font-medium text-slate-900">
+                      <span className="text-sm font-medium text-midnight-900 tabular-nums">
                         {formatCurrency(plan.revenue)}
                       </span>
                     </div>
-                    <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-1.5 bg-midnight-100 rounded-sm overflow-hidden">
                       <div
-                        className={`h-full ${planColors[plan.plan] || 'bg-slate-600'} transition-all`}
+                        className={`h-full ${planColors[plan.plan] || 'bg-midnight-600'} transition-all`}
                         style={{ width: `${percentage}%` }}
                       />
                     </div>
@@ -213,43 +216,40 @@ export default function AdminRevenuePage() {
                 );
               })
             ) : (
-              <p className="text-slate-500 text-center py-8">No paid subscriptions yet</p>
+              <p className="text-midnight-500 text-center py-8 text-sm">No paid subscriptions</p>
             )}
           </div>
         </div>
       </div>
 
       {/* Recent Transactions */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="p-6 border-b border-slate-100">
-          <h2 className="text-lg font-semibold text-slate-900 mb-1">Recent Transactions</h2>
-          <p className="text-sm text-slate-500">Latest subscription activity</p>
+      <div className="bg-white rounded border border-midnight-200 overflow-hidden">
+        <div className="p-5 border-b border-midnight-100">
+          <h2 className="text-base font-medium text-midnight-950">Recent Transactions</h2>
+          <p className="text-xs text-midnight-500 mt-0.5">Latest subscription activity</p>
         </div>
         {data.recentTransactions.length > 0 ? (
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-midnight-100">
             {data.recentTransactions.map((tx, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-                    <DollarSign className="h-5 w-5 text-emerald-600" />
+              <div key={index} className="flex items-center justify-between p-4 hover:bg-midnight-50 transition-colors">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-secure-50 rounded flex items-center justify-center">
+                    <DollarSign className="h-4 w-4 text-secure-600" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-slate-900">{tx.org}</p>
-                    <p className="text-xs text-slate-500 capitalize">{tx.type}</p>
+                    <p className="text-sm font-medium text-midnight-900">{tx.org}</p>
+                    <p className="text-xs text-midnight-500 capitalize">{tx.type}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium text-emerald-600">+{formatCurrency(tx.amount)}</p>
-                  <p className="text-xs text-slate-500">{formatDate(tx.date)}</p>
+                  <p className="text-sm font-medium text-secure-700 tabular-nums">+{formatCurrency(tx.amount)}</p>
+                  <p className="text-xs text-midnight-500">{formatDate(tx.date)}</p>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="p-12 text-center text-slate-500">
+          <div className="p-12 text-center text-midnight-500 text-sm">
             No transactions yet
           </div>
         )}
