@@ -7,9 +7,10 @@ interface LogoProps {
   size?: 'sm' | 'default' | 'lg';
   showText?: boolean;
   href?: string;
+  variant?: 'light' | 'dark';
 }
 
-export function Logo({ className, size = 'default', showText = true, href = '/' }: LogoProps) {
+export function Logo({ className, size = 'default', showText = true, href = '/', variant = 'light' }: LogoProps) {
   const sizes = {
     sm: { icon: 'h-6 w-6', text: 'text-lg' },
     default: { icon: 'h-8 w-8', text: 'text-xl' },
@@ -22,17 +23,17 @@ export function Logo({ className, size = 'default', showText = true, href = '/' 
         <Shield
           className={cn(
             sizes[size].icon,
-            'text-primary-600 fill-primary-100'
+            variant === 'light' ? 'text-cyber-glow fill-primary-900/50' : 'text-primary-600 fill-primary-100'
           )}
         />
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
+          <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
         </div>
       </div>
       {showText && (
         <span className={cn('font-bold tracking-tight', sizes[size].text)}>
-          <span className="text-primary-900">Rag</span>
-          <span className="text-primary-600">aurd</span>
+          <span className={variant === 'light' ? 'text-white' : 'text-primary-900'}>Rag</span>
+          <span className={variant === 'light' ? 'text-cyber-glow' : 'text-primary-600'}>aurd</span>
         </span>
       )}
     </div>

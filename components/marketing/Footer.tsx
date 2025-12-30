@@ -31,13 +31,13 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="border-t bg-slate-50">
+    <footer className="border-t border-slate-800 bg-slate-900">
       <div className="container py-12 md:py-16">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
           {/* Logo and Description */}
           <div className="col-span-2">
-            <Logo />
-            <p className="mt-4 text-sm text-muted-foreground max-w-xs">
+            <Logo variant="light" />
+            <p className="mt-4 text-sm text-slate-400 max-w-xs">
               The only Voice AI security platform with text AND audio defense layers.
               Protecting AI agents from prompt injection, jailbreaking, and deepfakes.
             </p>
@@ -48,7 +48,7 @@ export function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-slate-500 hover:text-primary-400 transition-colors"
                   aria-label={social.label}
                 >
                   <social.icon className="h-5 w-5" />
@@ -59,13 +59,13 @@ export function Footer() {
 
           {/* Product Links */}
           <div>
-            <h4 className="font-semibold text-sm mb-4">Product</h4>
+            <h4 className="font-semibold text-sm mb-4 text-white">Product</h4>
             <ul className="space-y-3">
               {footerLinks.product.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    className="text-sm text-slate-400 hover:text-white transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -76,13 +76,13 @@ export function Footer() {
 
           {/* Company Links */}
           <div>
-            <h4 className="font-semibold text-sm mb-4">Company</h4>
+            <h4 className="font-semibold text-sm mb-4 text-white">Company</h4>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    className="text-sm text-slate-400 hover:text-white transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -93,13 +93,13 @@ export function Footer() {
 
           {/* Legal Links */}
           <div>
-            <h4 className="font-semibold text-sm mb-4">Legal</h4>
+            <h4 className="font-semibold text-sm mb-4 text-white">Legal</h4>
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    className="text-sm text-slate-400 hover:text-white transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -110,13 +110,13 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-muted-foreground">
+        <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-slate-500">
             &copy; {new Date().getFullYear()} Ragaurd. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
+            <span className="text-sm text-slate-500 flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
               All systems operational
             </span>
           </div>

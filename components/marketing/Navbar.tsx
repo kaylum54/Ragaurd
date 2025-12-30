@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -17,19 +17,40 @@ const navLinks = [
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header
+      className={cn(
+        'fixed top-0 z-50 w-full transition-all duration-300',
+        scrolled
+          ? 'bg-slate-900/95 backdrop-blur-md border-b border-slate-800'
+          : 'bg-transparent'
+      )}
+    >
       <nav className="container flex h-16 items-center justify-between">
         <Logo />
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className={cn(
+                'text-sm font-medium transition-colors',
+                scrolled
+                  ? 'text-slate-300 hover:text-white'
+                  : 'text-slate-300 hover:text-white'
+              )}
             >
               {link.label}
             </Link>
@@ -38,17 +59,24 @@ export function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-4">
-          <Button variant="ghost" asChild>
+          <Button
+            variant="ghost"
+            className="text-slate-300 hover:text-white hover:bg-slate-800/50"
+            asChild
+          >
             <Link href="/login">Sign in</Link>
           </Button>
-          <Button asChild>
+          <Button
+            className="bg-primary-600 hover:bg-primary-500 text-white"
+            asChild
+          >
             <Link href="/signup">Start Free</Link>
           </Button>
         </div>
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden p-2"
+          className="md:hidden p-2 text-white"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle menu"
         >
@@ -63,7 +91,7 @@ export function Navbar() {
       {/* Mobile Menu */}
       <div
         className={cn(
-          'md:hidden absolute top-16 left-0 right-0 bg-background border-b transition-all duration-200',
+          'md:hidden absolute top-16 left-0 right-0 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 transition-all duration-200',
           mobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         )}
       >
@@ -72,17 +100,17 @@ export function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground py-2"
+              className="text-sm font-medium text-slate-300 hover:text-white py-2"
               onClick={() => setMobileMenuOpen(false)}
             >
               {link.label}
             </Link>
           ))}
-          <div className="flex flex-col gap-2 pt-4 border-t">
-            <Button variant="outline" asChild className="w-full">
+          <div className="flex flex-col gap-2 pt-4 border-t border-slate-800">
+            <Button variant="outline" className="w-full border-slate-600 text-slate-300" asChild>
               <Link href="/login">Sign in</Link>
             </Button>
-            <Button asChild className="w-full">
+            <Button className="w-full bg-primary-600 hover:bg-primary-500" asChild>
               <Link href="/signup">Start Free</Link>
             </Button>
           </div>
