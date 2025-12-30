@@ -4,6 +4,10 @@ import { validateApiKey } from '@/lib/services/db/api-keys';
 import { logRequest } from '@/lib/services/db/request-log';
 import { incrementDailyUsage } from '@/lib/services/db/usage';
 import { analyzeText } from '@/lib/services/defense/text';
+import { isSupabaseConfigured } from '@/lib/supabase/server';
+
+// Demo API key for testing without database
+const DEMO_API_KEY = 'rg_test_demo_key_for_local_development';
 
 // Request validation schema
 const defendRequestSchema = z.object({
@@ -32,17 +36,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate API key against database
-    const keyValidation = await validateApiKey(apiKey);
+    let orgId: string | undefined;
+    let keyRecord: { id: string } | undefined;
 
-    if (!keyValidation.valid) {
-      return NextResponse.json(
-        { error: keyValidation.error || 'Invalid API key' },
-        { status: 401 }
-      );
+    // Check if using demo mode (no database configured)
+    const isDemoMode = !isSupabaseConfigured() || apiKey === DEMO_API_KEY;
+
+    if (isDemoMode) {
+      // Demo mode - skip database validation
+      orgId = 'demo-org-001';
+    } else {
+      // Validate API key against database
+      const keyValidation = await validateApiKey(apiKey);
+
+      if (!keyValidation.valid) {
+        return NextResponse.json(
+          { error: keyValidation.error || 'Invalid API key' },
+          { status: 401 }
+        );
+      }
+
+      orgId = keyValidation.orgId;
+      keyRecord = keyValidation.apiKey;
     }
-
-    const { apiKey: keyRecord, orgId } = keyValidation;
 
     // Check rate limiting (basic check using key's rate limit)
     // In production, use Redis for distributed rate limiting
@@ -75,8 +91,8 @@ export async function POST(request: NextRequest) {
 
     const result = defenseResult.data;
 
-    // Log the request to database (fire and forget)
-    if (orgId) {
+    // Log the request to database (fire and forget) - skip in demo mode
+    if (orgId && !isDemoMode) {
       Promise.all([
         logRequest({
           orgId,
