@@ -13,11 +13,21 @@ export default function UsagePage() {
   const { stats, loading: statsLoading, refetch } = useUsageStats();
   const { data: dailyStats, loading: dailyLoading } = useDailyBreakdown(7);
 
-  const textPercent = stats.text.limit > 0 ? (stats.text.used / stats.text.limit) * 100 : 0;
-  const audioPercent = stats.audio.limit > 0 ? (stats.audio.used / stats.audio.limit) * 100 : 0;
-  const redteamPercent = stats.redteam.limit > 0 ? (stats.redteam.used / stats.redteam.limit) * 100 : 0;
-  const totalRequests = stats.blocked + stats.passed;
-  const blockRate = totalRequests > 0 ? (stats.blocked / totalRequests) * 100 : 0;
+  const textLimit = stats.text?.limit ?? 0;
+  const audioLimit = stats.audio?.limit ?? 0;
+  const redteamLimit = stats.redteam?.limit ?? 0;
+  const textUsed = stats.text?.used ?? 0;
+  const audioUsed = stats.audio?.used ?? 0;
+  const redteamUsed = stats.redteam?.used ?? 0;
+  const blocked = stats.blocked ?? 0;
+  const passed = stats.passed ?? 0;
+  const avgLatency = stats.avgLatency ?? 0;
+
+  const textPercent = textLimit > 0 ? (textUsed / textLimit) * 100 : 0;
+  const audioPercent = audioLimit > 0 ? (audioUsed / audioLimit) * 100 : 0;
+  const redteamPercent = redteamLimit > 0 ? (redteamUsed / redteamLimit) * 100 : 0;
+  const totalRequests = blocked + passed;
+  const blockRate = totalRequests > 0 ? (blocked / totalRequests) * 100 : 0;
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -64,11 +74,11 @@ export default function UsagePage() {
             ) : (
               <>
                 <div className="text-2xl font-bold">
-                  {stats.text.used.toLocaleString()}
+                  {textUsed.toLocaleString()}
                 </div>
                 <Progress value={textPercent} className="mt-2 h-2" />
                 <p className="text-xs text-muted-foreground mt-2">
-                  {Math.round(textPercent)}% of {stats.text.limit.toLocaleString()} limit
+                  {Math.round(textPercent)}% of {textLimit.toLocaleString()} limit
                 </p>
               </>
             )}
@@ -89,11 +99,11 @@ export default function UsagePage() {
             ) : (
               <>
                 <div className="text-2xl font-bold">
-                  {stats.audio.used.toLocaleString()}
+                  {audioUsed.toLocaleString()}
                 </div>
                 <Progress value={audioPercent} className="mt-2 h-2" />
                 <p className="text-xs text-muted-foreground mt-2">
-                  {Math.round(audioPercent)}% of {stats.audio.limit.toLocaleString()} limit
+                  {Math.round(audioPercent)}% of {audioLimit.toLocaleString()} limit
                 </p>
               </>
             )}
@@ -114,11 +124,11 @@ export default function UsagePage() {
             ) : (
               <>
                 <div className="text-2xl font-bold">
-                  {stats.redteam.used.toLocaleString()}
+                  {redteamUsed.toLocaleString()}
                 </div>
                 <Progress value={redteamPercent} className="mt-2 h-2" />
                 <p className="text-xs text-muted-foreground mt-2">
-                  {Math.round(redteamPercent)}% of {stats.redteam.limit.toLocaleString()} limit
+                  {Math.round(redteamPercent)}% of {redteamLimit.toLocaleString()} limit
                 </p>
               </>
             )}
@@ -147,7 +157,7 @@ export default function UsagePage() {
               <Loader2 className="h-6 w-6 animate-spin text-muted-foreground mt-2" />
             ) : (
               <div className="text-2xl font-bold text-danger">
-                {stats.blocked.toLocaleString()}
+                {blocked.toLocaleString()}
               </div>
             )}
           </CardContent>
@@ -171,7 +181,7 @@ export default function UsagePage() {
               <Loader2 className="h-6 w-6 animate-spin text-muted-foreground mt-2" />
             ) : (
               <div className="text-2xl font-bold text-success">
-                {stats.avgLatency}ms
+                {avgLatency}ms
               </div>
             )}
           </CardContent>
