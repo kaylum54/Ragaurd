@@ -179,18 +179,27 @@ curl -X POST http://localhost:3000/api/v1/defend \
 - Live usage progress bars
 - Loading states during data fetch
 
+#### Team Management Page (`/dashboard/team`)
+- View all team members with roles and status
+- Invite new members via email
+- Role management (owner/admin/member/viewer)
+- Remove members with confirmation
+- Shareable invite link
+- Role permissions guide
+
 #### Git Commits (Session 2)
-4. `[pending]` - Add scan detail page, text defense playground, billing updates
+4. `3a200e3` - Add scan detail page, text defense playground, billing updates
+5. `[pending]` - Add team management page
 
 ---
 
 ### Next Steps (Planned)
 
-- [ ] Team management UI
 - [ ] Webhook notifications
 - [ ] Export reports functionality
 - [ ] Audio defense configuration
 - [ ] Settings page backend integration
+- [ ] Documentation pages
 
 ---
 
