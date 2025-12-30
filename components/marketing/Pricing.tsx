@@ -6,32 +6,38 @@ const plans = [
     name: 'Free',
     price: '$0',
     period: '/month',
-    description: 'Basic protection to get started',
-    requests: '500 requests/mo',
-    features: [
-      'Text defense (6 layers)',
-      '1 API key',
-      'Community support',
-      'Basic analytics',
-      '1 team member',
-    ],
+    textDefense: '500/mo',
+    audioDefense: '—',
+    redTeam: '—',
+    apiKeys: '1',
+    latency: 'Best effort',
+    support: 'Community',
     cta: 'Start free',
     href: '/signup',
+  },
+  {
+    name: 'Starter',
+    price: '$79',
+    period: '/month',
+    textDefense: '25,000/mo',
+    audioDefense: '—',
+    redTeam: '—',
+    apiKeys: '3',
+    latency: '<500ms',
+    support: 'Email',
+    cta: 'Get started',
+    href: '/signup?plan=starter',
   },
   {
     name: 'Pro',
     price: '$249',
     period: '/month',
-    description: 'Full protection for growing teams',
-    requests: '150K requests/mo',
-    features: [
-      'Text + Audio defense',
-      'Red team testing (5 scans/mo)',
-      '10 API keys',
-      'Priority support',
-      'Advanced analytics',
-      'Up to 5 team members',
-    ],
+    textDefense: '150,000/mo',
+    audioDefense: '50,000/mo',
+    redTeam: '1,000 attacks/mo',
+    apiKeys: '10',
+    latency: '<200ms',
+    support: 'Priority',
     cta: 'Get started',
     href: '/signup?plan=pro',
     featured: true,
@@ -40,19 +46,24 @@ const plans = [
     name: 'Business',
     price: '$649',
     period: '/month',
-    description: 'For scaling organizations',
-    requests: '500K requests/mo',
-    features: [
-      'Everything in Pro',
-      'Red team (25 scans/mo)',
-      'Unlimited API keys',
-      'Dedicated support',
-      '99.9% SLA',
-      'SSO / SAML',
-    ],
+    textDefense: '500,000/mo',
+    audioDefense: '200,000/mo',
+    redTeam: '10,000 attacks/mo',
+    apiKeys: '25',
+    latency: '<100ms',
+    support: 'Dedicated',
     cta: 'Get started',
     href: '/signup?plan=business',
   },
+];
+
+const tableRows = [
+  { label: 'Text Defense', key: 'textDefense' },
+  { label: 'Audio Defense', key: 'audioDefense' },
+  { label: 'Red Team Testing', key: 'redTeam' },
+  { label: 'API Keys', key: 'apiKeys' },
+  { label: 'Latency SLA', key: 'latency' },
+  { label: 'Support', key: 'support' },
 ];
 
 export function Pricing() {
@@ -60,66 +71,86 @@ export function Pricing() {
     <section className="py-16 bg-white border-t border-midnight-200" id="pricing">
       <div className="container">
         {/* Section Header */}
-        <div className="max-w-xl mb-12">
+        <div className="max-w-xl mb-10">
           <h2 className="text-2xl font-semibold text-midnight-950">
-            Pricing
+            Pricing That Scales With You
           </h2>
           <p className="mt-2 text-sm text-midnight-600">
-            Start free, scale as you grow. No hidden fees.
+            All plans include access to the dashboard, usage analytics, and threat logging.
           </p>
         </div>
 
-        {/* Plans Grid */}
-        <div className="grid md:grid-cols-3 gap-6 max-w-4xl">
-          {plans.map((plan) => (
-            <div
-              key={plan.name}
-              className={`relative flex flex-col p-6 rounded border transition-colors ${
-                plan.featured
-                  ? 'border-accent-600 bg-accent-50/30'
-                  : 'border-midnight-200 hover:border-midnight-300'
-              }`}
-            >
-              {plan.featured && (
-                <div className="absolute -top-3 left-4">
-                  <span className="inline-flex items-center px-2 py-0.5 bg-accent-600 text-white text-xs font-medium rounded">
-                    Recommended
-                  </span>
-                </div>
-              )}
-
-              <div className={plan.featured ? 'pt-1' : ''}>
-                <h3 className="text-base font-medium text-midnight-950">{plan.name}</h3>
-                <p className="text-xs text-midnight-500 mt-0.5">{plan.description}</p>
-              </div>
-
-              <div className="mt-4 mb-6">
-                <span className="text-3xl font-semibold text-midnight-950">{plan.price}</span>
-                <span className="text-sm text-midnight-500">{plan.period}</span>
-                <div className="text-xs font-medium text-accent-600 mt-1">{plan.requests}</div>
-              </div>
-
-              <ul className="space-y-2.5 flex-1">
-                {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-secure-600 shrink-0 mt-0.5" />
-                    <span className="text-sm text-midnight-600">{feature}</span>
-                  </li>
+        {/* Pricing Table */}
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px]">
+            <thead>
+              <tr>
+                <th className="text-left py-3 pr-4 w-40"></th>
+                {plans.map((plan) => (
+                  <th
+                    key={plan.name}
+                    className={`text-left py-3 px-4 ${
+                      plan.featured ? 'bg-accent-50/50' : ''
+                    }`}
+                  >
+                    <div className="relative">
+                      {plan.featured && (
+                        <span className="absolute -top-6 left-0 text-[10px] font-medium px-2 py-0.5 bg-accent-600 text-white rounded">
+                          Popular
+                        </span>
+                      )}
+                      <div className="text-base font-medium text-midnight-950">{plan.name}</div>
+                      <div className="mt-1">
+                        <span className="text-2xl font-semibold text-midnight-950">{plan.price}</span>
+                        <span className="text-sm text-midnight-500">{plan.period}</span>
+                      </div>
+                    </div>
+                  </th>
                 ))}
-              </ul>
-
-              <Link
-                href={plan.href}
-                className={`mt-6 w-full py-2 px-4 rounded text-sm font-medium text-center transition-colors ${
-                  plan.featured
-                    ? 'bg-midnight-800 hover:bg-midnight-900 text-white'
-                    : 'bg-midnight-100 hover:bg-midnight-200 text-midnight-900'
-                }`}
-              >
-                {plan.cta}
-              </Link>
-            </div>
-          ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-midnight-100">
+              {tableRows.map((row) => (
+                <tr key={row.key}>
+                  <td className="py-3 pr-4 text-sm font-medium text-midnight-700">{row.label}</td>
+                  {plans.map((plan) => (
+                    <td
+                      key={plan.name}
+                      className={`py-3 px-4 text-sm text-midnight-600 ${
+                        plan.featured ? 'bg-accent-50/50' : ''
+                      }`}
+                    >
+                      {plan[row.key as keyof typeof plan] === '—' ? (
+                        <span className="text-midnight-400">—</span>
+                      ) : (
+                        plan[row.key as keyof typeof plan]
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+              <tr>
+                <td className="py-4 pr-4"></td>
+                {plans.map((plan) => (
+                  <td
+                    key={plan.name}
+                    className={`py-4 px-4 ${plan.featured ? 'bg-accent-50/50' : ''}`}
+                  >
+                    <Link
+                      href={plan.href}
+                      className={`inline-block w-full py-2 px-4 rounded text-sm font-medium text-center transition-colors ${
+                        plan.featured
+                          ? 'bg-midnight-800 hover:bg-midnight-900 text-white'
+                          : 'bg-midnight-100 hover:bg-midnight-200 text-midnight-900'
+                      }`}
+                    >
+                      {plan.cta}
+                    </Link>
+                  </td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         {/* Enterprise */}
@@ -129,7 +160,7 @@ export function Pricing() {
               <div>
                 <h3 className="text-lg font-semibold text-white">Enterprise</h3>
                 <p className="text-sm text-midnight-400 mt-1 max-w-md">
-                  Unlimited requests, custom SLA, dedicated support, on-premise options.
+                  Unlimited requests, custom limits, dedicated infrastructure, SLA guarantees, 24/7 support + TAM.
                 </p>
               </div>
               <Link
@@ -143,9 +174,9 @@ export function Pricing() {
           </div>
         </div>
 
-        {/* Guarantee */}
-        <p className="mt-8 text-xs text-midnight-500 max-w-4xl">
-          14-day free trial on all paid plans. No credit card required.
+        {/* Note */}
+        <p className="mt-6 text-xs text-midnight-500 max-w-4xl">
+          Need higher volume? Enterprise plans include custom limits, dedicated infrastructure, and SLA guarantees.
         </p>
       </div>
     </section>
