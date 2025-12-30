@@ -1,43 +1,28 @@
-import { Metadata } from 'next';
-import { BarChart3, Download, Calendar } from 'lucide-react';
+'use client';
+
+import { Download, Calendar, Loader2, RotateCw } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { UsageChart } from '@/components/dashboard/UsageChart';
 import { AttackChart } from '@/components/dashboard/AttackChart';
-
-export const metadata: Metadata = {
-  title: 'Usage & Analytics',
-  description: 'View your usage statistics and analytics',
-};
-
-// Mock data
-const usage = {
-  period: { start: '2024-12-01', end: '2024-12-31' },
-  text: { used: 45230, limit: 150000 },
-  audio: { used: 12456, limit: 50000 },
-  redteam: { used: 234, limit: 1000 },
-  blocked: 1247,
-  passed: 56685,
-  avgLatency: 156,
-};
-
-const dailyStats = [
-  { day: 'Mon', requests: 8234, blocked: 156 },
-  { day: 'Tue', requests: 7891, blocked: 143 },
-  { day: 'Wed', requests: 9012, blocked: 189 },
-  { day: 'Thu', requests: 8567, blocked: 167 },
-  { day: 'Fri', requests: 7234, blocked: 134 },
-  { day: 'Sat', requests: 4123, blocked: 78 },
-  { day: 'Sun', requests: 3891, blocked: 72 },
-];
+import { useUsageStats, useDailyBreakdown } from '@/hooks/useUsage';
 
 export default function UsagePage() {
-  const textPercent = (usage.text.used / usage.text.limit) * 100;
-  const audioPercent = (usage.audio.used / usage.audio.limit) * 100;
-  const redteamPercent = (usage.redteam.used / usage.redteam.limit) * 100;
-  const blockRate = (usage.blocked / (usage.blocked + usage.passed)) * 100;
+  const { stats, loading: statsLoading, refetch } = useUsageStats();
+  const { data: dailyStats, loading: dailyLoading } = useDailyBreakdown(7);
+
+  const textPercent = stats.text.limit > 0 ? (stats.text.used / stats.text.limit) * 100 : 0;
+  const audioPercent = stats.audio.limit > 0 ? (stats.audio.used / stats.audio.limit) * 100 : 0;
+  const redteamPercent = stats.redteam.limit > 0 ? (stats.redteam.used / stats.redteam.limit) * 100 : 0;
+  const totalRequests = stats.blocked + stats.passed;
+  const blockRate = totalRequests > 0 ? (stats.blocked / totalRequests) * 100 : 0;
+
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
 
   return (
     <div className="space-y-6">
@@ -52,8 +37,12 @@ export default function UsagePage() {
         <div className="flex items-center gap-4">
           <Badge variant="outline" className="flex items-center gap-2">
             <Calendar className="h-4 w-4" />
-            Dec 1 - Dec 31, 2024
+            {formatDate(stats.period.start)} - {formatDate(stats.period.end)}
           </Badge>
+          <Button variant="outline" size="sm" onClick={() => refetch()}>
+            <RotateCw className="h-4 w-4 mr-2" />
+            Refresh
+          </Button>
           <Button variant="outline">
             <Download className="mr-2 h-4 w-4" />
             Export Report
@@ -70,13 +59,19 @@ export default function UsagePage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {usage.text.used.toLocaleString()}
-            </div>
-            <Progress value={textPercent} className="mt-2 h-2" />
-            <p className="text-xs text-muted-foreground mt-2">
-              {Math.round(textPercent)}% of {usage.text.limit.toLocaleString()} limit
-            </p>
+            {statsLoading ? (
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            ) : (
+              <>
+                <div className="text-2xl font-bold">
+                  {stats.text.used.toLocaleString()}
+                </div>
+                <Progress value={textPercent} className="mt-2 h-2" />
+                <p className="text-xs text-muted-foreground mt-2">
+                  {Math.round(textPercent)}% of {stats.text.limit.toLocaleString()} limit
+                </p>
+              </>
+            )}
           </CardContent>
         </Card>
         <Card>
@@ -89,13 +84,19 @@ export default function UsagePage() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {usage.audio.used.toLocaleString()}
-            </div>
-            <Progress value={audioPercent} className="mt-2 h-2" />
-            <p className="text-xs text-muted-foreground mt-2">
-              {Math.round(audioPercent)}% of {usage.audio.limit.toLocaleString()} limit
-            </p>
+            {statsLoading ? (
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            ) : (
+              <>
+                <div className="text-2xl font-bold">
+                  {stats.audio.used.toLocaleString()}
+                </div>
+                <Progress value={audioPercent} className="mt-2 h-2" />
+                <p className="text-xs text-muted-foreground mt-2">
+                  {Math.round(audioPercent)}% of {stats.audio.limit.toLocaleString()} limit
+                </p>
+              </>
+            )}
           </CardContent>
         </Card>
         <Card>
@@ -108,13 +109,19 @@ export default function UsagePage() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {usage.redteam.used.toLocaleString()}
-            </div>
-            <Progress value={redteamPercent} className="mt-2 h-2" />
-            <p className="text-xs text-muted-foreground mt-2">
-              {Math.round(redteamPercent)}% of {usage.redteam.limit.toLocaleString()} limit
-            </p>
+            {statsLoading ? (
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            ) : (
+              <>
+                <div className="text-2xl font-bold">
+                  {stats.redteam.used.toLocaleString()}
+                </div>
+                <Progress value={redteamPercent} className="mt-2 h-2" />
+                <p className="text-xs text-muted-foreground mt-2">
+                  {Math.round(redteamPercent)}% of {stats.redteam.limit.toLocaleString()} limit
+                </p>
+              </>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -124,33 +131,49 @@ export default function UsagePage() {
         <Card>
           <CardContent className="p-6">
             <div className="text-sm text-muted-foreground">Total Requests</div>
-            <div className="text-2xl font-bold">
-              {(usage.blocked + usage.passed).toLocaleString()}
-            </div>
+            {statsLoading ? (
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground mt-2" />
+            ) : (
+              <div className="text-2xl font-bold">
+                {totalRequests.toLocaleString()}
+              </div>
+            )}
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-6">
             <div className="text-sm text-muted-foreground">Blocked</div>
-            <div className="text-2xl font-bold text-danger">
-              {usage.blocked.toLocaleString()}
-            </div>
+            {statsLoading ? (
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground mt-2" />
+            ) : (
+              <div className="text-2xl font-bold text-danger">
+                {stats.blocked.toLocaleString()}
+              </div>
+            )}
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-6">
             <div className="text-sm text-muted-foreground">Block Rate</div>
-            <div className="text-2xl font-bold text-primary-600">
-              {blockRate.toFixed(2)}%
-            </div>
+            {statsLoading ? (
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground mt-2" />
+            ) : (
+              <div className="text-2xl font-bold text-primary-600">
+                {blockRate.toFixed(2)}%
+              </div>
+            )}
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-6">
             <div className="text-sm text-muted-foreground">Avg Latency</div>
-            <div className="text-2xl font-bold text-success">
-              {usage.avgLatency}ms
-            </div>
+            {statsLoading ? (
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground mt-2" />
+            ) : (
+              <div className="text-2xl font-bold text-success">
+                {stats.avgLatency}ms
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -168,31 +191,37 @@ export default function UsagePage() {
           <CardDescription>Request volume and blocked threats by day</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            {dailyStats.map((day) => (
-              <div key={day.day} className="flex items-center gap-4">
-                <div className="w-12 font-medium">{day.day}</div>
-                <div className="flex-1">
-                  <div className="flex h-4 rounded-full overflow-hidden bg-slate-100">
-                    <div
-                      className="bg-success"
-                      style={{ width: `${((day.requests - day.blocked) / 10000) * 100}%` }}
-                    />
-                    <div
-                      className="bg-danger"
-                      style={{ width: `${(day.blocked / 10000) * 100}%` }}
-                    />
+          {dailyLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {dailyStats.map((day, index) => (
+                <div key={index} className="flex items-center gap-4">
+                  <div className="w-12 font-medium">{day.day}</div>
+                  <div className="flex-1">
+                    <div className="flex h-4 rounded-full overflow-hidden bg-slate-100">
+                      <div
+                        className="bg-success transition-all"
+                        style={{ width: `${Math.min(((day.requests - day.blocked) / 10000) * 100, 100)}%` }}
+                      />
+                      <div
+                        className="bg-danger transition-all"
+                        style={{ width: `${Math.min((day.blocked / 10000) * 100, 100)}%` }}
+                      />
+                    </div>
+                  </div>
+                  <div className="text-sm text-muted-foreground w-24 text-right">
+                    {day.requests.toLocaleString()} total
+                  </div>
+                  <div className="text-sm text-danger w-20 text-right">
+                    {day.blocked} blocked
                   </div>
                 </div>
-                <div className="text-sm text-muted-foreground w-24 text-right">
-                  {day.requests.toLocaleString()} total
-                </div>
-                <div className="text-sm text-danger w-20 text-right">
-                  {day.blocked} blocked
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
