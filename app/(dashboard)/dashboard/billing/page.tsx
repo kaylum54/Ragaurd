@@ -1,19 +1,15 @@
-import { Metadata } from 'next';
+'use client';
+
 import Link from 'next/link';
-import { CreditCard, Check, ArrowRight, ExternalLink, Zap } from 'lucide-react';
+import { CreditCard, Check, ArrowRight, ExternalLink, Zap, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
+import { useUsageStats } from '@/hooks/useUsage';
 
-export const metadata: Metadata = {
-  title: 'Billing',
-  description: 'Manage your subscription and billing',
-};
-
-// Mock data
+// Mock subscription data (would come from Stripe in production)
 const subscription = {
   plan: 'pro',
   planName: 'Professional',
@@ -21,12 +17,6 @@ const subscription = {
   currentPeriodStart: '2024-12-01',
   currentPeriodEnd: '2025-01-01',
   priceMonthly: 24900, // cents
-};
-
-const usage = {
-  text: { used: 45230, limit: 150000 },
-  audio: { used: 12456, limit: 50000 },
-  redteam: { used: 234, limit: 1000 },
 };
 
 const plans = [
@@ -58,6 +48,12 @@ const invoices = [
 ];
 
 export default function BillingPage() {
+  const { stats, loading } = useUsageStats();
+
+  const textPercent = stats.text.limit > 0 ? (stats.text.used / stats.text.limit) * 100 : 0;
+  const audioPercent = stats.audio.limit > 0 ? (stats.audio.used / stats.audio.limit) * 100 : 0;
+  const redteamPercent = stats.redteam.limit > 0 ? (stats.redteam.used / stats.redteam.limit) * 100 : 0;
+
   return (
     <div className="space-y-6">
       {/* Page Header */}
@@ -98,33 +94,41 @@ export default function BillingPage() {
 
           {/* Usage */}
           <div className="space-y-4">
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium">Text Requests</span>
-                <span className="text-sm text-muted-foreground">
-                  {usage.text.used.toLocaleString()} / {usage.text.limit.toLocaleString()}
-                </span>
+            {loading ? (
+              <div className="flex items-center justify-center py-4">
+                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
               </div>
-              <Progress value={(usage.text.used / usage.text.limit) * 100} className="h-2" />
-            </div>
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium">Audio Requests</span>
-                <span className="text-sm text-muted-foreground">
-                  {usage.audio.used.toLocaleString()} / {usage.audio.limit.toLocaleString()}
-                </span>
-              </div>
-              <Progress value={(usage.audio.used / usage.audio.limit) * 100} className="h-2" />
-            </div>
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium">Red Team Attacks</span>
-                <span className="text-sm text-muted-foreground">
-                  {usage.redteam.used.toLocaleString()} / {usage.redteam.limit.toLocaleString()}
-                </span>
-              </div>
-              <Progress value={(usage.redteam.used / usage.redteam.limit) * 100} className="h-2" />
-            </div>
+            ) : (
+              <>
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium">Text Requests</span>
+                    <span className="text-sm text-muted-foreground">
+                      {stats.text.used.toLocaleString()} / {stats.text.limit.toLocaleString()}
+                    </span>
+                  </div>
+                  <Progress value={textPercent} className="h-2" />
+                </div>
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium">Audio Requests</span>
+                    <span className="text-sm text-muted-foreground">
+                      {stats.audio.used.toLocaleString()} / {stats.audio.limit.toLocaleString()}
+                    </span>
+                  </div>
+                  <Progress value={audioPercent} className="h-2" />
+                </div>
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium">Red Team Attacks</span>
+                    <span className="text-sm text-muted-foreground">
+                      {stats.redteam.used.toLocaleString()} / {stats.redteam.limit.toLocaleString()}
+                    </span>
+                  </div>
+                  <Progress value={redteamPercent} className="h-2" />
+                </div>
+              </>
+            )}
           </div>
         </CardContent>
         <CardFooter className="flex gap-4">
