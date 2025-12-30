@@ -1,14 +1,20 @@
 'use client';
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { useThreatCategories } from '@/hooks/useDashboard';
+import { Loader2 } from 'lucide-react';
 
-const data = [
-  { name: 'Prompt Injection', value: 45, color: '#3b82f6' },
-  { name: 'Jailbreak', value: 25, color: '#06b6d4' },
-  { name: 'Data Exfiltration', value: 15, color: '#8b5cf6' },
-  { name: 'Role Manipulation', value: 10, color: '#10b981' },
-  { name: 'Other', value: 5, color: '#64748b' },
-];
+const COLORS = ['#3b82f6', '#06b6d4', '#8b5cf6', '#10b981', '#f59e0b', '#64748b'];
+
+const categoryLabels: Record<string, string> = {
+  prompt_injection: 'Prompt Injection',
+  jailbreak: 'Jailbreak',
+  data_exfiltration: 'Data Exfiltration',
+  role_manipulation: 'Role Manipulation',
+  code_injection: 'Code Injection',
+  security_bypass: 'Security Bypass',
+  privilege_escalation: 'Privilege Escalation',
+};
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
@@ -21,7 +27,7 @@ const CustomTooltip = ({ active, payload }: any) => {
           />
           <span className="text-sm text-steel-100">{payload[0].name}</span>
         </div>
-        <p className="text-lg font-bold text-steel-100 mt-1">{payload[0].value}%</p>
+        <p className="text-lg font-bold text-steel-100 mt-1">{payload[0].value} blocked</p>
       </div>
     );
   }
@@ -29,7 +35,40 @@ const CustomTooltip = ({ active, payload }: any) => {
 };
 
 export function AttackChart() {
-  const total = data.reduce((sum, entry) => sum + entry.value, 0);
+  const { data: threatData, loading } = useThreatCategories();
+
+  // Transform data for the chart
+  const chartData = threatData.slice(0, 5).map((item, index) => ({
+    name: categoryLabels[item.category] || item.category.replace(/_/g, ' '),
+    value: item.count,
+    color: COLORS[index % COLORS.length],
+  }));
+
+  // Add "Other" category if there are more than 5 categories
+  if (threatData.length > 5) {
+    const otherCount = threatData.slice(5).reduce((sum, item) => sum + item.count, 0);
+    chartData.push({
+      name: 'Other',
+      value: otherCount,
+      color: COLORS[5],
+    });
+  }
+
+  const total = chartData.reduce((sum, entry) => sum + entry.value, 0);
+
+  if (loading) {
+    return (
+      <div className="dashboard-card">
+        <div className="mb-6">
+          <h2 className="section-header mb-1">Attack Categories</h2>
+          <p className="text-sm text-steel-500">Breakdown of blocked threats by type</p>
+        </div>
+        <div className="h-[250px] flex items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-electric-500" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="dashboard-card">
@@ -42,7 +81,7 @@ export function AttackChart() {
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
-                data={data}
+                data={chartData}
                 cx="50%"
                 cy="50%"
                 innerRadius={70}
@@ -50,7 +89,7 @@ export function AttackChart() {
                 paddingAngle={2}
                 dataKey="value"
               >
-                {data.map((entry, index) => (
+                {chartData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} stroke="transparent" />
                 ))}
               </Pie>
@@ -60,13 +99,13 @@ export function AttackChart() {
           {/* Center label */}
           <div className="absolute inset-0 flex items-center justify-center flex-col">
             <span className="text-3xl font-bold text-steel-100">{total}</span>
-            <span className="text-xs text-steel-500">Total %</span>
+            <span className="text-xs text-steel-500">Blocked</span>
           </div>
         </div>
 
         {/* Legend */}
         <div className="flex-1 space-y-3">
-          {data.map((entry) => (
+          {chartData.map((entry) => (
             <div key={entry.name} className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div
@@ -76,7 +115,7 @@ export function AttackChart() {
                 <span className="text-sm text-steel-300">{entry.name}</span>
               </div>
               <span className="text-sm font-medium text-steel-100 tabular-nums">
-                {entry.value}%
+                {total > 0 ? Math.round((entry.value / total) * 100) : 0}%
               </span>
             </div>
           ))}
