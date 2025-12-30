@@ -6,7 +6,6 @@ import { AttackChart } from '@/components/dashboard/AttackChart';
 import { RecentRequests } from '@/components/dashboard/RecentRequests';
 import { QuickActions } from '@/components/dashboard/QuickActions';
 import { Progress } from '@/components/ui/progress';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -37,13 +36,13 @@ export default function DashboardPage() {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-2xl font-bold text-steel-100">Dashboard</h1>
+          <p className="text-steel-500">
             Monitor your Voice AI security in real-time
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="flex items-center gap-1">
+          <Badge variant="success" className="flex items-center gap-1.5">
             <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
             All systems operational
           </Badge>
@@ -51,7 +50,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
         <StatsCard
           title="Total Requests (30d)"
           value={stats.totalRequests.toLocaleString()}
@@ -82,51 +81,51 @@ export default function DashboardPage() {
       </div>
 
       {/* Usage Progress */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Usage This Month</CardTitle>
-          <CardDescription>
+      <div className="dashboard-card">
+        <div className="mb-6">
+          <h2 className="section-header mb-1">Usage This Month</h2>
+          <p className="text-sm text-steel-500">
             Current billing period: Dec 1 - Dec 31, 2024
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
+          </p>
+        </div>
+        <div className="space-y-6">
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">Text Requests</span>
-              <span className="text-sm text-muted-foreground">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm font-medium text-steel-100">Text Requests</span>
+              <span className="text-sm text-steel-400 tabular-nums">
                 {stats.usage.text.used.toLocaleString()} / {stats.usage.text.limit.toLocaleString()}
               </span>
             </div>
-            <Progress value={textUsagePercent} className="h-2" />
+            <Progress value={textUsagePercent} />
           </div>
           <div>
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-medium">Audio Requests</span>
-                <Badge variant="outline" className="text-xs">Pro+</Badge>
+                <span className="text-sm font-medium text-steel-100">Audio Requests</span>
+                <Badge variant="info" className="text-[10px]">Pro+</Badge>
               </div>
-              <span className="text-sm text-muted-foreground">
+              <span className="text-sm text-steel-400 tabular-nums">
                 {stats.usage.audio.used.toLocaleString()} / {stats.usage.audio.limit.toLocaleString()}
               </span>
             </div>
-            <Progress value={audioUsagePercent} className="h-2" />
+            <Progress value={audioUsagePercent} />
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-end pt-2">
             <Button variant="outline" size="sm" asChild>
               <Link href="/dashboard/usage">View Details</Link>
             </Button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Charts */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-5 lg:grid-cols-2">
         <UsageChart />
         <AttackChart />
       </div>
 
       {/* Recent Activity & Quick Actions */}
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-5 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <RecentRequests />
         </div>

@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, AlertCircle, Shield } from 'lucide-react';
+import { ArrowLeft, AlertCircle } from 'lucide-react';
+import { Logo } from '@/components/shared/Logo';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -41,11 +42,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950">
+    <div className="min-h-screen flex flex-col bg-base">
       {/* Header */}
-      <header className="border-b border-slate-800">
+      <header className="border-b border-[rgba(59,130,246,0.1)]">
         <div className="container h-14 flex items-center">
-          <Link href="/" className="flex items-center gap-2 text-slate-400 hover:text-white text-sm transition-colors">
+          <Link href="/" className="flex items-center gap-2 text-steel-500 hover:text-steel-100 text-sm transition-colors">
             <ArrowLeft className="w-4 h-4" />
             Back
           </Link>
@@ -54,46 +55,45 @@ export default function LoginPage() {
 
       {/* Main */}
       <main className="flex-1 flex items-center justify-center py-16">
-        <div className="w-full max-w-sm px-6">
+        <div className="w-full max-w-sm px-6 animate-fade-in">
           {/* Logo */}
-          <div className="flex items-center gap-2.5 mb-12">
-            <Shield className="w-6 h-6 text-blue-500" />
-            <span className="text-base font-semibold text-white">Ragaurd</span>
+          <div className="mb-12">
+            <Logo variant="light" />
           </div>
 
           {/* Title */}
-          <h1 className="text-2xl font-semibold text-white mb-2">Sign in</h1>
-          <p className="text-sm text-slate-400 mb-8">
+          <h1 className="text-2xl font-semibold text-steel-100 mb-2">Sign in</h1>
+          <p className="text-sm text-steel-500 mb-8">
             Enter your credentials to access your account
           </p>
 
           {/* Demo Credentials */}
-          <div className="mb-8 p-4 border border-slate-700/50 bg-slate-800/30 rounded-lg">
-            <div className="text-xs text-slate-500 uppercase tracking-wider mb-3">Demo credentials</div>
+          <div className="mb-8 p-4 border border-[rgba(59,130,246,0.1)] bg-card rounded-lg">
+            <div className="section-header mb-3">Demo credentials</div>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-slate-500">Admin:</span>
-                <span className="text-white font-mono text-xs">admin@ragaurd.com / Ragaurd2024!</span>
+                <span className="text-steel-500">Admin:</span>
+                <span className="text-steel-100 font-mono text-xs">admin@ragaurd.com / Ragaurd2024!</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">User:</span>
-                <span className="text-white font-mono text-xs">demo@ragaurd.com / demo123</span>
+                <span className="text-steel-500">User:</span>
+                <span className="text-steel-100 font-mono text-xs">demo@ragaurd.com / demo123</span>
               </div>
             </div>
           </div>
 
           {/* Error */}
           {error && (
-            <div className="mb-6 p-4 border border-red-500/20 bg-red-500/5 rounded-lg flex items-center gap-3">
-              <AlertCircle className="w-4 h-4 text-red-500" />
-              <span className="text-sm text-red-400">{error}</span>
+            <div className="mb-6 p-4 border border-[rgba(239,68,68,0.2)] bg-[rgba(239,68,68,0.1)] rounded-lg flex items-center gap-3">
+              <AlertCircle className="w-4 h-4 text-danger" />
+              <span className="text-sm text-danger">{error}</span>
             </div>
           )}
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm text-slate-400 mb-2">
+              <label htmlFor="email" className="block text-sm text-steel-400 mb-2">
                 Email
               </label>
               <input
@@ -102,13 +102,13 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-md text-white text-sm focus:outline-none focus:border-blue-500/50 transition-colors"
+                className="input-field w-full"
                 placeholder="you@company.com"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm text-slate-400 mb-2">
+              <label htmlFor="password" className="block text-sm text-steel-400 mb-2">
                 Password
               </label>
               <input
@@ -117,23 +117,23 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-md text-white text-sm focus:outline-none focus:border-blue-500/50 transition-colors"
+                className="input-field w-full"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-primary w-full"
             >
               {loading ? 'Signing in...' : 'Sign in'}
             </button>
           </form>
 
           {/* Footer */}
-          <p className="mt-8 text-sm text-slate-500 text-center">
+          <p className="mt-8 text-sm text-steel-500 text-center">
             Don&apos;t have an account?{' '}
-            <Link href="/signup" className="text-blue-400 hover:text-blue-300 transition-colors">
+            <Link href="/signup" className="text-electric-500 hover:text-electric-400 transition-colors">
               Sign up
             </Link>
           </p>

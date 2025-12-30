@@ -12,9 +12,10 @@ import {
   Server,
   ChevronLeft,
   LogOut,
-  Shield,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Logo } from '@/components/shared/Logo';
+import { Badge } from '@/components/ui/badge';
 
 const adminNavItems = [
   { title: 'Overview', href: '/admin', icon: LayoutDashboard },
@@ -39,26 +40,30 @@ export default function AdminLayout({
   };
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-base">
       {/* Sidebar */}
       <aside
         className={cn(
-          'fixed left-0 top-0 z-40 h-screen bg-slate-900/50 border-r border-slate-700/50 transition-all duration-200',
-          collapsed ? 'w-16' : 'w-56'
+          'fixed left-0 top-0 z-40 h-screen bg-sidebar border-r border-[rgba(59,130,246,0.1)] transition-all duration-200',
+          collapsed ? 'w-16' : 'w-[260px]'
         )}
       >
         <div className="flex h-full flex-col">
           {/* Logo */}
-          <div className="flex h-14 items-center justify-between px-4 border-b border-slate-700/50">
+          <div className="flex h-16 items-center justify-between px-4 border-b border-[rgba(59,130,246,0.1)]">
             {!collapsed && (
-              <div className="flex items-center gap-2">
-                <Shield className="w-5 h-5 text-blue-500" />
-                <span className="text-sm font-semibold text-white">Admin</span>
+              <div className="flex items-center gap-2 animate-pulse-glow rounded-lg p-1">
+                <Logo variant="light" size="sm" />
+                <Badge variant="destructive" className="text-[10px]">ADMIN</Badge>
               </div>
             )}
-            {collapsed && <Shield className="w-5 h-5 text-blue-500 mx-auto" />}
+            {collapsed && (
+              <div className="mx-auto animate-pulse-glow rounded-lg p-1">
+                <Logo showText={false} variant="light" size="sm" />
+              </div>
+            )}
             <button
-              className={cn('p-1 text-slate-500 hover:text-white', collapsed && 'mx-auto')}
+              className={cn('p-1.5 rounded-md text-steel-500 hover:text-steel-100 hover:bg-[rgba(59,130,246,0.1)] transition-all duration-150', collapsed && 'mx-auto')}
               onClick={() => setCollapsed(!collapsed)}
             >
               <ChevronLeft className={cn('h-4 w-4 transition-transform', collapsed && 'rotate-180')} />
@@ -67,20 +72,19 @@ export default function AdminLayout({
 
           {/* Navigation */}
           <nav className="flex-1 overflow-y-auto p-3 space-y-1">
+            <div className="nav-divider">Admin</div>
             {adminNavItems.map((item) => {
               const isActive = pathname === item.href;
               return (
                 <Link key={item.href} href={item.href}>
                   <div
                     className={cn(
-                      'flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors',
-                      isActive
-                        ? 'bg-blue-600 text-white'
-                        : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                      'nav-item',
+                      isActive && 'active'
                     )}
                   >
-                    <item.icon className="h-4 w-4 shrink-0" />
-                    {!collapsed && <span>{item.title}</span>}
+                    <item.icon className="nav-icon" />
+                    {!collapsed && <span className="text-sm">{item.title}</span>}
                   </div>
                 </Link>
               );
@@ -88,24 +92,24 @@ export default function AdminLayout({
           </nav>
 
           {/* Footer */}
-          <div className="p-3 border-t border-slate-700/50 space-y-2">
+          <div className="p-3 border-t border-[rgba(59,130,246,0.1)] space-y-1">
             {!collapsed && (
               <Link href="/dashboard">
-                <div className="flex items-center gap-2 px-3 py-2 text-sm text-slate-400 hover:bg-slate-800 hover:text-white rounded-md transition-colors">
-                  <ChevronLeft className="h-4 w-4" />
-                  Dashboard
+                <div className="nav-item">
+                  <ChevronLeft className="nav-icon" />
+                  <span className="text-sm">Dashboard</span>
                 </div>
               </Link>
             )}
             <button
               onClick={handleLogout}
               className={cn(
-                'w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-400 hover:bg-slate-800 hover:text-white rounded-md transition-colors',
+                'nav-item w-full text-danger hover:text-danger hover:bg-[rgba(239,68,68,0.1)]',
                 collapsed && 'justify-center'
               )}
             >
-              <LogOut className="h-4 w-4" />
-              {!collapsed && <span>Logout</span>}
+              <LogOut className="nav-icon" />
+              {!collapsed && <span className="text-sm">Logout</span>}
             </button>
           </div>
         </div>
@@ -114,16 +118,14 @@ export default function AdminLayout({
       {/* Header */}
       <header
         className={cn(
-          'fixed top-0 right-0 z-30 h-14 bg-slate-950 border-b border-slate-700/50 transition-all duration-200',
-          collapsed ? 'left-16' : 'left-56'
+          'fixed top-0 right-0 z-30 h-16 bg-base border-b border-[rgba(59,130,246,0.1)] transition-all duration-200',
+          collapsed ? 'left-16' : 'left-[260px]'
         )}
       >
         <div className="flex h-full items-center justify-between px-6">
-          <div className="text-sm text-white font-medium">Admin Dashboard</div>
+          <div className="text-sm text-steel-100 font-medium">Admin Dashboard</div>
           <div className="flex items-center gap-4">
-            <span className="text-xs px-2 py-1 bg-red-500/10 text-red-400 border border-red-500/20 rounded">
-              ADMIN
-            </span>
+            <Badge variant="destructive">ADMIN MODE</Badge>
           </div>
         </div>
       </header>
@@ -131,11 +133,11 @@ export default function AdminLayout({
       {/* Main Content */}
       <main
         className={cn(
-          'pt-14 min-h-screen transition-all duration-200',
-          collapsed ? 'pl-16' : 'pl-56'
+          'pt-16 min-h-screen transition-all duration-200',
+          collapsed ? 'pl-16' : 'pl-[260px]'
         )}
       >
-        <div className="p-6">{children}</div>
+        <div className="p-6 max-w-[1440px] mx-auto animate-fade-in">{children}</div>
       </main>
     </div>
   );

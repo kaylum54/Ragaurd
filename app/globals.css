@@ -2,89 +2,554 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ========================================
+   RAGuard Defense-Themed Design System
+   ======================================== */
+
 @layer base {
   :root {
-    --background: 222 47% 6%;
-    --foreground: 210 40% 98%;
+    /* Base Colors - Defense Navy Palette */
+    --bg-base: #0a0e1a;
+    --bg-card: #111827;
+    --bg-sidebar: #070b14;
+    --bg-elevated: #0d1320;
 
-    --card: 222 47% 8%;
-    --card-foreground: 210 40% 98%;
+    /* Primary Accent - Electric Blue */
+    --primary: #3b82f6;
+    --primary-hover: #60a5fa;
+    --primary-muted: rgba(59, 130, 246, 0.15);
 
-    --popover: 222 47% 8%;
-    --popover-foreground: 210 40% 98%;
+    /* Secondary Accent - Cyan */
+    --secondary: #06b6d4;
+    --secondary-hover: #22d3ee;
 
-    --primary: 217 91% 60%;
-    --primary-foreground: 222 47% 6%;
+    /* Text Colors */
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
 
-    --secondary: 217 33% 14%;
-    --secondary-foreground: 210 40% 98%;
+    /* Borders */
+    --border-default: rgba(59, 130, 246, 0.1);
+    --border-hover: rgba(59, 130, 246, 0.3);
+    --border-focus: rgba(59, 130, 246, 0.5);
 
-    --muted: 217 33% 14%;
-    --muted-foreground: 215 20% 55%;
+    /* Semantic Colors */
+    --success: #10b981;
+    --error: #ef4444;
+    --warning: #f59e0b;
 
+    /* Shadows */
+    --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+    --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.15);
+
+    /* Spacing */
+    --radius: 12px;
+    --radius-sm: 8px;
+
+    /* HSL Variables for shadcn compatibility */
+    --background: 222 47% 5%;
+    --foreground: 210 40% 96%;
+    --card: 222 47% 7%;
+    --card-foreground: 210 40% 96%;
+    --popover: 222 47% 7%;
+    --popover-foreground: 210 40% 96%;
+    --primary-hsl: 217 91% 60%;
+    --primary-foreground: 222 47% 5%;
+    --secondary-hsl: 187 81% 43%;
+    --secondary-foreground: 210 40% 96%;
+    --muted: 217 33% 12%;
+    --muted-foreground: 215 16% 47%;
     --accent: 217 91% 60%;
-    --accent-foreground: 210 40% 98%;
-
+    --accent-foreground: 210 40% 96%;
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-
+    --destructive-foreground: 210 40% 96%;
     --border: 217 33% 17%;
     --input: 217 33% 17%;
     --ring: 217 91% 60%;
-
-    --radius: 0.375rem;
   }
 }
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: var(--border-default);
   }
 
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   }
 
   ::selection {
-    background: rgba(59, 130, 246, 0.3);
+    background: rgba(59, 130, 246, 0.4);
+    color: var(--text-primary);
   }
 }
 
-/* Scrollbar */
+/* ========================================
+   Typography System
+   ======================================== */
+
+@layer components {
+  /* Large metric displays - 32-48px, weight 700 */
+  .metric-display {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .metric-display-lg {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Section headers - 14px uppercase, letter-spacing 0.05em */
+  .section-header {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+  }
+
+  /* Card titles - 14px uppercase steel blue */
+  .card-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+  }
+}
+
+/* ========================================
+   Card System
+   ======================================== */
+
+@layer components {
+  .dashboard-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-card);
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+
+  .dashboard-card:hover {
+    border-color: var(--border-hover);
+  }
+
+  .dashboard-card-interactive:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-card), var(--shadow-glow);
+  }
+}
+
+/* ========================================
+   Gradient Utilities
+   ======================================== */
+
+@layer utilities {
+  .gradient-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  }
+
+  .gradient-primary-text {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-border {
+    position: relative;
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+}
+
+/* ========================================
+   Button System
+   ======================================== */
+
+@layer components {
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: filter 150ms ease, transform 150ms ease;
+  }
+
+  .btn-primary:hover {
+    filter: brightness(1.1);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: background-color 150ms ease;
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--primary-muted);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: color 150ms ease;
+  }
+
+  .btn-ghost:hover {
+    color: var(--primary);
+  }
+}
+
+/* ========================================
+   Form Elements
+   ======================================== */
+
+@layer components {
+  .input-field {
+    background-color: var(--bg-card);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1rem;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+
+  .input-field::placeholder {
+    color: var(--text-muted);
+  }
+
+  .input-field:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+}
+
+/* ========================================
+   Table Styles
+   ======================================== */
+
+@layer components {
+  .table-header {
+    background-color: var(--bg-elevated);
+  }
+
+  .table-header-cell {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    padding: 0.75rem 1rem;
+    text-align: left;
+  }
+
+  .table-row {
+    border-bottom: 1px solid var(--border-default);
+    transition: background-color 150ms ease;
+  }
+
+  .table-row:nth-child(even) {
+    background-color: rgba(59, 130, 246, 0.02);
+  }
+
+  .table-row:hover {
+    background-color: rgba(59, 130, 246, 0.08);
+  }
+
+  .table-cell {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+  }
+
+  .table-cell-numeric {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* ========================================
+   Status Badges
+   ======================================== */
+
+@layer components {
+  .badge-success {
+    background-color: rgba(16, 185, 129, 0.15);
+    color: var(--success);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .badge-error {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: var(--error);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .badge-warning {
+    background-color: rgba(245, 158, 11, 0.15);
+    color: var(--warning);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .badge-info {
+    background-color: rgba(59, 130, 246, 0.15);
+    color: var(--primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+}
+
+/* ========================================
+   Navigation System
+   ======================================== */
+
+@layer components {
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 0.875rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: all 150ms ease;
+  }
+
+  .nav-item:hover {
+    color: var(--text-primary);
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+
+  .nav-item.active {
+    color: var(--primary);
+    background-color: rgba(59, 130, 246, 0.15);
+    border-left: 3px solid var(--primary);
+    margin-left: -3px;
+    padding-left: calc(0.875rem + 3px);
+  }
+
+  .nav-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+  }
+
+  .nav-divider {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    padding: 0 0.875rem;
+  }
+}
+
+/* ========================================
+   Scrollbar
+   ======================================== */
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--bg-card);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.2);
+  background: rgba(59, 130, 246, 0.5);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.3);
+  background: rgba(59, 130, 246, 0.7);
 }
 
-/* Monospace numbers */
-.mono {
-  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+/* ========================================
+   Animations
+   ======================================== */
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 300ms ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 300ms ease-out forwards;
+  }
+
+  .animate-pulse-glow {
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+
+  .animate-skeleton {
+    animation: skeleton 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+  }
+}
+
+@keyframes skeleton {
+  0% {
+    background-color: var(--bg-card);
+  }
+  50% {
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+  100% {
+    background-color: var(--bg-card);
+  }
+}
+
+/* ========================================
+   Chart Styles
+   ======================================== */
+
+@layer components {
+  .chart-container {
+    background: transparent;
+  }
+
+  .chart-grid-line {
+    stroke: rgba(148, 163, 184, 0.1);
+  }
+
+  .chart-axis-label {
+    fill: var(--text-muted);
+    font-size: 0.75rem;
+  }
+}
+
+/* ========================================
+   Semantic Status Colors (Legacy support)
+   ======================================== */
+
+.text-success { color: var(--success); }
+.text-warning { color: var(--warning); }
+.text-danger { color: var(--error); }
+.text-primary-accent { color: var(--primary); }
+.text-secondary-accent { color: var(--secondary); }
+
+.bg-success { background-color: var(--success); }
+.bg-warning { background-color: var(--warning); }
+.bg-danger { background-color: var(--error); }
+
+/* Tabular numbers for data */
+.tabular-nums {
   font-variant-numeric: tabular-nums;
 }
 
-/* Status colors */
-.text-success { color: #22c55e; }
-.text-warning { color: #f59e0b; }
-.text-danger { color: #ef4444; }
-.bg-success { background-color: #22c55e; }
-.bg-warning { background-color: #f59e0b; }
-.bg-danger { background-color: #ef4444; }
+/* Monospace for code/technical data */
+.mono {
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ========================================
+   Separators
+   ======================================== */
+
+.separator {
+  height: 1px;
+  background-color: rgba(148, 163, 184, 0.1);
+}
+
+/* ========================================
+   Max Width Container
+   ======================================== */
+
+.max-content-width {
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}

@@ -1,5 +1,4 @@
 import { LucideIcon } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
 interface StatsCardProps {
@@ -23,37 +22,38 @@ export function StatsCard({
   className,
 }: StatsCardProps) {
   return (
-    <Card className={cn('', className)}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">
-          {title}
-        </CardTitle>
+    <div
+      className={cn(
+        'dashboard-card dashboard-card-interactive animate-slide-up',
+        className
+      )}
+    >
+      <div className="flex items-center justify-between mb-4">
+        <span className="section-header">{title}</span>
         {Icon && (
-          <div className="h-8 w-8 rounded-lg bg-primary-50 flex items-center justify-center">
-            <Icon className="h-4 w-4 text-primary-600" />
+          <div className="h-10 w-10 rounded-lg bg-[rgba(59,130,246,0.1)] flex items-center justify-center">
+            <Icon className="h-5 w-5 text-electric-500" />
           </div>
         )}
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
-        {(description || trend) && (
-          <div className="flex items-center gap-2 mt-1">
-            {trend && (
-              <span
-                className={cn(
-                  'text-xs font-medium',
-                  trend.isPositive ? 'text-success' : 'text-danger'
-                )}
-              >
-                {trend.isPositive ? '+' : ''}{trend.value}%
-              </span>
-            )}
-            {description && (
-              <span className="text-xs text-muted-foreground">{description}</span>
-            )}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+      </div>
+      <div className="metric-display tabular-nums">{value}</div>
+      {(description || trend) && (
+        <div className="flex items-center gap-2 mt-2">
+          {trend && (
+            <span
+              className={cn(
+                'text-xs font-medium tabular-nums',
+                trend.isPositive ? 'text-success' : 'text-danger'
+              )}
+            >
+              {trend.isPositive ? '+' : ''}{trend.value}%
+            </span>
+          )}
+          {description && (
+            <span className="text-xs text-steel-500">{description}</span>
+          )}
+        </div>
+      )}
+    </div>
   );
 }

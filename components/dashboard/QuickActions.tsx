@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { Key, Target, FileText, Settings } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 const actions = [
   {
@@ -33,33 +32,33 @@ const actions = [
 
 export function QuickActions() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Quick Actions</CardTitle>
-        <CardDescription>Common tasks and shortcuts</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-2 gap-4">
-          {actions.map((action) => (
-            <Button
-              key={action.title}
-              variant="outline"
-              className="h-auto p-4 flex flex-col items-start text-left"
-              asChild
-            >
-              <Link href={action.href}>
-                <div className="h-8 w-8 rounded-lg bg-primary-50 flex items-center justify-center mb-2">
-                  <action.icon className="h-4 w-4 text-primary-600" />
-                </div>
-                <div className="font-medium text-sm">{action.title}</div>
-                <div className="text-xs text-muted-foreground mt-0.5">
-                  {action.description}
-                </div>
-              </Link>
-            </Button>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+    <div className="dashboard-card">
+      <div className="mb-6">
+        <h2 className="section-header mb-1">Quick Actions</h2>
+        <p className="text-sm text-steel-500">Common tasks and shortcuts</p>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        {actions.map((action) => (
+          <Link
+            key={action.title}
+            href={action.href}
+            className="group p-4 rounded-lg border border-[rgba(59,130,246,0.1)] bg-[rgba(59,130,246,0.02)] hover:border-[rgba(59,130,246,0.3)] hover:bg-[rgba(59,130,246,0.05)] transition-all duration-150"
+          >
+            <div className="h-10 w-10 rounded-lg bg-[rgba(59,130,246,0.1)] flex items-center justify-center mb-3 group-hover:bg-[rgba(59,130,246,0.2)] transition-colors">
+              <action.icon className="h-5 w-5 text-electric-500" />
+            </div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="font-medium text-sm text-steel-100">{action.title}</span>
+              {action.badge && (
+                <Badge variant="info" className="text-[10px] px-1.5 py-0">
+                  {action.badge}
+                </Badge>
+              )}
+            </div>
+            <p className="text-xs text-steel-500">{action.description}</p>
+          </Link>
+        ))}
+      </div>
+    </div>
   );
 }
