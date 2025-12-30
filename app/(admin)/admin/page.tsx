@@ -1,28 +1,18 @@
-import { Metadata } from 'next';
-import { Users, Building, DollarSign, Activity, TrendingUp, AlertTriangle } from 'lucide-react';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Admin Dashboard',
-  description: 'Platform administration and monitoring',
-};
+import { useState, useEffect } from 'react';
+import { Users, Building, DollarSign, Activity, TrendingUp, AlertTriangle, Loader2, CheckCircle } from 'lucide-react';
 
-// Mock data
-const stats = {
-  totalUsers: 1247,
-  totalOrgs: 456,
-  activeSubscriptions: 234,
-  mrr: 4567800,
-  totalRequests: 12547890,
-  blockedThreats: 234567,
-};
-
-const recentActivity = [
-  { type: 'signup', message: 'New user registered: john@example.com', time: '2 min ago' },
-  { type: 'upgrade', message: 'Acme Inc upgraded to Business plan', time: '15 min ago' },
-  { type: 'alert', message: 'High threat volume detected from IP 192.168.1.1', time: '32 min ago' },
-  { type: 'signup', message: 'New organization created: TechCorp', time: '1 hour ago' },
-  { type: 'downgrade', message: 'StartupXYZ downgraded to Starter plan', time: '2 hours ago' },
-];
+interface PlatformStats {
+  totalUsers: number;
+  totalOrgs: number;
+  activeSubscriptions: number;
+  mrr: number;
+  totalRequests: number;
+  blockedThreats: number;
+  newUsersToday: number;
+  newOrgsToday: number;
+}
 
 const systemStatus = [
   { name: 'Orchestrator (18.220.113.81)', status: 'healthy', latency: '12ms' },
@@ -32,6 +22,57 @@ const systemStatus = [
 ];
 
 export default function AdminPage() {
+  const [stats, setStats] = useState<PlatformStats | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await fetch('/api/admin/stats');
+        const data = await res.json();
+        setStats(data);
+      } catch (error) {
+        console.error('Failed to fetch admin stats:', error);
+        // Use fallback data if API fails
+        setStats({
+          totalUsers: 0,
+          totalOrgs: 0,
+          activeSubscriptions: 0,
+          mrr: 0,
+          totalRequests: 0,
+          blockedThreats: 0,
+          newUsersToday: 0,
+          newOrgsToday: 0,
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-electric-500" />
+      </div>
+    );
+  }
+
+  const recentActivity = [
+    { type: 'signup', message: `${stats?.newUsersToday || 0} new users today`, time: 'Today' },
+    { type: 'signup', message: `${stats?.newOrgsToday || 0} new organizations today`, time: 'Today' },
+    { type: 'alert', message: `${(stats?.blockedThreats || 0).toLocaleString()} threats blocked`, time: 'All time' },
+    { type: 'upgrade', message: `${stats?.activeSubscriptions || 0} active subscriptions`, time: 'Current' },
+  ];
+
+  const formatNumber = (num: number) => {
+    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
+    if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
+    return num.toString();
+  };
+
   return (
     <div className="space-y-8">
       {/* Page Header */}
@@ -50,11 +91,11 @@ export default function AdminPage() {
             </div>
           </div>
           <div className="metric-display">
-            {stats.totalUsers.toLocaleString()}
+            {(stats?.totalUsers || 0).toLocaleString()}
           </div>
           <p className="text-xs text-success flex items-center gap-1 mt-2">
             <TrendingUp className="h-3 w-3" />
-            +12% from last month
+            +{stats?.newUsersToday || 0} today
           </p>
         </div>
 
@@ -66,11 +107,11 @@ export default function AdminPage() {
             </div>
           </div>
           <div className="metric-display">
-            {stats.totalOrgs.toLocaleString()}
+            {(stats?.totalOrgs || 0).toLocaleString()}
           </div>
           <p className="text-xs text-success flex items-center gap-1 mt-2">
             <TrendingUp className="h-3 w-3" />
-            +8% from last month
+            +{stats?.newOrgsToday || 0} today
           </p>
         </div>
 
@@ -82,11 +123,10 @@ export default function AdminPage() {
             </div>
           </div>
           <div className="metric-display">
-            ${(stats.mrr / 100).toLocaleString()}
+            ${((stats?.mrr || 0) / 100).toLocaleString()}
           </div>
-          <p className="text-xs text-success flex items-center gap-1 mt-2">
-            <TrendingUp className="h-3 w-3" />
-            +15% from last month
+          <p className="text-xs text-steel-500 mt-2">
+            {stats?.activeSubscriptions || 0} active subscriptions
           </p>
         </div>
 
@@ -98,10 +138,10 @@ export default function AdminPage() {
             </div>
           </div>
           <div className="metric-display">
-            {(stats.totalRequests / 1000000).toFixed(1)}M
+            {formatNumber(stats?.totalRequests || 0)}
           </div>
           <p className="text-xs text-steel-500 mt-2">
-            {stats.blockedThreats.toLocaleString()} threats blocked
+            {(stats?.blockedThreats || 0).toLocaleString()} threats blocked
           </p>
         </div>
       </div>
@@ -138,11 +178,11 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* Recent Activity */}
+        {/* Platform Summary */}
         <div className="dashboard-card p-0 overflow-hidden">
           <div className="p-6 border-b border-[rgba(59,130,246,0.1)]">
-            <h2 className="section-header mb-1">Recent Activity</h2>
-            <p className="text-sm text-steel-500">Latest platform events</p>
+            <h2 className="section-header mb-1">Platform Summary</h2>
+            <p className="text-sm text-steel-500">Key platform metrics</p>
           </div>
           <div className="divide-y divide-[rgba(59,130,246,0.1)]">
             {recentActivity.map((activity, index) => (
@@ -157,11 +197,11 @@ export default function AdminPage() {
                 >
                   {activity.type === 'alert' ? (
                     <AlertTriangle className="h-4 w-4 text-danger" />
+                  ) : activity.type === 'upgrade' ? (
+                    <CheckCircle className="h-4 w-4 text-success" />
                   ) : (
                     <Users className={`h-4 w-4 ${
-                      activity.type === 'signup' ? 'text-electric-500' :
-                      activity.type === 'upgrade' ? 'text-success' :
-                      'text-warning'
+                      activity.type === 'signup' ? 'text-electric-500' : 'text-warning'
                     }`} />
                   )}
                 </div>
