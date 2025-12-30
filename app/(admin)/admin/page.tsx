@@ -36,18 +36,20 @@ export default function AdminPage() {
     <div className="space-y-8">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-medium text-white">Overview</h1>
-        <p className="text-sm text-neutral-500 mt-1">Platform metrics and system health</p>
+        <h1 className="text-2xl font-semibold text-white">Overview</h1>
+        <p className="text-sm text-slate-400 mt-1">Platform metrics and system health</p>
       </div>
 
       {/* Key Metrics */}
-      <div className="grid gap-px bg-neutral-800 md:grid-cols-2 lg:grid-cols-4">
-        <div className="bg-black p-6">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="p-6 bg-slate-800/30 border border-slate-700/50 rounded-lg">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs text-neutral-500 uppercase tracking-widest">Users</span>
-            <Users className="h-4 w-4 text-neutral-600" />
+            <span className="text-sm text-slate-400">Users</span>
+            <div className="w-8 h-8 bg-blue-500/10 rounded-lg flex items-center justify-center">
+              <Users className="h-4 w-4 text-blue-400" />
+            </div>
           </div>
-          <div className="text-3xl font-medium text-white mono">
+          <div className="text-3xl font-semibold text-white">
             {stats.totalUsers.toLocaleString()}
           </div>
           <p className="text-xs text-green-500 flex items-center gap-1 mt-2">
@@ -56,12 +58,14 @@ export default function AdminPage() {
           </p>
         </div>
 
-        <div className="bg-black p-6">
+        <div className="p-6 bg-slate-800/30 border border-slate-700/50 rounded-lg">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs text-neutral-500 uppercase tracking-widest">Organizations</span>
-            <Building className="h-4 w-4 text-neutral-600" />
+            <span className="text-sm text-slate-400">Organizations</span>
+            <div className="w-8 h-8 bg-purple-500/10 rounded-lg flex items-center justify-center">
+              <Building className="h-4 w-4 text-purple-400" />
+            </div>
           </div>
-          <div className="text-3xl font-medium text-white mono">
+          <div className="text-3xl font-semibold text-white">
             {stats.totalOrgs.toLocaleString()}
           </div>
           <p className="text-xs text-green-500 flex items-center gap-1 mt-2">
@@ -70,12 +74,14 @@ export default function AdminPage() {
           </p>
         </div>
 
-        <div className="bg-black p-6">
+        <div className="p-6 bg-slate-800/30 border border-slate-700/50 rounded-lg">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs text-neutral-500 uppercase tracking-widest">MRR</span>
-            <DollarSign className="h-4 w-4 text-neutral-600" />
+            <span className="text-sm text-slate-400">MRR</span>
+            <div className="w-8 h-8 bg-green-500/10 rounded-lg flex items-center justify-center">
+              <DollarSign className="h-4 w-4 text-green-400" />
+            </div>
           </div>
-          <div className="text-3xl font-medium text-white mono">
+          <div className="text-3xl font-semibold text-white">
             ${(stats.mrr / 100).toLocaleString()}
           </div>
           <p className="text-xs text-green-500 flex items-center gap-1 mt-2">
@@ -84,33 +90,35 @@ export default function AdminPage() {
           </p>
         </div>
 
-        <div className="bg-black p-6">
+        <div className="p-6 bg-slate-800/30 border border-slate-700/50 rounded-lg">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs text-neutral-500 uppercase tracking-widest">Requests</span>
-            <Activity className="h-4 w-4 text-neutral-600" />
+            <span className="text-sm text-slate-400">Requests</span>
+            <div className="w-8 h-8 bg-cyan-500/10 rounded-lg flex items-center justify-center">
+              <Activity className="h-4 w-4 text-cyan-400" />
+            </div>
           </div>
-          <div className="text-3xl font-medium text-white mono">
+          <div className="text-3xl font-semibold text-white">
             {(stats.totalRequests / 1000000).toFixed(1)}M
           </div>
-          <p className="text-xs text-neutral-500 mt-2">
+          <p className="text-xs text-slate-500 mt-2">
             {stats.blockedThreats.toLocaleString()} threats blocked
           </p>
         </div>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2">
         {/* System Status */}
-        <div className="border border-neutral-800">
-          <div className="p-6 border-b border-neutral-800">
-            <h2 className="text-lg font-medium text-white">System Status</h2>
-            <p className="text-sm text-neutral-500 mt-1">AWS instance health</p>
+        <div className="bg-slate-800/30 border border-slate-700/50 rounded-lg">
+          <div className="p-6 border-b border-slate-700/50">
+            <h2 className="text-lg font-semibold text-white">System Status</h2>
+            <p className="text-sm text-slate-400 mt-1">AWS instance health</p>
           </div>
-          <div className="divide-y divide-neutral-800">
+          <div className="divide-y divide-slate-700/50">
             {systemStatus.map((system) => (
               <div key={system.name} className="flex items-center justify-between p-4">
                 <div className="flex items-center gap-3">
                   <div
-                    className={`h-2 w-2 ${
+                    className={`h-2 w-2 rounded-full ${
                       system.status === 'healthy' ? 'bg-green-500' :
                       system.status === 'pending' ? 'bg-yellow-500' : 'bg-red-500'
                     }`}
@@ -118,7 +126,7 @@ export default function AdminPage() {
                   <span className="text-sm text-white">{system.name}</span>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="text-xs text-neutral-500 mono">{system.latency}</span>
+                  <span className="text-xs text-slate-500 font-mono">{system.latency}</span>
                   <span className={`text-xs uppercase tracking-wider ${
                     system.status === 'healthy' ? 'text-green-500' : 'text-yellow-500'
                   }`}>
@@ -131,16 +139,16 @@ export default function AdminPage() {
         </div>
 
         {/* Recent Activity */}
-        <div className="border border-neutral-800">
-          <div className="p-6 border-b border-neutral-800">
-            <h2 className="text-lg font-medium text-white">Recent Activity</h2>
-            <p className="text-sm text-neutral-500 mt-1">Latest platform events</p>
+        <div className="bg-slate-800/30 border border-slate-700/50 rounded-lg">
+          <div className="p-6 border-b border-slate-700/50">
+            <h2 className="text-lg font-semibold text-white">Recent Activity</h2>
+            <p className="text-sm text-slate-400 mt-1">Latest platform events</p>
           </div>
-          <div className="divide-y divide-neutral-800">
+          <div className="divide-y divide-slate-700/50">
             {recentActivity.map((activity, index) => (
               <div key={index} className="flex items-start gap-4 p-4">
                 <div
-                  className={`w-8 h-8 flex items-center justify-center shrink-0 ${
+                  className={`w-8 h-8 flex items-center justify-center shrink-0 rounded-lg ${
                     activity.type === 'signup' ? 'bg-blue-500/10' :
                     activity.type === 'upgrade' ? 'bg-green-500/10' :
                     activity.type === 'downgrade' ? 'bg-yellow-500/10' :
@@ -159,7 +167,7 @@ export default function AdminPage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-white">{activity.message}</p>
-                  <p className="text-xs text-neutral-600 mt-1">{activity.time}</p>
+                  <p className="text-xs text-slate-500 mt-1">{activity.time}</p>
                 </div>
               </div>
             ))}

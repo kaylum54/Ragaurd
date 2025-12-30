@@ -12,6 +12,7 @@ import {
   Server,
   ChevronLeft,
   LogOut,
+  Shield,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -38,26 +39,26 @@ export default function AdminLayout({
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-slate-950">
       {/* Sidebar */}
       <aside
         className={cn(
-          'fixed left-0 top-0 z-40 h-screen bg-neutral-900 border-r border-neutral-800 transition-all duration-200',
+          'fixed left-0 top-0 z-40 h-screen bg-slate-900/50 border-r border-slate-700/50 transition-all duration-200',
           collapsed ? 'w-16' : 'w-56'
         )}
       >
         <div className="flex h-full flex-col">
           {/* Logo */}
-          <div className="flex h-14 items-center justify-between px-4 border-b border-neutral-800">
+          <div className="flex h-14 items-center justify-between px-4 border-b border-slate-700/50">
             {!collapsed && (
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 bg-white" />
-                <span className="text-sm font-semibold text-white">ADMIN</span>
+                <Shield className="w-5 h-5 text-blue-500" />
+                <span className="text-sm font-semibold text-white">Admin</span>
               </div>
             )}
-            {collapsed && <div className="w-5 h-5 bg-white mx-auto" />}
+            {collapsed && <Shield className="w-5 h-5 text-blue-500 mx-auto" />}
             <button
-              className={cn('p-1 text-neutral-500 hover:text-white', collapsed && 'mx-auto')}
+              className={cn('p-1 text-slate-500 hover:text-white', collapsed && 'mx-auto')}
               onClick={() => setCollapsed(!collapsed)}
             >
               <ChevronLeft className={cn('h-4 w-4 transition-transform', collapsed && 'rotate-180')} />
@@ -72,10 +73,10 @@ export default function AdminLayout({
                 <Link key={item.href} href={item.href}>
                   <div
                     className={cn(
-                      'flex items-center gap-3 px-3 py-2 text-sm transition-colors',
+                      'flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors',
                       isActive
-                        ? 'bg-white text-black'
-                        : 'text-neutral-400 hover:bg-neutral-800 hover:text-white'
+                        ? 'bg-blue-600 text-white'
+                        : 'text-slate-400 hover:bg-slate-800 hover:text-white'
                     )}
                   >
                     <item.icon className="h-4 w-4 shrink-0" />
@@ -87,10 +88,10 @@ export default function AdminLayout({
           </nav>
 
           {/* Footer */}
-          <div className="p-3 border-t border-neutral-800 space-y-2">
+          <div className="p-3 border-t border-slate-700/50 space-y-2">
             {!collapsed && (
               <Link href="/dashboard">
-                <div className="flex items-center gap-2 px-3 py-2 text-sm text-neutral-400 hover:bg-neutral-800 hover:text-white transition-colors">
+                <div className="flex items-center gap-2 px-3 py-2 text-sm text-slate-400 hover:bg-slate-800 hover:text-white rounded-md transition-colors">
                   <ChevronLeft className="h-4 w-4" />
                   Dashboard
                 </div>
@@ -99,7 +100,7 @@ export default function AdminLayout({
             <button
               onClick={handleLogout}
               className={cn(
-                'w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-400 hover:bg-neutral-800 hover:text-white transition-colors',
+                'w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-400 hover:bg-slate-800 hover:text-white rounded-md transition-colors',
                 collapsed && 'justify-center'
               )}
             >
@@ -113,14 +114,14 @@ export default function AdminLayout({
       {/* Header */}
       <header
         className={cn(
-          'fixed top-0 right-0 z-30 h-14 bg-black border-b border-neutral-800 transition-all duration-200',
+          'fixed top-0 right-0 z-30 h-14 bg-slate-950 border-b border-slate-700/50 transition-all duration-200',
           collapsed ? 'left-16' : 'left-56'
         )}
       >
         <div className="flex h-full items-center justify-between px-6">
           <div className="text-sm text-white font-medium">Admin Dashboard</div>
           <div className="flex items-center gap-4">
-            <span className="text-xs px-2 py-1 bg-red-500/10 text-red-400 border border-red-500/20">
+            <span className="text-xs px-2 py-1 bg-red-500/10 text-red-400 border border-red-500/20 rounded">
               ADMIN
             </span>
           </div>

@@ -53,18 +53,18 @@ const config: Config = {
         },
       },
       borderRadius: {
-        lg: '0',
-        md: '0',
-        sm: '0',
-        DEFAULT: '0',
+        lg: 'calc(var(--radius) + 2px)',
+        md: 'var(--radius)',
+        sm: 'calc(var(--radius) - 2px)',
+        DEFAULT: 'var(--radius)',
       },
       fontFamily: {
         sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'SF Mono', 'monospace'],
       },
       fontSize: {
-        'xs': ['0.75rem', { lineHeight: '1.5', letterSpacing: '0.05em' }],
-        'sm': ['0.875rem', { lineHeight: '1.5', letterSpacing: '0.01em' }],
+        'xs': ['0.75rem', { lineHeight: '1.5' }],
+        'sm': ['0.875rem', { lineHeight: '1.5' }],
         'base': ['1rem', { lineHeight: '1.6' }],
         'lg': ['1.125rem', { lineHeight: '1.5' }],
         'xl': ['1.25rem', { lineHeight: '1.4' }],
@@ -72,7 +72,6 @@ const config: Config = {
         '3xl': ['2rem', { lineHeight: '1.2', letterSpacing: '-0.02em' }],
         '4xl': ['2.5rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
         '5xl': ['3.5rem', { lineHeight: '1', letterSpacing: '-0.02em' }],
-        '6xl': ['4.5rem', { lineHeight: '0.95', letterSpacing: '-0.03em' }],
       },
       keyframes: {
         'accordion-down': {

@@ -1,21 +1,24 @@
 import Link from 'next/link';
-import { ArrowRight, Check } from 'lucide-react';
+import { Check, ArrowRight } from 'lucide-react';
 
 const plans = [
   {
     name: 'Free',
     price: '$0',
-    requests: '500',
-    features: ['Text defense', '1 API key', 'Community support'],
+    period: '/month',
+    description: 'Get started with basic protection',
+    requests: '500 requests/mo',
+    features: ['Text defense (6 layers)', '1 API key', 'Community support', 'Basic analytics'],
     cta: 'Start free',
     href: '/signup',
   },
   {
     name: 'Pro',
     price: '$249',
-    period: '/mo',
-    requests: '150K',
-    features: ['Text + Audio defense', 'Red team testing', '10 API keys', 'Priority support'],
+    period: '/month',
+    description: 'Full protection suite',
+    requests: '150K requests/mo',
+    features: ['Text + Audio defense', 'Red team testing', '10 API keys', 'Priority support', 'Advanced analytics'],
     cta: 'Get started',
     href: '/signup?plan=pro',
     featured: true,
@@ -23,9 +26,10 @@ const plans = [
   {
     name: 'Business',
     price: '$649',
-    period: '/mo',
-    requests: '500K',
-    features: ['Everything in Pro', 'Dedicated support', 'SLA guarantee', 'Custom integrations'],
+    period: '/month',
+    description: 'For scaling teams',
+    requests: '500K requests/mo',
+    features: ['Everything in Pro', 'Dedicated support', 'SLA guarantee', 'Custom integrations', 'SSO'],
     cta: 'Get started',
     href: '/signup?plan=business',
   },
@@ -33,47 +37,48 @@ const plans = [
 
 export function Pricing() {
   return (
-    <section className="py-24 border-b border-neutral-800" id="pricing">
+    <section className="py-20" id="pricing">
       <div className="container">
-        {/* Section Label */}
-        <div className="text-xs text-neutral-600 uppercase tracking-widest mb-16">
-          Pricing
-        </div>
-
-        {/* Header */}
-        <div className="max-w-xl mb-16">
-          <h2 className="text-3xl font-medium text-white mb-4">
-            Simple pricing.
-            <br />
-            <span className="text-neutral-600">No surprises.</span>
+        {/* Section Header */}
+        <div className="text-center mb-16">
+          <h2 className="text-2xl md:text-3xl font-semibold text-white">
+            Simple, transparent pricing
           </h2>
+          <p className="mt-3 text-slate-400">
+            Start free, upgrade as you grow. No hidden fees.
+          </p>
         </div>
 
         {/* Plans Grid */}
-        <div className="grid md:grid-cols-3 gap-px bg-neutral-800">
+        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`p-8 ${plan.featured ? 'bg-neutral-900 border-t-2 border-white' : 'bg-black'}`}
+              className={`p-6 rounded-lg border ${
+                plan.featured
+                  ? 'bg-blue-600/10 border-blue-500/30'
+                  : 'bg-slate-800/30 border-slate-700/50'
+              }`}
             >
-              <div className="flex items-baseline justify-between mb-8">
-                <div>
-                  <div className="text-sm text-neutral-400">{plan.name}</div>
-                  <div className="mt-2">
-                    <span className="text-3xl font-medium text-white mono">{plan.price}</span>
-                    {plan.period && <span className="text-neutral-600 text-sm">{plan.period}</span>}
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-2xl font-medium text-white mono">{plan.requests}</div>
-                  <div className="text-xs text-neutral-600 uppercase">requests/mo</div>
-                </div>
+              {plan.featured && (
+                <div className="text-xs text-blue-400 font-medium mb-4">Most popular</div>
+              )}
+
+              <div className="mb-4">
+                <h3 className="text-lg font-medium text-white">{plan.name}</h3>
+                <p className="text-sm text-slate-400 mt-1">{plan.description}</p>
               </div>
 
-              <ul className="space-y-3 mb-8">
+              <div className="mb-6">
+                <span className="text-3xl font-semibold text-white">{plan.price}</span>
+                <span className="text-slate-500 text-sm">{plan.period}</span>
+                <div className="text-sm text-slate-400 mt-1">{plan.requests}</div>
+              </div>
+
+              <ul className="space-y-3 mb-6">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-center gap-3 text-sm text-neutral-400">
-                    <Check className="w-4 h-4 text-neutral-600" />
+                  <li key={feature} className="flex items-center gap-2 text-sm text-slate-300">
+                    <Check className="w-4 h-4 text-green-500 shrink-0" />
                     {feature}
                   </li>
                 ))}
@@ -81,10 +86,10 @@ export function Pricing() {
 
               <Link
                 href={plan.href}
-                className={`block w-full text-center py-3 text-sm font-medium transition-colors ${
+                className={`block w-full text-center py-2.5 text-sm font-medium rounded-md transition-colors ${
                   plan.featured
-                    ? 'bg-white text-black hover:bg-neutral-200'
-                    : 'border border-neutral-800 text-white hover:bg-neutral-900'
+                    ? 'bg-blue-600 text-white hover:bg-blue-500'
+                    : 'bg-slate-700/50 text-white hover:bg-slate-700'
                 }`}
               >
                 {plan.cta}
@@ -94,16 +99,16 @@ export function Pricing() {
         </div>
 
         {/* Enterprise */}
-        <div className="mt-px bg-neutral-900 p-8 flex items-center justify-between">
+        <div className="mt-8 max-w-5xl mx-auto p-6 bg-slate-800/30 border border-slate-700/50 rounded-lg flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
-            <div className="text-sm text-neutral-400">Enterprise</div>
-            <div className="text-sm text-neutral-500 mt-1">
-              Unlimited requests, custom SLA, dedicated support
-            </div>
+            <h3 className="font-medium text-white">Enterprise</h3>
+            <p className="text-sm text-slate-400 mt-1">
+              Unlimited requests, custom SLA, dedicated support, on-premise options
+            </p>
           </div>
           <Link
             href="/contact"
-            className="inline-flex items-center gap-2 text-sm text-white hover:text-neutral-400 transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors whitespace-nowrap"
           >
             Contact sales
             <ArrowRight className="w-4 h-4" />

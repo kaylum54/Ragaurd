@@ -1,86 +1,92 @@
-import { ArrowRight } from 'lucide-react';
+import { Shield, Mic, Target, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
-const capabilities = [
+const features = [
   {
-    id: '01',
+    icon: Shield,
     title: 'Text Defense',
-    subtitle: '6-layer detection',
-    description: 'Pattern matching, semantic analysis, embedding similarity, LLM guard, context validation, and output filtering. Each layer runs independently.',
+    description: '6-layer detection stack: pattern matching, semantic analysis, embedding similarity, LLM guard, context validation, and output filtering.',
     stat: '99.53%',
-    statLabel: 'detection rate',
+    statLabel: 'Detection rate',
+    color: 'blue',
   },
   {
-    id: '02',
+    icon: Mic,
     title: 'Audio Defense',
-    subtitle: 'Deepfake detection',
-    description: 'AASIST-L and LCNN models analyze voice patterns in real-time. Detect synthetic audio before it reaches your agent.',
+    description: 'Real-time deepfake detection using AASIST-L and LCNN models. Identify synthetic voices before they reach your agent.',
     stat: '0.83%',
-    statLabel: 'equal error rate',
+    statLabel: 'Equal error rate',
+    color: 'purple',
     pro: true,
   },
   {
-    id: '03',
-    title: 'Red Team',
-    subtitle: 'Automated testing',
-    description: '10,000+ attack vectors run against your agent continuously. Find vulnerabilities before attackers do.',
+    icon: Target,
+    title: 'Red Team Testing',
+    description: 'Automated security scanning with 10,000+ attack vectors. Discover vulnerabilities before attackers do.',
     stat: '10K+',
-    statLabel: 'attack vectors',
+    statLabel: 'Attack vectors',
+    color: 'rose',
     pro: true,
   },
 ];
 
 export function Features() {
   return (
-    <section className="py-24 border-b border-neutral-800" id="features">
+    <section className="py-20" id="features">
       <div className="container">
-        {/* Section Label */}
-        <div className="text-xs text-neutral-600 uppercase tracking-widest mb-16">
-          Capabilities
+        {/* Section Header */}
+        <div className="max-w-2xl mb-16">
+          <h2 className="text-2xl md:text-3xl font-semibold text-white">
+            Complete protection stack
+          </h2>
+          <p className="mt-3 text-slate-400">
+            Multi-layer defense for text and audio, plus automated security testing.
+          </p>
         </div>
 
-        {/* Feature List */}
-        <div className="space-y-0">
-          {capabilities.map((cap, index) => (
+        {/* Features Grid */}
+        <div className="grid md:grid-cols-3 gap-6">
+          {features.map((feature) => (
             <div
-              key={cap.id}
-              className="grid md:grid-cols-12 gap-8 py-12 border-t border-neutral-800 group"
+              key={feature.title}
+              className="p-6 bg-slate-800/30 border border-slate-700/50 rounded-lg hover:border-slate-600/50 transition-colors"
             >
-              {/* Number */}
-              <div className="md:col-span-1">
-                <span className="text-xs text-neutral-600 mono">{cap.id}</span>
+              <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-4 ${
+                feature.color === 'blue' ? 'bg-blue-500/10' :
+                feature.color === 'purple' ? 'bg-purple-500/10' :
+                'bg-rose-500/10'
+              }`}>
+                <feature.icon className={`w-5 h-5 ${
+                  feature.color === 'blue' ? 'text-blue-400' :
+                  feature.color === 'purple' ? 'text-purple-400' :
+                  'text-rose-400'
+                }`} />
               </div>
 
-              {/* Title */}
-              <div className="md:col-span-3">
-                <h3 className="text-xl font-medium text-white">{cap.title}</h3>
-                <p className="text-sm text-neutral-500 mt-1">
-                  {cap.subtitle}
-                  {cap.pro && <span className="ml-2 text-xs text-blue-500 uppercase">Pro</span>}
-                </p>
+              <div className="flex items-center gap-2 mb-2">
+                <h3 className="text-lg font-medium text-white">{feature.title}</h3>
+                {feature.pro && (
+                  <span className="text-xs px-2 py-0.5 bg-blue-500/10 text-blue-400 rounded">Pro</span>
+                )}
               </div>
 
-              {/* Description */}
-              <div className="md:col-span-5">
-                <p className="text-sm text-neutral-400 leading-relaxed">
-                  {cap.description}
-                </p>
-              </div>
+              <p className="text-sm text-slate-400 mb-6">
+                {feature.description}
+              </p>
 
-              {/* Stat */}
-              <div className="md:col-span-3 text-right">
-                <div className="text-3xl font-medium text-white mono">{cap.stat}</div>
-                <div className="text-xs text-neutral-600 uppercase tracking-wider mt-1">{cap.statLabel}</div>
+              <div className="pt-4 border-t border-slate-700/50">
+                <div className="text-2xl font-semibold text-white">{feature.stat}</div>
+                <div className="text-xs text-slate-500">{feature.statLabel}</div>
               </div>
             </div>
           ))}
         </div>
 
         {/* CTA */}
-        <div className="mt-16 flex items-center gap-8">
+        <div className="mt-12">
           <Link
             href="/docs"
-            className="inline-flex items-center gap-2 text-sm text-white hover:text-neutral-400 transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors"
           >
             View full documentation
             <ArrowRight className="w-4 h-4" />
