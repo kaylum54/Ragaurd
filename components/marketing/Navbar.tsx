@@ -1,43 +1,26 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Logo } from '@/components/shared/Logo';
-import { cn } from '@/lib/utils';
 
 const navLinks = [
   { href: '/pricing', label: 'Pricing' },
   { href: '/docs', label: 'Docs' },
   { href: '/demo', label: 'Demo' },
-  { href: '/about', label: 'About' },
-  { href: '/blog', label: 'Blog' },
 ];
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   return (
-    <header
-      className={cn(
-        'fixed top-0 z-50 w-full transition-all duration-300',
-        scrolled
-          ? 'bg-slate-900/95 backdrop-blur-md border-b border-slate-800'
-          : 'bg-transparent'
-      )}
-    >
-      <nav className="container flex h-16 items-center justify-between">
-        <Logo />
+    <header className="fixed top-0 z-50 w-full border-b border-neutral-800 bg-black/90 backdrop-blur-sm">
+      <nav className="container flex h-14 items-center justify-between">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2">
+          <div className="w-6 h-6 bg-white" />
+          <span className="text-sm font-semibold tracking-tight text-white">RAGAURD</span>
+        </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
@@ -45,12 +28,7 @@ export function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className={cn(
-                'text-sm font-medium transition-colors',
-                scrolled
-                  ? 'text-slate-300 hover:text-white'
-                  : 'text-slate-300 hover:text-white'
-              )}
+              className="text-sm text-neutral-400 hover:text-white transition-colors"
             >
               {link.label}
             </Link>
@@ -58,20 +36,19 @@ export function Navbar() {
         </div>
 
         {/* Desktop CTA */}
-        <div className="hidden md:flex items-center gap-4">
-          <Button
-            variant="ghost"
-            className="text-slate-300 hover:text-white hover:bg-slate-800/50"
-            asChild
+        <div className="hidden md:flex items-center gap-6">
+          <Link
+            href="/login"
+            className="text-sm text-neutral-400 hover:text-white transition-colors"
           >
-            <Link href="/login">Sign in</Link>
-          </Button>
-          <Button
-            className="bg-primary-600 hover:bg-primary-500 text-white"
-            asChild
+            Sign in
+          </Link>
+          <Link
+            href="/signup"
+            className="text-sm px-4 py-2 bg-white text-black font-medium hover:bg-neutral-200 transition-colors"
           >
-            <Link href="/signup">Start Free</Link>
-          </Button>
+            Get Started
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -80,42 +57,43 @@ export function Navbar() {
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle menu"
         >
-          {mobileMenuOpen ? (
-            <X className="h-6 w-6" />
-          ) : (
-            <Menu className="h-6 w-6" />
-          )}
+          {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </nav>
 
       {/* Mobile Menu */}
-      <div
-        className={cn(
-          'md:hidden absolute top-16 left-0 right-0 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 transition-all duration-200',
-          mobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-        )}
-      >
-        <div className="container py-4 flex flex-col gap-4">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium text-slate-300 hover:text-white py-2"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
-          <div className="flex flex-col gap-2 pt-4 border-t border-slate-800">
-            <Button variant="outline" className="w-full border-slate-600 text-slate-300" asChild>
-              <Link href="/login">Sign in</Link>
-            </Button>
-            <Button className="w-full bg-primary-600 hover:bg-primary-500" asChild>
-              <Link href="/signup">Start Free</Link>
-            </Button>
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t border-neutral-800 bg-black">
+          <div className="container py-4 flex flex-col gap-4">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm text-neutral-400 hover:text-white py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
+            <div className="flex flex-col gap-3 pt-4 border-t border-neutral-800">
+              <Link
+                href="/login"
+                className="text-sm text-neutral-400 hover:text-white py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/signup"
+                className="text-sm px-4 py-2 bg-white text-black text-center font-medium"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Get Started
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </header>
   );
 }

@@ -1,72 +1,46 @@
 import Link from 'next/link';
-import { Logo } from '@/components/shared/Logo';
-import { Github, Linkedin, Twitter } from 'lucide-react';
 
-const footerLinks = {
+const links = {
   product: [
     { href: '/pricing', label: 'Pricing' },
-    { href: '/demo', label: 'Demo' },
     { href: '/docs', label: 'Documentation' },
-    { href: '/changelog', label: 'Changelog' },
+    { href: '/demo', label: 'Demo' },
   ],
   company: [
     { href: '/about', label: 'About' },
     { href: '/blog', label: 'Blog' },
-    { href: '/careers', label: 'Careers' },
     { href: '/contact', label: 'Contact' },
   ],
   legal: [
-    { href: '/privacy', label: 'Privacy Policy' },
-    { href: '/terms', label: 'Terms of Service' },
+    { href: '/privacy', label: 'Privacy' },
+    { href: '/terms', label: 'Terms' },
     { href: '/security', label: 'Security' },
-    { href: '/compliance', label: 'Compliance' },
   ],
 };
 
-const socialLinks = [
-  { href: 'https://twitter.com/ragaurd', icon: Twitter, label: 'Twitter' },
-  { href: 'https://github.com/ragaurd', icon: Github, label: 'GitHub' },
-  { href: 'https://linkedin.com/company/ragaurd', icon: Linkedin, label: 'LinkedIn' },
-];
-
 export function Footer() {
   return (
-    <footer className="border-t border-slate-800 bg-slate-900">
-      <div className="container py-12 md:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
-          {/* Logo and Description */}
-          <div className="col-span-2">
-            <Logo variant="light" />
-            <p className="mt-4 text-sm text-slate-400 max-w-xs">
-              The only Voice AI security platform with text AND audio defense layers.
-              Protecting AI agents from prompt injection, jailbreaking, and deepfakes.
+    <footer className="py-16">
+      <div className="container">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+          {/* Brand */}
+          <div className="col-span-2 md:col-span-1">
+            <Link href="/" className="flex items-center gap-2">
+              <div className="w-5 h-5 bg-white" />
+              <span className="text-sm font-semibold text-white">RAGAURD</span>
+            </Link>
+            <p className="mt-4 text-sm text-neutral-500 max-w-xs">
+              Voice AI security platform.
             </p>
-            <div className="flex gap-4 mt-6">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-slate-500 hover:text-primary-400 transition-colors"
-                  aria-label={social.label}
-                >
-                  <social.icon className="h-5 w-5" />
-                </a>
-              ))}
-            </div>
           </div>
 
-          {/* Product Links */}
+          {/* Product */}
           <div>
-            <h4 className="font-semibold text-sm mb-4 text-white">Product</h4>
+            <div className="text-xs text-neutral-600 uppercase tracking-widest mb-4">Product</div>
             <ul className="space-y-3">
-              {footerLinks.product.map((link) => (
+              {links.product.map((link) => (
                 <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-slate-400 hover:text-white transition-colors"
-                  >
+                  <Link href={link.href} className="text-sm text-neutral-400 hover:text-white transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -74,16 +48,13 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Company Links */}
+          {/* Company */}
           <div>
-            <h4 className="font-semibold text-sm mb-4 text-white">Company</h4>
+            <div className="text-xs text-neutral-600 uppercase tracking-widest mb-4">Company</div>
             <ul className="space-y-3">
-              {footerLinks.company.map((link) => (
+              {links.company.map((link) => (
                 <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-slate-400 hover:text-white transition-colors"
-                  >
+                  <Link href={link.href} className="text-sm text-neutral-400 hover:text-white transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -91,16 +62,13 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Legal Links */}
+          {/* Legal */}
           <div>
-            <h4 className="font-semibold text-sm mb-4 text-white">Legal</h4>
+            <div className="text-xs text-neutral-600 uppercase tracking-widest mb-4">Legal</div>
             <ul className="space-y-3">
-              {footerLinks.legal.map((link) => (
+              {links.legal.map((link) => (
                 <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-slate-400 hover:text-white transition-colors"
-                  >
+                  <Link href={link.href} className="text-sm text-neutral-400 hover:text-white transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -109,16 +77,14 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-slate-500">
-            &copy; {new Date().getFullYear()} Ragaurd. All rights reserved.
+        {/* Bottom */}
+        <div className="mt-16 pt-8 border-t border-neutral-800 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-neutral-600">
+            © {new Date().getFullYear()} Ragaurd. All rights reserved.
           </p>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-slate-500 flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-              All systems operational
-            </span>
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 bg-green-500" />
+            <span className="text-xs text-neutral-600">All systems operational</span>
           </div>
         </div>
       </div>

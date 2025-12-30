@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { validateCredentials } from '@/lib/auth';
-import { cookies } from 'next/headers';
 
 export async function POST(req: NextRequest) {
   try {
@@ -23,30 +22,30 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Create a simple session token (in production, use proper JWT or session management)
+    // Create session data
     const sessionData = JSON.stringify({
       user,
-      expires: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
+      expires: Date.now() + 24 * 60 * 60 * 1000,
     });
 
-    // Base64 encode the session (in production, encrypt this)
     const sessionToken = Buffer.from(sessionData).toString('base64');
 
-    // Set the session cookie
-    const cookieStore = await cookies();
-    cookieStore.set('session', sessionToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 24 * 60 * 60, // 24 hours
-      path: '/',
-    });
-
-    return NextResponse.json({
+    // Create response with cookie
+    const response = NextResponse.json({
       success: true,
       user,
       redirectTo: user.role === 'admin' ? '/admin' : '/dashboard',
     });
+
+    response.cookies.set('session', sessionToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60,
+      path: '/',
+    });
+
+    return response;
   } catch (error) {
     console.error('Login error:', error);
     return NextResponse.json(
