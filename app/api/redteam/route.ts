@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { getSession, getDemoOrgId } from '@/lib/services/auth/session';
+import { getSession } from '@/lib/session';
+import { isDemoModeEnabled, getDemoOrgId } from '@/lib/auth';
 import { getRedteamScans, getRedteamStats, createRedteamScan } from '@/lib/services/db/redteam';
-
-// Demo mode for development without auth
-const isDemoMode = () => process.env.NODE_ENV === 'development' || !process.env.AUTH0_CLIENT_ID;
+import { logError } from '@/lib/utils/safe-error';
 
 const ATTACK_COUNTS: Record<string, number> = {
   basic: 50,
@@ -12,27 +11,39 @@ const ATTACK_COUNTS: Record<string, number> = {
   comprehensive: 500,
 };
 
+// Strict config schema to prevent arbitrary data storage
+const scanConfigSchema = z.object({
+  timeout: z.number().min(1).max(3600).optional(),      // Max 1 hour timeout
+  retries: z.number().min(0).max(5).optional(),          // Max 5 retries
+  concurrency: z.number().min(1).max(10).optional(),     // Max 10 concurrent
+  headers: z.record(z.string().max(1000)).optional(),    // Custom headers (limited size)
+  skipPatterns: z.array(z.string().max(200)).max(20).optional(), // Attack patterns to skip
+}).optional();
+
 const createScanSchema = z.object({
-  name: z.string().optional(),
-  targetEndpoint: z.string().url('Must be a valid URL'),
+  name: z.string().max(100).optional(),
+  targetEndpoint: z.string().url('Must be a valid URL').max(2000),
   attackSuite: z.enum(['basic', 'standard', 'comprehensive']),
-  config: z.record(z.unknown()).optional(),
+  config: scanConfigSchema,
 });
 
 // List scans and stats
 export async function GET(request: NextRequest) {
   try {
+    // Get session (required)
+    const session = await getSession();
+
     let orgId: string;
 
-    if (isDemoMode()) {
+    if (session) {
+      orgId = session.orgId;
+    } else if (isDemoModeEnabled()) {
+      // Only allow demo mode fallback in development
       orgId = getDemoOrgId();
     } else {
-      const session = await getSession();
-      if (!session) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
-      orgId = session.orgId || getDemoOrgId();
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type');
 
@@ -61,7 +72,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ scans: transformedScans });
   } catch (error) {
-    console.error('List redteam scans error:', error);
+    logError('List redteam scans error', error);
     return NextResponse.json(
       { error: 'Failed to fetch scans' },
       { status: 500 }
@@ -72,16 +83,18 @@ export async function GET(request: NextRequest) {
 // Create new scan
 export async function POST(request: NextRequest) {
   try {
+    // Get session (required)
+    const session = await getSession();
+
     let orgId: string;
 
-    if (isDemoMode()) {
+    if (session) {
+      orgId = session.orgId;
+    } else if (isDemoModeEnabled()) {
+      // Only allow demo mode fallback in development
       orgId = getDemoOrgId();
     } else {
-      const session = await getSession();
-      if (!session) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
-      orgId = session.orgId || getDemoOrgId();
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await request.json();
@@ -143,7 +156,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Create redteam scan error:', error);
+    logError('Create redteam scan error', error);
     return NextResponse.json(
       { error: 'Failed to create scan' },
       { status: 500 }

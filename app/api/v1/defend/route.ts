@@ -5,9 +5,11 @@ import { logRequest } from '@/lib/services/db/request-log';
 import { incrementDailyUsage } from '@/lib/services/db/usage';
 import { analyzeText } from '@/lib/services/defense/text';
 import { isSupabaseConfigured } from '@/lib/supabase/server';
+import { isDemoModeEnabled, getDemoOrgId } from '@/lib/auth';
+import { logError } from '@/lib/utils/safe-error';
 
-// Demo API key for testing without database
-const DEMO_API_KEY = 'rg_test_demo_key_for_local_development';
+// Maximum request body size (1MB for text input)
+const MAX_BODY_SIZE = 1 * 1024 * 1024; // 1MB
 
 // Request validation schema
 const defendRequestSchema = z.object({
@@ -15,8 +17,52 @@ const defendRequestSchema = z.object({
   profile: z.enum(['strict', 'balanced', 'permissive']).default('balanced'),
 });
 
+/**
+ * Check if the provided API key is a valid demo key
+ * Demo keys only work in development with demo mode enabled
+ */
+function isValidDemoApiKey(apiKey: string): boolean {
+  if (!isDemoModeEnabled()) {
+    return false;
+  }
+
+  const demoKey = process.env.DEMO_API_KEY;
+  if (!demoKey) {
+    return false;
+  }
+
+  // Use timing-safe comparison to prevent timing attacks
+  if (apiKey.length !== demoKey.length) {
+    return false;
+  }
+
+  let result = 0;
+  for (let i = 0; i < apiKey.length; i++) {
+    result |= apiKey.charCodeAt(i) ^ demoKey.charCodeAt(i);
+  }
+  return result === 0;
+}
+
 export async function POST(request: NextRequest) {
   try {
+    // Check Content-Length to prevent oversized requests
+    const contentLength = parseInt(request.headers.get('content-length') || '0', 10);
+    if (contentLength > MAX_BODY_SIZE) {
+      return NextResponse.json(
+        { error: 'Request body too large. Maximum size is 1MB.' },
+        { status: 413 }
+      );
+    }
+
+    // Validate Content-Type
+    const contentType = request.headers.get('content-type');
+    if (!contentType?.includes('application/json')) {
+      return NextResponse.json(
+        { error: 'Content-Type must be application/json' },
+        { status: 415 }
+      );
+    }
+
     // Check for API key
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -38,13 +84,23 @@ export async function POST(request: NextRequest) {
 
     let orgId: string | undefined;
     let keyRecord: { id: string } | undefined;
+    let isDemoRequest = false;
 
-    // Check if using demo mode (no database configured)
-    const isDemoMode = !isSupabaseConfigured() || apiKey === DEMO_API_KEY;
-
-    if (isDemoMode) {
-      // Demo mode - skip database validation
-      orgId = 'demo-org-001';
+    // Check if using demo key (development only)
+    if (isValidDemoApiKey(apiKey)) {
+      orgId = getDemoOrgId();
+      isDemoRequest = true;
+    } else if (!isSupabaseConfigured()) {
+      // Database not configured - only allow in development demo mode
+      if (isDemoModeEnabled()) {
+        orgId = getDemoOrgId();
+        isDemoRequest = true;
+      } else {
+        return NextResponse.json(
+          { error: 'Service not configured' },
+          { status: 503 }
+        );
+      }
     } else {
       // Validate API key against database
       const keyValidation = await validateApiKey(apiKey);
@@ -56,12 +112,18 @@ export async function POST(request: NextRequest) {
         );
       }
 
+      // Enforce scope - API key must have 'defend:text' permission
+      const requiredScope = 'defend:text';
+      if (!keyValidation.apiKey?.scopes?.includes(requiredScope)) {
+        return NextResponse.json(
+          { error: `API key lacks required scope: ${requiredScope}` },
+          { status: 403 }
+        );
+      }
+
       orgId = keyValidation.orgId;
       keyRecord = keyValidation.apiKey;
     }
-
-    // Check rate limiting (basic check using key's rate limit)
-    // In production, use Redis for distributed rate limiting
 
     // Parse and validate request body
     const body = await request.json();
@@ -92,7 +154,7 @@ export async function POST(request: NextRequest) {
     const result = defenseResult.data;
 
     // Log the request to database (fire and forget) - skip in demo mode
-    if (orgId && !isDemoMode) {
+    if (orgId && !isDemoRequest) {
       Promise.all([
         logRequest({
           orgId,
@@ -104,12 +166,12 @@ export async function POST(request: NextRequest) {
           latencyMs: result.latency_ms,
         }),
         incrementDailyUsage(orgId, 'text', !result.allowed, result.latency_ms),
-      ]).catch((err) => console.error('Error logging request:', err));
+      ]).catch((err) => logError('Error logging request', err));
     }
 
     return NextResponse.json(result);
   } catch (error) {
-    console.error('Defense API error:', error);
+    logError('Defense API error', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

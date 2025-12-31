@@ -1,27 +1,28 @@
 import { NextResponse } from 'next/server';
-import { getSession, getDemoOrgId } from '@/lib/services/auth/session';
+import { getSession } from '@/lib/session';
+import { isDemoModeEnabled, getDemoOrgId } from '@/lib/auth';
 import { getRequestStats } from '@/lib/services/db/request-log';
 import { getUsageLimits, getCurrentMonthUsage } from '@/lib/services/db/usage';
 import { getApiKeyCount } from '@/lib/services/db/api-keys';
 import { getMemberCount } from '@/lib/services/db/organizations';
-
-// Demo mode for development without auth
-const isDemoMode = () => process.env.NODE_ENV === 'development' || !process.env.AUTH0_CLIENT_ID;
+import { logError } from '@/lib/utils/safe-error';
 
 export async function GET() {
   try {
+    // Get session (required)
+    const session = await getSession();
+
     let orgId: string;
 
-    if (isDemoMode()) {
-      // Allow unauthenticated access in demo mode
+    if (session) {
+      orgId = session.orgId;
+    } else if (isDemoModeEnabled()) {
+      // Only allow demo mode fallback in development
       orgId = getDemoOrgId();
     } else {
-      const session = await getSession();
-      if (!session) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
-      orgId = session.orgId || getDemoOrgId();
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
     const plan = 'pro'; // In production, get from org record
 
     // Fetch all stats in parallel
@@ -64,7 +65,7 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error('Dashboard stats error:', error);
+    logError('Dashboard stats error', error);
     return NextResponse.json(
       { error: 'Failed to fetch dashboard stats' },
       { status: 500 }

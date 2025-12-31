@@ -1,6 +1,20 @@
 import { createServiceClient } from '@/lib/supabase/server';
 import type { User, Organization, UsageDaily } from '@/types/database';
 
+/**
+ * Sanitize search input to prevent SQL injection in ILIKE patterns
+ * Escapes special PostgreSQL LIKE/ILIKE characters: % _ \
+ */
+function sanitizeSearchInput(search: string): string {
+  // Limit length to prevent DoS
+  const trimmed = search.slice(0, 100);
+  // Escape special LIKE pattern characters
+  return trimmed
+    .replace(/\\/g, '\\\\')  // Escape backslashes first
+    .replace(/%/g, '\\%')    // Escape percent signs
+    .replace(/_/g, '\\_');   // Escape underscores
+}
+
 // Platform-wide stats for admin dashboard
 export interface PlatformStats {
   totalUsers: number;
@@ -112,7 +126,9 @@ export async function getAllUsers(
     .select('*', { count: 'exact' });
 
   if (search) {
-    query = query.or(`email.ilike.%${search}%,name.ilike.%${search}%`);
+    // Sanitize search input to prevent SQL injection
+    const sanitized = sanitizeSearchInput(search);
+    query = query.or(`email.ilike.%${sanitized}%,name.ilike.%${sanitized}%`);
   }
 
   const { data: users, count, error } = await query
@@ -131,7 +147,7 @@ export async function getAllUsers(
     .select('user_id, org_id')
     .in('user_id', userIds);
 
-  const orgIds = [...new Set((memberships || []).map((m: { org_id: string }) => m.org_id))];
+  const orgIds = Array.from(new Set((memberships || []).map((m: { org_id: string }) => m.org_id)));
   const { data: orgs } = await supabase
     .from('organizations')
     .select('id, name, plan')
@@ -171,7 +187,9 @@ export async function getAllOrganizations(
     .select('*', { count: 'exact' });
 
   if (search) {
-    query = query.or(`name.ilike.%${search}%,slug.ilike.%${search}%`);
+    // Sanitize search input to prevent SQL injection
+    const sanitized = sanitizeSearchInput(search);
+    query = query.or(`name.ilike.%${sanitized}%,slug.ilike.%${sanitized}%`);
   }
 
   const { data: orgs, count, error } = await query

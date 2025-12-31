@@ -1,19 +1,25 @@
 import { NextResponse } from 'next/server';
+import { getSession } from '@/lib/session';
 import { getRevenueData } from '@/lib/services/db/admin';
-
-// Demo mode for development
-const isDemoMode = () => process.env.NODE_ENV === 'development' || !process.env.AUTH0_CLIENT_ID;
+import { logError } from '@/lib/utils/safe-error';
 
 export async function GET() {
   try {
-    if (!isDemoMode()) {
-      // TODO: Check if user is admin
+    // Verify authentication
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Verify admin role
+    if (session.user.role !== 'admin') {
+      return NextResponse.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
     }
 
     const revenue = await getRevenueData();
     return NextResponse.json(revenue);
   } catch (error) {
-    console.error('Admin revenue error:', error);
+    logError('Admin revenue error', error);
     return NextResponse.json(
       { error: 'Failed to fetch revenue data' },
       { status: 500 }

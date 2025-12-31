@@ -1,31 +1,43 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { getSession, getDemoOrgId } from '@/lib/services/auth/session';
+import { getSession } from '@/lib/session';
+import { isDemoModeEnabled, getDemoOrgId } from '@/lib/auth';
 import { createApiKey, getApiKeysByOrg } from '@/lib/services/db/api-keys';
+import { logError } from '@/lib/utils/safe-error';
 
-// Demo mode for development without auth
-const isDemoMode = () => process.env.NODE_ENV === 'development' || !process.env.AUTH0_CLIENT_ID;
+// Valid API key scopes - exported for use in other modules
+export const VALID_API_SCOPES = [
+  'defend:text',   // Text defense API
+  'defend:audio',  // Audio defense API
+  'redteam:run',   // Run redteam scans
+  'keys:read',     // Read API keys
+] as const;
+
+export type ApiScope = typeof VALID_API_SCOPES[number];
 
 const createKeySchema = z.object({
   name: z.string().min(1, 'Name is required').max(100),
-  scopes: z.array(z.string()).optional(),
+  scopes: z.array(z.enum(VALID_API_SCOPES)).optional().default(['defend:text']),
   expiresInDays: z.number().min(1).max(365).optional(),
 });
 
 // List API keys
 export async function GET() {
   try {
+    // Get session (required)
+    const session = await getSession();
+
     let orgId: string;
 
-    if (isDemoMode()) {
+    if (session) {
+      orgId = session.orgId;
+    } else if (isDemoModeEnabled()) {
+      // Only allow demo mode fallback in development
       orgId = getDemoOrgId();
     } else {
-      const session = await getSession();
-      if (!session) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
-      orgId = session.orgId || getDemoOrgId();
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
     const keys = await getApiKeysByOrg(orgId);
 
     // Don't expose the hash
@@ -42,7 +54,7 @@ export async function GET() {
 
     return NextResponse.json({ keys: safeKeys });
   } catch (error) {
-    console.error('List API keys error:', error);
+    logError('List API keys error', error);
     return NextResponse.json(
       { error: 'Failed to fetch API keys' },
       { status: 500 }
@@ -53,16 +65,18 @@ export async function GET() {
 // Create new API key
 export async function POST(request: NextRequest) {
   try {
+    // Get session (required)
+    const session = await getSession();
+
     let orgId: string;
 
-    if (isDemoMode()) {
+    if (session) {
+      orgId = session.orgId;
+    } else if (isDemoModeEnabled()) {
+      // Only allow demo mode fallback in development
       orgId = getDemoOrgId();
     } else {
-      const session = await getSession();
-      if (!session) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
-      orgId = session.orgId || getDemoOrgId();
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await request.json();
@@ -111,7 +125,7 @@ export async function POST(request: NextRequest) {
       secretKey: result.secretKey, // Only returned once!
     });
   } catch (error) {
-    console.error('Create API key error:', error);
+    logError('Create API key error', error);
     return NextResponse.json(
       { error: 'Failed to create API key' },
       { status: 500 }

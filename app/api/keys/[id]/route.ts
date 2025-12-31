@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSession, getDemoOrgId } from '@/lib/services/auth/session';
+import { getSession } from '@/lib/session';
 import { revokeApiKey, deleteApiKey, getApiKeyById } from '@/lib/services/db/api-keys';
+import { logError } from '@/lib/utils/safe-error';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -22,8 +23,13 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: 'API key not found' }, { status: 404 });
     }
 
+    // Verify org ID exists
+    const orgId = session.orgId;
+    if (!orgId) {
+      return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
+    }
+
     // Verify ownership
-    const orgId = session.orgId || getDemoOrgId();
     if (key.org_id !== orgId) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
@@ -42,7 +48,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       },
     });
   } catch (error) {
-    console.error('Get API key error:', error);
+    logError('Get API key error', error);
     return NextResponse.json(
       { error: 'Failed to fetch API key' },
       { status: 500 }
@@ -60,7 +66,11 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     const { id } = await params;
-    const orgId = session.orgId || getDemoOrgId();
+    const orgId = session.orgId;
+
+    if (!orgId) {
+      return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
+    }
 
     const success = await revokeApiKey(id, orgId);
 
@@ -70,7 +80,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
     return NextResponse.json({ success: true, message: 'API key revoked' });
   } catch (error) {
-    console.error('Revoke API key error:', error);
+    logError('Revoke API key error', error);
     return NextResponse.json(
       { error: 'Failed to revoke API key' },
       { status: 500 }
@@ -88,7 +98,11 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     const { id } = await params;
-    const orgId = session.orgId || getDemoOrgId();
+    const orgId = session.orgId;
+
+    if (!orgId) {
+      return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
+    }
 
     const success = await deleteApiKey(id, orgId);
 
@@ -98,7 +112,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     return NextResponse.json({ success: true, message: 'API key deleted' });
   } catch (error) {
-    console.error('Delete API key error:', error);
+    logError('Delete API key error', error);
     return NextResponse.json(
       { error: 'Failed to delete API key' },
       { status: 500 }

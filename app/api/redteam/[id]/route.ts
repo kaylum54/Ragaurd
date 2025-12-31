@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSession, getDemoOrgId } from '@/lib/services/auth/session';
+import { getSession } from '@/lib/session';
 import { getRedteamScanById, updateScanStatus, deleteScan } from '@/lib/services/db/redteam';
+import { logError } from '@/lib/utils/safe-error';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -22,8 +23,13 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: 'Scan not found' }, { status: 404 });
     }
 
+    // Verify org ID exists
+    const orgId = session.orgId;
+    if (!orgId) {
+      return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
+    }
+
     // Verify ownership
-    const orgId = session.orgId || getDemoOrgId();
     if (scan.org_id !== orgId) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
@@ -48,7 +54,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       },
     });
   } catch (error) {
-    console.error('Get redteam scan error:', error);
+    logError('Get redteam scan error', error);
     return NextResponse.json(
       { error: 'Failed to fetch scan' },
       { status: 500 }
@@ -75,8 +81,13 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: 'Scan not found' }, { status: 404 });
     }
 
+    // Verify org ID exists
+    const orgId = session.orgId;
+    if (!orgId) {
+      return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
+    }
+
     // Verify ownership
-    const orgId = session.orgId || getDemoOrgId();
     if (scan.org_id !== orgId) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
@@ -99,7 +110,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Update redteam scan error:', error);
+    logError('Update redteam scan error', error);
     return NextResponse.json(
       { error: 'Failed to update scan' },
       { status: 500 }
@@ -117,7 +128,11 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     const { id } = await params;
-    const orgId = session.orgId || getDemoOrgId();
+    const orgId = session.orgId;
+
+    if (!orgId) {
+      return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
+    }
 
     const success = await deleteScan(id, orgId);
 
@@ -127,7 +142,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     return NextResponse.json({ success: true, message: 'Scan deleted' });
   } catch (error) {
-    console.error('Delete redteam scan error:', error);
+    logError('Delete redteam scan error', error);
     return NextResponse.json(
       { error: 'Failed to delete scan' },
       { status: 500 }

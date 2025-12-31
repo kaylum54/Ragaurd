@@ -1,22 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSession, getDemoOrgId } from '@/lib/services/auth/session';
+import { getSession } from '@/lib/session';
+import { isDemoModeEnabled, getDemoOrgId } from '@/lib/auth';
 import { getRecentRequests, getThreatCategories, getBlockedByLayer } from '@/lib/services/db/request-log';
-
-// Demo mode for development without auth
-const isDemoMode = () => process.env.NODE_ENV === 'development' || !process.env.AUTH0_CLIENT_ID;
+import { logError } from '@/lib/utils/safe-error';
 
 export async function GET(request: NextRequest) {
   try {
+    // Get session (required)
+    const session = await getSession();
+
     let orgId: string;
 
-    if (isDemoMode()) {
+    if (session) {
+      orgId = session.orgId;
+    } else if (isDemoModeEnabled()) {
+      // Only allow demo mode fallback in development with explicit flag
       orgId = getDemoOrgId();
     } else {
-      const session = await getSession();
-      if (!session) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
-      orgId = session.orgId || getDemoOrgId();
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    if (!orgId) {
+      return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
 
     // Get query params
@@ -50,7 +55,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ data: formattedRequests });
   } catch (error) {
-    console.error('Requests data error:', error);
+    logError('Requests data error', error);
     return NextResponse.json(
       { error: 'Failed to fetch requests' },
       { status: 500 }
