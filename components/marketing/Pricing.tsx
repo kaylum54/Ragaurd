@@ -1,63 +1,17 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Check, ArrowRight } from 'lucide-react';
+import { ArrowRight, Check, Sparkles, X } from 'lucide-react';
 
 const plans = [
-  {
-    name: 'Free',
-    price: '$0',
-    period: '/month',
-    textDefense: '500/mo',
-    audioDefense: '—',
-    redTeam: '—',
-    apiKeys: '1',
-    latency: 'Best effort',
-    support: 'Community',
-    cta: 'Start free',
-    href: '/signup',
-  },
-  {
-    name: 'Starter',
-    price: '$79',
-    period: '/month',
-    textDefense: '25,000/mo',
-    audioDefense: '—',
-    redTeam: '—',
-    apiKeys: '3',
-    latency: '<500ms',
-    support: 'Email',
-    cta: 'Get started',
-    href: '/signup?plan=starter',
-  },
-  {
-    name: 'Pro',
-    price: '$249',
-    period: '/month',
-    textDefense: '150,000/mo',
-    audioDefense: '50,000/mo',
-    redTeam: '1,000 attacks/mo',
-    apiKeys: '10',
-    latency: '<200ms',
-    support: 'Priority',
-    cta: 'Get started',
-    href: '/signup?plan=pro',
-    featured: true,
-  },
-  {
-    name: 'Business',
-    price: '$649',
-    period: '/month',
-    textDefense: '500,000/mo',
-    audioDefense: '200,000/mo',
-    redTeam: '10,000 attacks/mo',
-    apiKeys: '25',
-    latency: '<100ms',
-    support: 'Dedicated',
-    cta: 'Get started',
-    href: '/signup?plan=business',
-  },
+  { name: 'Free', price: '$0', period: '/month', description: 'Try it out', textDefense: '500/mo', audioDefense: '—', redTeam: '—', apiKeys: '1', latency: 'Best effort', support: 'Community', cta: 'Start free', href: '/signup' },
+  { name: 'Starter', price: '$79', period: '/month', description: 'For small teams', textDefense: '25,000/mo', audioDefense: '—', redTeam: '—', apiKeys: '3', latency: '<500ms', support: 'Email', cta: 'Get started', href: '/signup?plan=starter' },
+  { name: 'Pro', price: '$249', period: '/month', description: 'Most popular', textDefense: '150,000/mo', audioDefense: '50,000/mo', redTeam: '1,000/mo', apiKeys: '10', latency: '<200ms', support: 'Priority', cta: 'Get started', href: '/signup?plan=pro', featured: true },
+  { name: 'Business', price: '$649', period: '/month', description: 'For enterprises', textDefense: '500,000/mo', audioDefense: '200,000/mo', redTeam: '10,000/mo', apiKeys: '25', latency: '<100ms', support: 'Dedicated', cta: 'Get started', href: '/signup?plan=business' },
 ];
 
-const tableRows = [
+const features = [
   { label: 'Text Defense', key: 'textDefense' },
   { label: 'Audio Defense', key: 'audioDefense' },
   { label: 'Red Team Testing', key: 'redTeam' },
@@ -66,118 +20,155 @@ const tableRows = [
   { label: 'Support', key: 'support' },
 ];
 
+function useScrollAnimation() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) setIsVisible(true);
+    }, { threshold: 0.1 });
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+  return { ref, isVisible };
+}
+
 export function Pricing() {
+  const { ref: sectionRef, isVisible } = useScrollAnimation();
+
   return (
-    <section className="py-16 bg-white border-t border-midnight-200" id="pricing">
-      <div className="container">
-        {/* Section Header */}
-        <div className="max-w-xl mb-10">
-          <h2 className="text-2xl font-semibold text-midnight-950">
-            Pricing That Scales With You
+    <section ref={sectionRef} className="py-24 md:py-32 bg-void relative" id="pricing">
+      {/* Background */}
+      <div className="absolute inset-0 bg-noir-radial opacity-20" />
+      <div className="divider-noir absolute top-0" />
+
+      <div className="container relative">
+        {/* Header */}
+        <div className="max-w-3xl mx-auto text-center mb-16">
+          <div
+            className={`badge-cyan mb-6 opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+            style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Pricing</span>
+          </div>
+
+          <h2
+            className={`heading-1 text-white mb-6 opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+            style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}
+          >
+            Pricing That<br />
+            <span className="gradient-text-cyan">Scales With You</span>
           </h2>
-          <p className="mt-2 text-sm text-midnight-600">
-            All plans include access to the dashboard, usage analytics, and threat logging.
+
+          <p
+            className={`text-lg text-void-700 leading-relaxed opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+            style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}
+          >
+            All plans include dashboard access, usage analytics, and threat logging.
           </p>
-        </div>
 
-        {/* Pricing Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[640px]">
-            <thead>
-              <tr>
-                <th className="text-left py-3 pr-4 w-40"></th>
-                {plans.map((plan) => (
-                  <th
-                    key={plan.name}
-                    className={`text-left py-3 px-4 ${
-                      plan.featured ? 'bg-accent-50/50' : ''
-                    }`}
-                  >
-                    <div className="relative">
-                      {plan.featured && (
-                        <span className="absolute -top-6 left-0 text-[10px] font-medium px-2 py-0.5 bg-accent-600 text-white rounded">
-                          Popular
-                        </span>
-                      )}
-                      <div className="text-base font-medium text-midnight-950">{plan.name}</div>
-                      <div className="mt-1">
-                        <span className="text-2xl font-semibold text-midnight-950">{plan.price}</span>
-                        <span className="text-sm text-midnight-500">{plan.period}</span>
-                      </div>
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-midnight-100">
-              {tableRows.map((row) => (
-                <tr key={row.key}>
-                  <td className="py-3 pr-4 text-sm font-medium text-midnight-700">{row.label}</td>
-                  {plans.map((plan) => (
-                    <td
-                      key={plan.name}
-                      className={`py-3 px-4 text-sm text-midnight-600 ${
-                        plan.featured ? 'bg-accent-50/50' : ''
-                      }`}
-                    >
-                      {plan[row.key as keyof typeof plan] === '—' ? (
-                        <span className="text-midnight-400">—</span>
-                      ) : (
-                        plan[row.key as keyof typeof plan]
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-              <tr>
-                <td className="py-4 pr-4"></td>
-                {plans.map((plan) => (
-                  <td
-                    key={plan.name}
-                    className={`py-4 px-4 ${plan.featured ? 'bg-accent-50/50' : ''}`}
-                  >
-                    <Link
-                      href={plan.href}
-                      className={`inline-block w-full py-2 px-4 rounded text-sm font-medium text-center transition-colors ${
-                        plan.featured
-                          ? 'bg-midnight-800 hover:bg-midnight-900 text-white'
-                          : 'bg-midnight-100 hover:bg-midnight-200 text-midnight-900'
-                      }`}
-                    >
-                      {plan.cta}
-                    </Link>
-                  </td>
-                ))}
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        {/* Enterprise */}
-        <div className="mt-10 max-w-4xl">
-          <div className="bg-midnight-800 rounded p-6 md:p-8">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-              <div>
-                <h3 className="text-lg font-semibold text-white">Enterprise</h3>
-                <p className="text-sm text-midnight-400 mt-1 max-w-md">
-                  Unlimited requests, custom limits, dedicated infrastructure, SLA guarantees, 24/7 support + TAM.
-                </p>
-              </div>
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 bg-white hover:bg-midnight-50 text-midnight-900 font-medium px-4 py-2 rounded transition-colors shrink-0 text-sm"
-              >
-                Contact sales
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
+          <div
+            className={`inline-flex items-center gap-2 mt-6 text-sm text-void-600 opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+            style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}
+          >
+            <Check className="w-4 h-4 text-secure-500" />
+            No credit card required for free tier
           </div>
         </div>
 
-        {/* Note */}
-        <p className="mt-6 text-xs text-midnight-500 max-w-4xl">
-          Need higher volume? Enterprise plans include custom limits, dedicated infrastructure, and SLA guarantees.
-        </p>
+        {/* Pricing Cards */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
+          {plans.map((plan, index) => (
+            <div
+              key={plan.name}
+              className={`group relative noir-card-glow rounded-2xl p-6 opacity-0 hover-lift ${isVisible ? 'animate-cascade-up' : ''} ${
+                plan.featured ? 'ring-2 ring-cyan-500/50 glow-cyan' : ''
+              }`}
+              style={{ animationDelay: `${500 + index * 100}ms`, animationFillMode: 'forwards' }}
+            >
+              {/* Featured badge */}
+              {plan.featured && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                  <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-cyan-500 text-void text-[10px] font-bold uppercase tracking-wide rounded-full shadow-lg shadow-cyan-500/30">
+                    <Sparkles className="w-3 h-3" />
+                    Popular
+                  </span>
+                </div>
+              )}
+
+              {/* Plan header */}
+              <div className="mb-5 pt-2">
+                <div className="text-sm font-medium text-void-600">{plan.name}</div>
+                <div className="mt-2 flex items-baseline gap-1">
+                  <span className="text-4xl font-bold text-white">{plan.price}</span>
+                  <span className="text-sm text-void-500">{plan.period}</span>
+                </div>
+                <div className="text-xs text-void-500 mt-1">{plan.description}</div>
+              </div>
+
+              {/* Features */}
+              <div className="space-y-3 mb-6">
+                {features.map((feature) => {
+                  const value = plan[feature.key as keyof typeof plan];
+                  const isDisabled = value === '—';
+                  return (
+                    <div key={feature.key} className="flex items-center justify-between text-sm">
+                      <span className="text-void-600">{feature.label}</span>
+                      <span className={`font-medium ${isDisabled ? 'text-void-400' : 'text-void-700'}`}>
+                        {isDisabled ? <X className="w-4 h-4 text-void-400" /> : value}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* CTA */}
+              <Link
+                href={plan.href}
+                className={`block w-full py-3 px-4 rounded-xl text-sm font-semibold text-center transition-all ${
+                  plan.featured
+                    ? 'bg-cyan-500 hover:bg-cyan-400 text-void shadow-lg shadow-cyan-500/20'
+                    : 'bg-void-200 hover:bg-void-300 text-white border border-void-400'
+                }`}
+              >
+                {plan.cta}
+              </Link>
+
+              {/* Bottom accent */}
+              <div className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-b-2xl transition-all ${
+                plan.featured ? 'bg-cyan-500' : 'bg-transparent group-hover:bg-void-400'
+              }`} />
+            </div>
+          ))}
+        </div>
+
+        {/* Enterprise */}
+        <div
+          className={`opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+          style={{ animationDelay: '900ms', animationFillMode: 'forwards' }}
+        >
+          <div className="noir-card rounded-2xl p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="flex items-start gap-5">
+              <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center shrink-0">
+                <Sparkles className="w-7 h-7 text-cyan-400" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">Enterprise</h3>
+                <p className="text-sm text-void-600 max-w-lg">
+                  Unlimited requests, custom limits, dedicated infrastructure, SLA guarantees, 24/7 support + TAM.
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/contact"
+              className="btn-primary group shrink-0"
+            >
+              Contact sales
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+        </div>
       </div>
     </section>
   );
