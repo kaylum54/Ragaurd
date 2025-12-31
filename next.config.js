@@ -28,6 +28,8 @@ const corsHeaders = [
 const nextConfig = {
   output: 'standalone',
   reactStrictMode: true,
+  // Security: Disable X-Powered-By header to avoid exposing Next.js version
+  poweredByHeader: false,
   async headers() {
     return [
       // API routes get CORS headers

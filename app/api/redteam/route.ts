@@ -4,6 +4,7 @@ import { getSession } from '@/lib/session';
 import { isDemoModeEnabled, getDemoOrgId } from '@/lib/auth';
 import { getRedteamScans, getRedteamStats, createRedteamScan } from '@/lib/services/db/redteam';
 import { logError } from '@/lib/utils/safe-error';
+import { checkRedteamLimit, checkRedteamFeatureAccess } from '@/lib/services/billing/enforcement';
 
 const ATTACK_COUNTS: Record<string, number> = {
   basic: 50,
@@ -20,9 +21,22 @@ const scanConfigSchema = z.object({
   skipPatterns: z.array(z.string().max(200)).max(20).optional(), // Attack patterns to skip
 }).optional();
 
+// Custom URL validator that only allows http/https protocols (prevents javascript: XSS)
+const safeUrlSchema = z.string().max(2000).refine(
+  (url) => {
+    try {
+      const parsed = new URL(url);
+      return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+    } catch {
+      return false;
+    }
+  },
+  { message: 'Must be a valid HTTP or HTTPS URL' }
+);
+
 const createScanSchema = z.object({
   name: z.string().max(100).optional(),
-  targetEndpoint: z.string().url('Must be a valid URL').max(2000),
+  targetEndpoint: safeUrlSchema,
   attackSuite: z.enum(['basic', 'standard', 'comprehensive']),
   config: scanConfigSchema,
 });
@@ -95,6 +109,37 @@ export async function POST(request: NextRequest) {
       orgId = getDemoOrgId();
     } else {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Check feature access - redteam requires Pro plan or higher (skip for demo)
+    if (!isDemoModeEnabled()) {
+      const featureCheck = await checkRedteamFeatureAccess(orgId);
+      if (!featureCheck.allowed) {
+        return NextResponse.json(
+          {
+            error: featureCheck.error || 'Red team testing not available on your plan',
+            requiredPlan: featureCheck.requiredPlan,
+            currentPlan: featureCheck.currentPlan,
+          },
+          { status: 403 }
+        );
+      }
+
+      // Check usage limits before processing
+      const limitCheck = await checkRedteamLimit(orgId);
+      if (!limitCheck.allowed) {
+        return NextResponse.json(
+          {
+            error: limitCheck.error || 'Usage limit exceeded',
+            usage: {
+              current: limitCheck.currentUsage,
+              limit: limitCheck.limit,
+              percentUsed: limitCheck.percentUsed,
+            },
+          },
+          { status: 429 }
+        );
+      }
     }
 
     const body = await request.json();

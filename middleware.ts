@@ -158,6 +158,23 @@ export async function middleware(request: NextRequest) {
   response.headers.set('X-Content-Type-Options', 'nosniff');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 
+  // Content Security Policy
+  // Note: 'unsafe-inline' for styles is required for Next.js styled-jsx and Tailwind
+  // In production, consider using nonces for stricter CSP
+  const cspDirectives = [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-eval' 'unsafe-inline'", // Next.js requires unsafe-eval in dev
+    "style-src 'self' 'unsafe-inline'", // Tailwind requires unsafe-inline
+    "img-src 'self' data: https:",
+    "font-src 'self' data:",
+    "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
+    "frame-ancestors 'self'",
+    "form-action 'self'",
+    "base-uri 'self'",
+    "object-src 'none'",
+  ];
+  response.headers.set('Content-Security-Policy', cspDirectives.join('; '));
+
   // Rate limit ALL API routes (not just /api/v1)
   if (pathname.startsWith('/api/')) {
     const clientIp = getClientIp(request);

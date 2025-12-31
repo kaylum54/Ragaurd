@@ -227,17 +227,26 @@ export default function ScanDetailPage() {
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground">Target Endpoint</span>
-              <a
-                href={scan.targetEndpoint}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1 text-sm font-medium text-primary-600 hover:underline"
-              >
-                {scan.targetEndpoint.length > 40
-                  ? scan.targetEndpoint.substring(0, 40) + '...'
-                  : scan.targetEndpoint}
-                <ExternalLink className="h-3 w-3" />
-              </a>
+              {/* Only render as link if protocol is http/https (prevent javascript: XSS) */}
+              {scan.targetEndpoint.startsWith('http://') || scan.targetEndpoint.startsWith('https://') ? (
+                <a
+                  href={scan.targetEndpoint}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 text-sm font-medium text-primary-600 hover:underline"
+                >
+                  {scan.targetEndpoint.length > 40
+                    ? scan.targetEndpoint.substring(0, 40) + '...'
+                    : scan.targetEndpoint}
+                  <ExternalLink className="h-3 w-3" />
+                </a>
+              ) : (
+                <span className="text-sm font-medium">
+                  {scan.targetEndpoint.length > 40
+                    ? scan.targetEndpoint.substring(0, 40) + '...'
+                    : scan.targetEndpoint}
+                </span>
+              )}
             </div>
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground">Attack Suite</span>
