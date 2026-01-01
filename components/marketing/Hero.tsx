@@ -32,7 +32,7 @@ export function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden hero-gradient pt-20">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden hero-gradient pt-32 md:pt-40">
       <ThreatInterceptionBackground />
       
       <div className="container relative z-10">
