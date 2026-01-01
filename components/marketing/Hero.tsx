@@ -47,38 +47,47 @@ function GridBackground() {
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      {/* Primary Grid */}
+      {/* Primary Grid - More visible at boundaries */}
       <div 
-        className="absolute inset-0 opacity-[0.03] transition-transform duration-1000 ease-out"
+        className="absolute inset-0 opacity-[0.04] transition-transform duration-1000 ease-out"
         style={{ 
           backgroundImage: 'linear-gradient(to right, #0a1628 1px, transparent 1px), linear-gradient(to bottom, #0a1628 1px, transparent 1px)',
           backgroundSize: '80px 80px',
-          transform: `translate(${mousePos.x * 0.5}px, ${mousePos.y * 0.5}px)`
+          transform: `translate(${mousePos.x * 0.5}px, ${mousePos.y * 0.5}px)`,
+          maskImage: 'linear-gradient(to bottom, black 0%, transparent 20%, transparent 80%, black 100%), linear-gradient(to right, black 0%, transparent 20%, transparent 80%, black 100%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 20%, transparent 80%, black 100%), linear-gradient(to right, black 0%, transparent 20%, transparent 80%, black 100%)',
+          maskComposite: 'exclude',
+          WebkitMaskComposite: 'source-out'
         }}
       />
       
-      {/* Secondary Layered Grid */}
+      {/* Secondary Layered Grid - Softer center for text readability */}
       <div 
-        className="absolute inset-0 opacity-[0.02] transition-transform duration-1000 ease-out"
+        className="absolute inset-0 opacity-[0.025] transition-transform duration-1000 ease-out"
         style={{ 
           backgroundImage: 'linear-gradient(to right, #0a1628 1px, transparent 1px), linear-gradient(to bottom, #0a1628 1px, transparent 1px)',
           backgroundSize: '160px 160px',
-          transform: `translate(${mousePos.x * 1.2}px, ${mousePos.y * 1.2}px) rotate(1deg) scale(1.1)`
+          transform: `translate(${mousePos.x * 1.2}px, ${mousePos.y * 1.2}px) rotate(1deg) scale(1.1)`,
+          maskImage: 'radial-gradient(circle at center, transparent 30%, black 100%)',
+          WebkitMaskImage: 'radial-gradient(circle at center, transparent 30%, black 100%)'
         }}
       />
 
-      {/* Tertiary Infrastructure Lines */}
+      {/* Tertiary Infrastructure Lines - Context aware reinforcing structure */}
       <div 
-        className="absolute inset-0 opacity-[0.015] transition-transform duration-1000 ease-out"
+        className="absolute inset-0 opacity-[0.02] transition-transform duration-1000 ease-out"
         style={{ 
           backgroundImage: 'linear-gradient(to right, #0a1628 1px, transparent 1px)',
           backgroundSize: '320px 100%',
-          transform: `translate(${mousePos.x * 2}px, ${mousePos.y * 0.8}px) rotate(-2deg)`
+          transform: `translate(${mousePos.x * 2}px, ${mousePos.y * 0.8}px) rotate(-2deg)`,
+          maskImage: 'linear-gradient(to right, black 0%, transparent 40%, transparent 60%, black 100%)',
+          WebkitMaskImage: 'linear-gradient(to right, black 0%, transparent 40%, transparent 60%, black 100%)'
         }}
       />
       
-      {/* Subtle radial mask to fade edges */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/40 to-white" />
+      {/* Subtle radial mask to fade edges and soften background overall */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-white/10" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,white_90%)] opacity-40" />
     </div>
   );
 }
