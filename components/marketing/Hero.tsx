@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Play, Shield, Zap, CheckCircle2 } from 'lucide-react';
 
@@ -22,6 +22,67 @@ function AnimatedStat({ value, label, delay }: { value: string; label: string; d
   );
 }
 
+function GridBackground() {
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const requestRef = useRef<number>();
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const { clientX, clientY } = e;
+      const x = (clientX / window.innerWidth - 0.5) * 20;
+      const y = (clientY / window.innerHeight - 0.5) * 20;
+      
+      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+      requestRef.current = requestAnimationFrame(() => {
+        setMousePos({ x, y });
+      });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+    };
+  }, []);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {/* Primary Grid */}
+      <div 
+        className="absolute inset-0 opacity-[0.03] transition-transform duration-1000 ease-out"
+        style={{ 
+          backgroundImage: 'linear-gradient(to right, #0a1628 1px, transparent 1px), linear-gradient(to bottom, #0a1628 1px, transparent 1px)',
+          backgroundSize: '80px 80px',
+          transform: `translate(${mousePos.x * 0.5}px, ${mousePos.y * 0.5}px)`
+        }}
+      />
+      
+      {/* Secondary Layered Grid */}
+      <div 
+        className="absolute inset-0 opacity-[0.02] transition-transform duration-1000 ease-out"
+        style={{ 
+          backgroundImage: 'linear-gradient(to right, #0a1628 1px, transparent 1px), linear-gradient(to bottom, #0a1628 1px, transparent 1px)',
+          backgroundSize: '160px 160px',
+          transform: `translate(${mousePos.x * 1.2}px, ${mousePos.y * 1.2}px) rotate(1deg) scale(1.1)`
+        }}
+      />
+
+      {/* Tertiary Infrastructure Lines */}
+      <div 
+        className="absolute inset-0 opacity-[0.015] transition-transform duration-1000 ease-out"
+        style={{ 
+          backgroundImage: 'linear-gradient(to right, #0a1628 1px, transparent 1px)',
+          backgroundSize: '320px 100%',
+          transform: `translate(${mousePos.x * 2}px, ${mousePos.y * 0.8}px) rotate(-2deg)`
+        }}
+      />
+      
+      {/* Subtle radial mask to fade edges */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/40 to-white" />
+    </div>
+  );
+}
+
 export function Hero() {
   const [mounted, setMounted] = useState(false);
 
@@ -31,6 +92,8 @@ export function Hero() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden hero-gradient pt-20">
+      <GridBackground />
+      
       <div className="container relative z-10">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
