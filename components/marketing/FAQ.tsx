@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { ChevronDown, HelpCircle, Mail } from 'lucide-react';
+import { ChevronDown, Mail } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const faqs = [
@@ -31,28 +31,16 @@ export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section ref={sectionRef} className="py-20 md:py-28 section-white relative overflow-hidden" id="faq">
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-[0.015]">
-        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="faq-grid" width="60" height="60" patternUnits="userSpaceOnUse">
-              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#0a1628" strokeWidth="0.5"/>
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#faq-grid)" />
-        </svg>
-      </div>
+    <section ref={sectionRef} className="py-24 md:py-32 bg-white relative" id="faq">
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(10,22,40,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(10,22,40,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
       <div className="container relative">
         <div className="max-w-3xl mx-auto">
-          {/* Header */}
           <div className="text-center mb-16">
             <div
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-navy-100/50 border border-navy-200/50 mb-8 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+              className={`inline-flex items-center gap-2 px-4 py-2 bg-navy-100 mb-8 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
               style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}
             >
-              <HelpCircle className="w-4 h-4 text-navy-600" />
               <span className="text-xs font-semibold text-navy-700 uppercase tracking-wider">FAQ</span>
             </div>
 
@@ -71,52 +59,46 @@ export function FAQ() {
             </p>
           </div>
 
-          {/* FAQ Items */}
-          <div className="space-y-4">
+          <div className="space-y-0 border border-navy-200">
             {faqs.map((faq, index) => {
               const isOpen = openIndex === index;
+              const isLast = index === faqs.length - 1;
 
               return (
                 <div
                   key={index}
                   className={cn(
-                    'bg-white rounded-2xl overflow-hidden transition-all duration-500 shadow-lg shadow-navy-950/5 border opacity-0',
+                    'bg-white opacity-0',
                     isVisible ? 'animate-fade-up' : '',
-                    isOpen ? 'border-navy-200 shadow-xl' : 'border-navy-100/50'
+                    !isLast && 'border-b border-navy-200'
                   )}
                   style={{ animationDelay: `${400 + index * 50}ms`, animationFillMode: 'forwards' }}
                 >
                   <button
-                    className="w-full flex items-center justify-between px-6 py-5 text-left group relative"
+                    className="w-full flex items-center justify-between px-6 py-5 text-left group"
                     onClick={() => setOpenIndex(isOpen ? null : index)}
                   >
-                    {/* Left accent bar */}
-                    <div className={cn(
-                      'absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-navy-400 to-navy-600 transition-opacity duration-300',
-                      isOpen ? 'opacity-100' : 'opacity-0'
-                    )} />
-
                     <span className={cn(
-                      'text-base font-semibold transition-colors pr-4',
-                      isOpen ? 'text-navy-950' : 'text-navy-800 group-hover:text-navy-950'
+                      'text-base font-medium transition-colors pr-4',
+                      isOpen ? 'text-navy-950' : 'text-navy-700 group-hover:text-navy-950'
                     )}>
                       {faq.question}
                     </span>
 
                     <div className={cn(
-                      'w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300',
-                      isOpen ? 'bg-navy-100 rotate-180' : 'bg-navy-50 group-hover:bg-navy-100'
+                      'w-8 h-8 flex items-center justify-center shrink-0 transition-all duration-300',
+                      isOpen ? 'bg-navy-950 rotate-180' : 'bg-navy-100 group-hover:bg-navy-200'
                     )}>
                       <ChevronDown className={cn(
-                        'w-5 h-5 transition-colors',
-                        isOpen ? 'text-navy-700' : 'text-navy-400'
+                        'w-4 h-4 transition-colors',
+                        isOpen ? 'text-white' : 'text-navy-500'
                       )} />
                     </div>
                   </button>
 
                   <div className={cn(
-                    'overflow-hidden transition-all duration-300 ease-out',
-                    isOpen ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'
+                    'overflow-hidden transition-all duration-300',
+                    isOpen ? 'max-h-60' : 'max-h-0'
                   )}>
                     <div className="px-6 pb-6">
                       <p className="text-sm text-navy-600 leading-relaxed">
@@ -129,22 +111,20 @@ export function FAQ() {
             })}
           </div>
 
-          {/* Contact CTA */}
           <div
             className={`mt-12 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
             style={{ animationDelay: '700ms', animationFillMode: 'forwards' }}
           >
-            <div className="bg-gradient-to-br from-navy-50 to-white rounded-2xl p-8 text-center border border-navy-100/50 shadow-lg shadow-navy-950/5">
-              <p className="text-sm text-navy-500 mb-3">Still have questions?</p>
+            <div className="bg-navy-50 border border-navy-100 p-8 text-center">
+              <p className="text-sm text-navy-500 mb-4">Still have questions?</p>
               <a
                 href="mailto:support@ragaurd.com"
                 className="inline-flex items-center gap-3 text-base font-semibold text-navy-950 hover:text-navy-700 transition-colors group"
               >
-                <div className="w-10 h-10 rounded-xl bg-navy-100 flex items-center justify-center group-hover:bg-navy-200 transition-colors">
-                  <Mail className="w-5 h-5 text-navy-600" />
+                <div className="w-10 h-10 bg-navy-950 flex items-center justify-center group-hover:bg-navy-800 transition-colors">
+                  <Mail className="w-5 h-5 text-white" />
                 </div>
                 Contact our team
-                <span className="group-hover:translate-x-1 transition-transform">→</span>
               </a>
             </div>
           </div>

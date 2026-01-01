@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Search, Brain, Shield, Lock, Fingerprint, Mic, Zap, FileText, Clock, ArrowRight, ChevronDown } from 'lucide-react';
+import { Search, Brain, Shield, Lock, Fingerprint, Mic, ArrowRight, Check } from 'lucide-react';
 import Link from 'next/link';
 
 const layers = [
@@ -13,65 +13,12 @@ const layers = [
   { number: 6, title: 'Audio Verification', description: 'Deepfake detection with 0.83% EER', tech: 'AASIST-L + LCNN ensemble', icon: Mic, badge: 'Pro' },
 ];
 
-const benefits = [
-  { icon: Zap, label: 'Real-time', detail: '<200ms latency' },
-  { icon: Shield, label: 'Zero FP', detail: '0% false positives' },
-  { icon: FileText, label: 'Logging', detail: 'Full threat data' },
-  { icon: Clock, label: 'Simple', detail: 'REST API & SDKs' },
+const stats = [
+  { value: '<20ms', label: 'Latency' },
+  { value: '99.53%', label: 'Block Rate' },
+  { value: '0%', label: 'False Positives' },
+  { value: '5min', label: 'Integration' },
 ];
-
-function DataFlowDiagram() {
-  return (
-    <div className="relative flex items-center justify-center gap-4 md:gap-8 py-12">
-      {/* Input */}
-      <div className="relative flex flex-col items-center group">
-        <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-navy-800/50 border border-navy-600/50 flex items-center justify-center backdrop-blur-sm group-hover:border-navy-500 transition-colors">
-          <span className="text-2xl md:text-3xl">📥</span>
-        </div>
-        <span className="mt-3 text-xs font-medium text-navy-400">Input</span>
-      </div>
-
-      {/* Animated connection line */}
-      <div className="relative w-16 md:w-24 h-[2px]">
-        <div className="absolute inset-0 bg-gradient-to-r from-navy-600 to-navy-500 rounded-full" />
-        <div className="absolute w-3 h-3 -top-[5px] bg-navy-400 rounded-full animate-[flow_2s_ease-in-out_infinite]" />
-      </div>
-
-      {/* Ragaurd Shield */}
-      <div className="relative flex flex-col items-center group">
-        <div className="relative">
-          {/* Glow effect */}
-          <div className="absolute inset-0 bg-navy-400/20 rounded-2xl blur-xl group-hover:bg-navy-400/30 transition-colors" />
-          <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-navy-700 to-navy-800 border-2 border-navy-400/50 flex items-center justify-center shadow-xl group-hover:border-navy-300/50 transition-colors">
-            <Shield className="w-10 h-10 md:w-12 md:h-12 text-white" />
-          </div>
-        </div>
-        <span className="mt-3 text-xs font-bold text-white">Ragaurd</span>
-        <span className="text-[10px] text-navy-400">6 layers</span>
-      </div>
-
-      {/* Animated connection line */}
-      <div className="relative w-16 md:w-24 h-[2px]">
-        <div className="absolute inset-0 bg-gradient-to-r from-navy-500 to-success-500/50 rounded-full" />
-        <div className="absolute w-3 h-3 -top-[5px] bg-success-400 rounded-full animate-[flow_2s_ease-in-out_infinite]" style={{ animationDelay: '1s' }} />
-      </div>
-
-      {/* Agent */}
-      <div className="relative flex flex-col items-center group">
-        <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-navy-800/50 border-2 border-success-500/30 flex items-center justify-center backdrop-blur-sm group-hover:border-success-400/50 transition-colors">
-          <span className="text-2xl md:text-3xl">🤖</span>
-        </div>
-        <span className="mt-3 text-xs font-medium text-success-400">Agent</span>
-      </div>
-
-      {/* Blocked indicator */}
-      <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 text-[10px] text-danger-400">
-        <span className="w-2 h-2 rounded-full bg-danger-500 animate-pulse" />
-        <span className="font-medium">Attacks blocked</span>
-      </div>
-    </div>
-  );
-}
 
 function useScrollAnimation() {
   const ref = useRef<HTMLDivElement>(null);
@@ -88,47 +35,35 @@ function useScrollAnimation() {
 
 export function Solution() {
   const { ref: sectionRef, isVisible } = useScrollAnimation();
-  const [expandedLayer, setExpandedLayer] = useState<number | null>(null);
+  const [activeLayer, setActiveLayer] = useState(0);
 
   return (
-    <section ref={sectionRef} className="py-20 md:py-28 section-navy relative overflow-hidden" id="solution">
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-[0.02]">
-        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="dots-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
-              <circle cx="2" cy="2" r="1" fill="white"/>
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#dots-pattern)" />
-        </svg>
-      </div>
+    <section ref={sectionRef} className="py-24 md:py-32 bg-navy-950 relative overflow-hidden" id="solution">
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:80px_80px]" />
 
-      {/* Gradient orbs */}
-      <div className="absolute top-20 left-10 w-[400px] h-[400px] bg-navy-500/10 rounded-full blur-[120px]" />
-      <div className="absolute bottom-20 right-10 w-[300px] h-[300px] bg-navy-400/10 rounded-full blur-[100px]" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-navy-700 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-navy-700 to-transparent" />
 
       <div className="container relative">
-        {/* Header */}
-        <div className="max-w-3xl mx-auto text-center mb-16">
+        <div className="max-w-3xl mx-auto text-center mb-20">
           <div
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+            className={`inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 mb-8 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
             style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}
           >
             <Shield className="w-4 h-4 text-navy-300" />
-            <span className="text-xs font-semibold text-white/70 uppercase tracking-wider">Solution</span>
+            <span className="text-xs font-semibold text-white/70 uppercase tracking-wider">The Solution</span>
           </div>
 
           <h2
             className={`text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
             style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}
           >
-            One API.<br />
-            <span className="bg-gradient-to-r from-navy-300 to-navy-200 bg-clip-text text-transparent">Six Layers of Defense.</span>
+            One API.{' '}
+            <span className="text-navy-300">Six Layers of Defense.</span>
           </h2>
 
           <p
-            className={`text-lg text-white/50 leading-relaxed opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+            className={`text-lg text-navy-400 leading-relaxed opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
             style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}
           >
             Ragaurd inspects every input before it reaches your agent's LLM,
@@ -136,107 +71,113 @@ export function Solution() {
           </p>
         </div>
 
-        {/* Data flow diagram */}
-        <div
-          className={`max-w-2xl mx-auto mb-20 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
-          style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}
-        >
-          <DataFlowDiagram />
-        </div>
-
-        {/* Layers accordion */}
-        <div className="max-w-4xl mx-auto mb-16">
-          <div className="space-y-3">
-            {layers.map((layer, index) => {
-              const isExpanded = expandedLayer === index;
-
-              return (
-                <div
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 mb-20">
+          <div
+            className={`opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+            style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}
+          >
+            <div className="space-y-2">
+              {layers.map((layer, index) => (
+                <button
                   key={layer.number}
-                  className={`group relative rounded-2xl overflow-hidden opacity-0 transition-all duration-300 ${isVisible ? 'animate-fade-up' : ''} ${isExpanded ? 'ring-1 ring-navy-400/30' : ''}`}
-                  style={{ animationDelay: `${500 + index * 80}ms`, animationFillMode: 'forwards' }}
+                  onClick={() => setActiveLayer(index)}
+                  className={`w-full text-left p-4 border transition-all duration-300 ${
+                    activeLayer === index
+                      ? 'bg-white/5 border-navy-500'
+                      : 'bg-transparent border-navy-800 hover:border-navy-700'
+                  }`}
                 >
-                  {/* Glass background */}
-                  <div className="absolute inset-0 bg-white/[0.03] backdrop-blur-xl" />
-                  <div className="absolute inset-0 border border-white/5 rounded-2xl" />
-                  
-                  <button
-                    onClick={() => setExpandedLayer(isExpanded ? null : index)}
-                    className="relative w-full flex items-center gap-4 p-5 text-left"
-                  >
-                    {/* Layer number */}
-                    <div className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 bg-gradient-to-br from-navy-700 to-navy-800 border border-white/10 group-hover:border-white/20 transition-colors">
-                      <span className="text-xl font-bold text-navy-300">{layer.number}</span>
+                  <div className="flex items-center gap-4">
+                    <div className={`w-10 h-10 flex items-center justify-center text-sm font-bold transition-colors ${
+                      activeLayer === index ? 'bg-white text-navy-950' : 'bg-navy-800 text-navy-400'
+                    }`}>
+                      {layer.number}
                     </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-3">
-                        <h4 className="text-base font-semibold text-white group-hover:text-navy-200 transition-colors">
-                          {layer.title}
-                        </h4>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <h4 className="text-sm font-semibold text-white">{layer.title}</h4>
                         {layer.badge && (
-                          <span className="text-[9px] font-bold px-2.5 py-1 bg-gradient-to-r from-navy-500 to-navy-600 text-white rounded-full uppercase tracking-wider">
+                          <span className="text-[9px] font-bold px-2 py-0.5 bg-navy-600 text-white uppercase tracking-wider">
                             {layer.badge}
                           </span>
                         )}
                       </div>
-                      <p className="text-sm text-white/40 mt-1 line-clamp-1">{layer.description}</p>
                     </div>
-
-                    <layer.icon className="w-5 h-5 shrink-0 text-navy-400 opacity-40 group-hover:opacity-70 transition-opacity" />
-                    <ChevronDown className={`w-5 h-5 text-navy-500 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
-                  </button>
-
-                  <div className={`relative overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-40' : 'max-h-0'}`}>
-                    <div className="px-5 pb-5 pl-[88px]">
-                      <p className="text-sm text-white/50 mb-4">{layer.description}</p>
-                      <div className="inline-flex items-center gap-3 px-4 py-2 bg-navy-800/50 rounded-xl border border-white/5">
-                        <span className="text-[10px] text-navy-400 uppercase tracking-wider font-medium">Technical:</span>
-                        <span className="text-xs text-white/70 font-mono">{layer.tech}</span>
-                      </div>
-                    </div>
+                    <layer.icon className={`w-4 h-4 transition-colors ${
+                      activeLayer === index ? 'text-white' : 'text-navy-600'
+                    }`} />
                   </div>
-
-                  {/* Active indicator */}
-                  <div className={`absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-navy-500 to-navy-300 transition-opacity ${isExpanded ? 'opacity-100' : 'opacity-0'}`} />
-                </div>
-              );
-            })}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Benefits bar */}
-        <div
-          className={`max-w-4xl mx-auto opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
-          style={{ animationDelay: '1000ms', animationFillMode: 'forwards' }}
-        >
-          <div className="relative rounded-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-white/[0.03] backdrop-blur-xl" />
-            <div className="absolute inset-0 border border-white/5 rounded-2xl" />
-            
-            <div className="relative p-6 md:p-8">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-                <div className="flex flex-wrap justify-center gap-8 md:gap-12">
-                  {benefits.map((benefit) => (
-                    <div key={benefit.label} className="flex items-center gap-4 group">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-navy-700 to-navy-800 border border-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <benefit.icon className="w-5 h-5 text-navy-300" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-white">{benefit.label}</p>
-                        <p className="text-xs text-white/40">{benefit.detail}</p>
-                      </div>
-                    </div>
-                  ))}
+          <div
+            className={`opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+            style={{ animationDelay: '500ms', animationFillMode: 'forwards' }}
+          >
+            <div className="sticky top-24">
+              <div className="bg-navy-900/50 border border-navy-800 p-8">
+                <div className="absolute top-0 left-0 w-6 h-6 border-l-2 border-t-2 border-navy-500" />
+                <div className="absolute top-0 right-0 w-6 h-6 border-r-2 border-t-2 border-navy-500" />
+                <div className="absolute bottom-0 left-0 w-6 h-6 border-l-2 border-b-2 border-navy-500" />
+                <div className="absolute bottom-0 right-0 w-6 h-6 border-r-2 border-b-2 border-navy-500" />
+
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-14 h-14 bg-white flex items-center justify-center">
+                    {(() => {
+                      const LayerIcon = layers[activeLayer].icon;
+                      return <LayerIcon className="w-7 h-7 text-navy-950" />;
+                    })()}
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-white">Layer {layers[activeLayer].number}</h3>
+                    <p className="text-navy-400">{layers[activeLayer].title}</p>
+                  </div>
                 </div>
 
-                <Link href="/docs" className="inline-flex items-center gap-2 text-sm text-navy-300 hover:text-white font-medium group transition-colors">
-                  Documentation
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                <p className="text-navy-300 leading-relaxed mb-6">
+                  {layers[activeLayer].description}
+                </p>
+
+                <div className="p-4 bg-navy-950 border border-navy-800">
+                  <p className="text-[10px] text-navy-500 uppercase tracking-wider mb-2 font-medium">Technical Implementation</p>
+                  <code className="text-sm text-navy-200 font-mono">{layers[activeLayer].tech}</code>
+                </div>
               </div>
             </div>
           </div>
+        </div>
+
+        <div
+          className={`grid grid-cols-2 md:grid-cols-4 gap-px bg-navy-800 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+          style={{ animationDelay: '700ms', animationFillMode: 'forwards' }}
+        >
+          {stats.map((stat) => (
+            <div key={stat.label} className="bg-navy-900 p-6 md:p-8 text-center">
+              <div className="text-3xl md:text-4xl font-bold text-white mb-2">{stat.value}</div>
+              <div className="text-xs text-navy-500 uppercase tracking-wider">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+
+        <div
+          className={`mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+          style={{ animationDelay: '800ms', animationFillMode: 'forwards' }}
+        >
+          <Link
+            href="/signup"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-white text-navy-950 font-semibold hover:bg-navy-100 transition-colors"
+          >
+            Start Free Trial
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+          <Link
+            href="/docs"
+            className="inline-flex items-center gap-2 px-8 py-4 border border-navy-600 text-white font-semibold hover:bg-navy-800/50 transition-colors"
+          >
+            Read Documentation
+          </Link>
         </div>
       </div>
     </section>
