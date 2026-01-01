@@ -30,17 +30,17 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="bg-void-100 border-t border-white/5">
+    <footer className="bg-white border-t border-navy-100">
       <div className="container py-16">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-10">
           <div className="col-span-2">
-            <Link href="/" className="inline-flex items-center gap-3 group">
-              <div className="w-10 h-10 bg-cyan-500 flex items-center justify-center">
-                <Shield className="w-5 h-5 text-void" />
+            <Link href="/" className="inline-flex items-center gap-2.5 group">
+              <div className="w-9 h-9 bg-navy-950 flex items-center justify-center">
+                <Shield className="w-5 h-5 text-white" />
               </div>
-              <span className="font-bold text-xl text-white tracking-tight">Ragaurd</span>
+              <span className="font-bold text-lg text-navy-950 tracking-tight">Ragaurd</span>
             </Link>
-            <p className="mt-5 text-sm text-white-40 max-w-xs leading-relaxed">
+            <p className="mt-5 text-sm text-navy-500 max-w-xs leading-relaxed">
               Voice AI Security Infrastructure. Protecting voice agents from prompt injection, jailbreaking, and deepfake attacks.
             </p>
             
@@ -56,11 +56,11 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-[10px] font-bold text-white-40 uppercase tracking-[0.2em] mb-5">Product</h4>
+            <h4 className="text-xs font-semibold text-navy-950 uppercase tracking-wider mb-5">Product</h4>
             <ul className="space-y-3">
               {links.product.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-white-40 hover:text-white transition-colors">
+                  <Link href={link.href} className="text-sm text-navy-500 hover:text-navy-950 transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -69,11 +69,11 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-[10px] font-bold text-white-40 uppercase tracking-[0.2em] mb-5">Resources</h4>
+            <h4 className="text-xs font-semibold text-navy-950 uppercase tracking-wider mb-5">Resources</h4>
             <ul className="space-y-3">
               {links.resources.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-white-40 hover:text-white transition-colors">
+                  <Link href={link.href} className="text-sm text-navy-500 hover:text-navy-950 transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -82,11 +82,11 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-[10px] font-bold text-white-40 uppercase tracking-[0.2em] mb-5">Legal</h4>
+            <h4 className="text-xs font-semibold text-navy-950 uppercase tracking-wider mb-5">Legal</h4>
             <ul className="space-y-3">
               {links.legal.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-white-40 hover:text-white transition-colors">
+                  <Link href={link.href} className="text-sm text-navy-500 hover:text-navy-950 transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -95,8 +95,8 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-xs text-white-20">
+        <div className="mt-16 pt-8 border-t border-navy-100 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-xs text-navy-400">
             &copy; {new Date().getFullYear()} Ragaurd. All rights reserved.
           </p>
           
@@ -105,7 +105,7 @@ export function Footer() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-xs text-white-40 hover:text-white transition-colors"
+                className="text-xs text-navy-500 hover:text-navy-950 transition-colors"
               >
                 {link.label}
               </Link>

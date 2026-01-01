@@ -14,10 +14,10 @@ const layers = [
 ];
 
 const stats = [
-  { value: '<20ms', label: 'Average Latency' },
+  { value: '<200ms', label: 'Average Latency' },
   { value: '99.53%', label: 'Attack Block Rate' },
   { value: '0%', label: 'False Positives' },
-  { value: '5min', label: 'Integration Time' },
+  { value: '5 min', label: 'Integration Time' },
 ];
 
 function useScrollAnimation() {
@@ -38,31 +38,26 @@ export function Solution() {
   const [activeLayer, setActiveLayer] = useState(0);
 
   return (
-    <section ref={sectionRef} className="py-24 md:py-32 bg-void-100 relative overflow-hidden" id="solution">
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,229,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,229,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
-
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" />
-
+    <section ref={sectionRef} className="py-24 md:py-32 bg-white-off relative overflow-hidden" id="solution">
       <div className="container relative">
-        <div className="max-w-3xl mx-auto text-center mb-20">
-          <div
-            className={`inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 mb-8 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+        <div className="max-w-3xl mx-auto text-center mb-16">
+          <span
+            className={`inline-block text-sm font-semibold text-navy-500 uppercase tracking-wider mb-4 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
             style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}
           >
-            <Layers className="w-4 h-4 text-cyan-500" />
-            <span className="text-xs font-semibold text-cyan-400 uppercase tracking-wider">The Solution</span>
-          </div>
+            The Solution
+          </span>
 
           <h2
-            className={`text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+            className={`heading-1 mb-6 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
             style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}
           >
             One API.{' '}
-            <span className="text-gradient-cyan">Six Layers of Defense.</span>
+            <span className="text-navy-500">Six Layers of Defense.</span>
           </h2>
 
           <p
-            className={`text-lg text-white-60 leading-relaxed opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+            className={`body-large opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
             style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}
           >
             Ragaurd inspects every input before it reaches your agent's LLM,
@@ -70,7 +65,7 @@ export function Solution() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 mb-20">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 mb-16">
           <div
             className={`opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
             style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}
@@ -82,28 +77,30 @@ export function Solution() {
                   onClick={() => setActiveLayer(index)}
                   className={`w-full text-left p-4 border transition-all duration-300 ${
                     activeLayer === index
-                      ? 'bg-cyan-500/10 border-cyan-500'
-                      : 'bg-void-200 border-white/5 hover:border-white/20'
+                      ? 'bg-navy-950 border-navy-950 text-white'
+                      : 'bg-white border-navy-100 hover:border-navy-300'
                   }`}
                 >
                   <div className="flex items-center gap-4">
                     <div className={`w-10 h-10 flex items-center justify-center text-sm font-bold transition-colors ${
-                      activeLayer === index ? 'bg-cyan-500 text-void' : 'bg-void-400 text-white-60'
+                      activeLayer === index ? 'bg-white text-navy-950' : 'bg-navy-50 text-navy-600'
                     }`}>
                       {layer.number}
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <h4 className="text-sm font-semibold text-white">{layer.title}</h4>
+                        <h4 className={`text-sm font-semibold ${activeLayer === index ? 'text-white' : 'text-navy-950'}`}>
+                          {layer.title}
+                        </h4>
                         {layer.badge && (
-                          <span className="text-[9px] font-bold px-2 py-0.5 bg-violet-500/20 text-violet-400 uppercase tracking-wider">
+                          <span className="text-[9px] font-bold px-2 py-0.5 bg-navy-500 text-white uppercase tracking-wider">
                             {layer.badge}
                           </span>
                         )}
                       </div>
                     </div>
                     <layer.icon className={`w-4 h-4 transition-colors ${
-                      activeLayer === index ? 'text-cyan-500' : 'text-white-40'
+                      activeLayer === index ? 'text-white/70' : 'text-navy-400'
                     }`} />
                   </div>
                 </button>
@@ -116,32 +113,27 @@ export function Solution() {
             style={{ animationDelay: '500ms', animationFillMode: 'forwards' }}
           >
             <div className="sticky top-24">
-              <div className="bg-void-200 border border-cyan-500/30 p-8 relative">
-                <div className="absolute top-0 left-0 w-6 h-6 border-l-2 border-t-2 border-cyan-500" />
-                <div className="absolute top-0 right-0 w-6 h-6 border-r-2 border-t-2 border-cyan-500" />
-                <div className="absolute bottom-0 left-0 w-6 h-6 border-l-2 border-b-2 border-cyan-500" />
-                <div className="absolute bottom-0 right-0 w-6 h-6 border-r-2 border-b-2 border-cyan-500" />
-
+              <div className="bg-white border border-navy-200 shadow-lg p-8">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-14 h-14 bg-cyan-500 flex items-center justify-center">
+                  <div className="w-14 h-14 bg-navy-950 flex items-center justify-center">
                     {(() => {
                       const LayerIcon = layers[activeLayer].icon;
-                      return <LayerIcon className="w-7 h-7 text-void" />;
+                      return <LayerIcon className="w-7 h-7 text-white" />;
                     })()}
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-white">Layer {layers[activeLayer].number}</h3>
-                    <p className="text-cyan-400">{layers[activeLayer].title}</p>
+                    <h3 className="text-2xl font-bold text-navy-950">Layer {layers[activeLayer].number}</h3>
+                    <p className="text-navy-500">{layers[activeLayer].title}</p>
                   </div>
                 </div>
 
-                <p className="text-white-60 leading-relaxed mb-6">
+                <p className="text-navy-600 leading-relaxed mb-6">
                   {layers[activeLayer].description}
                 </p>
 
-                <div className="p-4 bg-void border border-white/10">
-                  <p className="text-[10px] text-white-40 uppercase tracking-wider mb-2 font-medium">Technical Implementation</p>
-                  <code className="text-sm text-cyan-400 font-mono">{layers[activeLayer].tech}</code>
+                <div className="p-4 bg-navy-50 border border-navy-100">
+                  <p className="text-[10px] text-navy-500 uppercase tracking-wider mb-2 font-medium">Technical Implementation</p>
+                  <code className="text-sm text-navy-700 font-mono">{layers[activeLayer].tech}</code>
                 </div>
               </div>
             </div>
@@ -149,13 +141,13 @@ export function Solution() {
         </div>
 
         <div
-          className={`grid grid-cols-2 md:grid-cols-4 gap-px bg-cyan-500/20 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+          className={`grid grid-cols-2 md:grid-cols-4 gap-6 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
           style={{ animationDelay: '700ms', animationFillMode: 'forwards' }}
         >
           {stats.map((stat) => (
-            <div key={stat.label} className="bg-void-200 p-6 md:p-8 text-center">
-              <div className="text-3xl md:text-4xl font-bold text-cyan-500 mb-2">{stat.value}</div>
-              <div className="text-xs text-white-40 uppercase tracking-wider">{stat.label}</div>
+            <div key={stat.label} className="bg-white border border-navy-100 p-6 md:p-8 text-center shadow-sm">
+              <div className="text-3xl md:text-4xl font-bold text-navy-950 mb-2">{stat.value}</div>
+              <div className="text-sm text-navy-500">{stat.label}</div>
             </div>
           ))}
         </div>

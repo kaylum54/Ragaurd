@@ -19,7 +19,7 @@ Preferred communication style: Simple, everyday language.
 ### Frontend Stack
 - **Framework**: Next.js 14 with App Router
 - **React**: Version 18.3 with TypeScript
-- **Styling**: TailwindCSS with V3 Obsidian design system (marketing) and Navy Clinical design system (dashboard)
+- **Styling**: TailwindCSS with Navy & White Premium design system
 - **Components**: Radix UI primitives (dialogs, dropdowns, tabs, tooltips, etc.)
 - **Icons**: Lucide React
 - **Charts**: Recharts for data visualization
@@ -52,23 +52,46 @@ Preferred communication style: Simple, everyday language.
 - Input validation with Zod
 - JWT session tokens with expiration
 
-### Design System
-The marketing landing page uses a "V3 Obsidian" design system:
-- **Void (Obsidian Black)**: #050507 to #3a3a47 - Dark, tactical backgrounds
-- **Electric Cyan**: #00e5ff - Primary accent for CTAs, highlights, and key data
-- **Violet**: #8b5cf6 - Secondary accent for badges and premium features
-- **Threat Red**: #f43f5e - Danger indicators, attack alerts
-- **Secure Green**: #10b981 - Success states, protected status
-- **Warning Amber**: #f59e0b - Caution indicators
+### Design System - Navy & White Premium
 
-Marketing components use dark obsidian backgrounds with electric cyan/violet glowing accents,
-corner decorations, scan line animations, and glass-morphism effects for a premium B2B security feel.
+The marketing landing page uses a "Navy & White Premium" design system inspired by Stripe, Linear, and Mercury:
 
-The dashboard retains the legacy "Navy Clinical" design system:
-- Primary colors: Navy blues (#0a1628 to #f4f9fd)
-- Semantic colors: secure (green), warning (amber), danger (red), accent (blue)
-- White variants for dark contexts
-- Consistent spacing and typography scales
+**Navy Blues (Primary Palette)**
+- `navy-950`: #0a1628 - Deepest navy for dark sections and text
+- `navy-900`: #0f2042 - Dark navy
+- `navy-800`: #1a3a5c - Navy for cards on dark backgrounds
+- `navy-700`: #234b72 - Medium navy
+- `navy-600`: #2d5f8a - Interactive navy
+- `navy-500`: #3b7cb8 - Bright navy accent
+- `navy-400`: #5a9fd4 - Light navy
+- `navy-300`: #8bbde8 - Pale navy
+- `navy-200`: #bdd9f4 - Very light navy
+- `navy-100`: #e8f2fb - Near white navy tint
+- `navy-50`: #f0f7ff - Lightest navy tint
+
+**Whites**
+- `white`: #ffffff - Pure white backgrounds
+- `off-white`: #fafbfc - Off-white for sections
+- `warm-white`: #f8f9fb - Warm white
+
+**Semantic Colors**
+- `success`: #059669 - Success states
+- `danger`: #dc2626 - Error and danger states
+- `warning`: #f59e0b - Warning indicators
+
+**Design Principles**
+- White/off-white backgrounds with subtle gradient dynamics
+- Navy-950 for primary text, navy-500/600 for secondary text
+- Clean, minimal aesthetic - no neon colors or hacker effects
+- Subtle animations: fade-up reveals, hover shadows
+- Premium typography with tight letter-spacing for headlines
+- Fortune 500 CISO trust aesthetic
+
+**Pricing Tiers (exact)**
+- Free: $0/month
+- Starter: $79/month
+- Pro: $249/month (featured)
+- Business: $649/month
 
 ## External Dependencies
 

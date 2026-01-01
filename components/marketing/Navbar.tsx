@@ -6,7 +6,7 @@ import { Menu, X, Shield } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navLinks = [
-  { href: '#threats', label: 'Threats' },
+  { href: '#problem', label: 'Why Security' },
   { href: '#solution', label: 'Solution' },
   { href: '#how-it-works', label: 'How It Works' },
   { href: '#pricing', label: 'Pricing' },
@@ -19,7 +19,7 @@ export function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      setScrolled(window.scrollY > 20);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -31,15 +31,15 @@ export function Navbar() {
     <header
       className={cn(
         'fixed top-0 z-50 w-full transition-all duration-300',
-        scrolled ? 'navbar-blur' : 'bg-transparent'
+        scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-navy-100' : 'bg-transparent'
       )}
     >
-      <nav className="container flex h-16 md:h-20 items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 bg-cyan-500 flex items-center justify-center">
-            <Shield className="w-5 h-5 text-void" />
+      <nav className="container flex h-16 md:h-18 items-center justify-between">
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <div className="w-9 h-9 bg-navy-950 flex items-center justify-center">
+            <Shield className="w-5 h-5 text-white" />
           </div>
-          <span className="font-bold text-xl tracking-tight text-white">
+          <span className="font-bold text-lg tracking-tight text-navy-950">
             Ragaurd
           </span>
         </Link>
@@ -49,34 +49,34 @@ export function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium px-4 py-2 text-white-60 hover:text-white transition-colors"
+              className="text-sm font-medium px-4 py-2 text-navy-600 hover:text-navy-950 transition-colors"
             >
               {link.label}
             </Link>
           ))}
         </div>
 
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-3">
           <Link
             href="/login"
-            className="text-sm font-medium px-4 py-2 text-white-60 hover:text-white transition-colors"
+            className="text-sm font-medium px-4 py-2 text-navy-600 hover:text-navy-950 transition-colors"
           >
             Sign in
           </Link>
           <Link
             href="/signup"
-            className="btn-primary text-sm"
+            className="btn-primary text-sm px-5 py-2.5"
           >
             Get Started
           </Link>
         </div>
 
         <button
-          className="md:hidden p-2 text-white"
+          className="md:hidden p-2 text-navy-600 hover:text-navy-950"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle menu"
         >
-          {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </nav>
 
@@ -84,29 +84,29 @@ export function Navbar() {
         'md:hidden overflow-hidden transition-all duration-300',
         mobileMenuOpen ? 'max-h-[400px]' : 'max-h-0'
       )}>
-        <div className="bg-void-200 border-t border-white/5">
+        <div className="bg-white border-t border-navy-100">
           <div className="container py-4 flex flex-col gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-white-60 hover:text-white hover:bg-white/5 py-3 px-4 transition-colors"
+                className="text-sm font-medium text-navy-600 hover:text-navy-950 hover:bg-navy-50 py-3 px-4 transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {link.label}
               </Link>
             ))}
-            <div className="flex flex-col gap-2 pt-4 mt-2 border-t border-white/5">
+            <div className="flex flex-col gap-3 pt-4 mt-2 border-t border-navy-100">
               <Link
                 href="/login"
-                className="text-sm font-medium text-white-60 py-3 px-4 text-center"
+                className="btn-secondary text-sm justify-center"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Sign in
               </Link>
               <Link
                 href="/signup"
-                className="btn-primary text-sm text-center"
+                className="btn-primary text-sm justify-center"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Get Started
