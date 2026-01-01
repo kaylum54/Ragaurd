@@ -42,7 +42,7 @@ export function Navbar() {
             alt="Ragaurd - AI Voice Defense System"
             width={180}
             height={45}
-            className="h-10 w-auto"
+            className="h-5 w-auto"
             priority
           />
         </Link>
