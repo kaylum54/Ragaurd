@@ -1,0 +1,336 @@
+# Ragaurd Landing Page V3 - Complete Creative Redesign (Version 2)
+
+You are designing Version 3 of the landing page for Ragaurd, a B2B SaaS product that provides AI security for voice agents. You have FULL creative control over layout, structure, animations, and copywriting. Create something bold, premium, and memorable.
+
+---
+
+## THE PRODUCT: Ragaurd
+
+Ragaurd is a security layer for AI voice agents. It protects against:
+- **Prompt injection attacks** - Hidden instructions that override system prompts
+- **Jailbreaking** - Social engineering to bypass safety guidelines  
+- **Data exfiltration** - Attackers extracting system prompts and business logic
+- **Deepfake audio** - Synthetic voice cloning to impersonate authorized users
+- **Compliance exposure** - PII/PHI handling that creates regulatory liability
+
+### Core Features
+1. **Text Defense** - 6-layer detection: pattern matching, semantic analysis, embedding similarity, LLM guard, context validation, output filtering. 99.5% detection rate.
+
+2. **Audio Defense** - Real-time deepfake detection using AASIST-L and LCNN models. 0.83% equal error rate. Identifies synthetic voices before they reach your agent.
+
+3. **Red Team Testing** - Automated security scanning with 10,000+ attack vectors. Find vulnerabilities before attackers do.
+
+### Pricing Tiers (keep these exact prices)
+- **Free**: $0/month - 500 text requests, 1 API key, community support
+- **Starter**: $79/month - 25,000 text requests, 3 API keys, email support, <500ms latency
+- **Pro**: $249/month - 150,000 text requests, 50,000 audio requests, 1,000 red team tests, 10 API keys, priority support, <200ms latency (MOST POPULAR)
+- **Business**: $649/month - 500,000 text requests, 200,000 audio requests, 10,000 red team tests, 25 API keys, dedicated support, <100ms latency
+
+### Key Stats (use these or similar)
+- 99.53% attack block rate
+- <200ms average latency
+- 6 defense layers
+- 5 minute integration
+- 10,000+ attack vectors tested
+
+---
+
+## CHOOSE A COLOR SCHEME
+
+Pick ONE of these color schemes for the entire design:
+
+### SCHEME A: Navy & White (Recommended for Enterprise Trust)
+```css
+/* Backgrounds */
+--navy-950: #0a1628;      /* Deepest navy - primary dark sections */
+--navy-900: #0f2042;      /* Dark navy */
+--navy-800: #1a3a5c;      /* Navy cards on dark */
+--navy-700: #234b72;      /* Medium navy */
+--navy-600: #2d5f8a;      /* Interactive navy */
+--navy-500: #3b7cb8;      /* Bright navy accent */
+--navy-400: #5a9fd4;      /* Light navy */
+--navy-300: #8bbde8;      /* Pale navy */
+--navy-200: #bdd9f4;      /* Very light navy */
+--navy-100: #e8f2fb;      /* Near white navy tint */
+
+/* Whites */
+--white: #ffffff;
+--off-white: #f8fafc;
+--white-90: rgba(255, 255, 255, 0.9);
+--white-60: rgba(255, 255, 255, 0.6);
+--white-20: rgba(255, 255, 255, 0.2);
+
+/* Black Accents */
+--black: #000000;
+--black-80: rgba(0, 0, 0, 0.8);
+--black-10: rgba(0, 0, 0, 0.1);
+
+/* Semantic */
+--success: #22c55e;
+--warning: #f59e0b;
+--danger: #ef4444;
+
+/* Usage: Dark navy sections with white text, white sections with navy text, 
+   alternating rhythm. Navy-500 for primary buttons. Clean, trustworthy, 
+   banking/fintech feel. Think: Mercury, Stripe, Linear */
+
+SCHEME B: Obsidian & Electric Cyan (Cyber Security)
+/* Void - Deep blacks */
+--void: #050507;
+--void-100: #0a0a0f;
+--void-200: #12121a;
+--void-300: #1a1a24;
+--void-400: #22222e;
+
+/* Electric Cyan */
+--cyan-500: #00e5ff;
+--cyan-400: #22d3ee;
+--cyan-300: #67e8f9;
+--cyan-600: #00bcd4;
+
+/* Violet Secondary */
+--violet-500: #8b5cf6;
+--violet-400: #a78bfa;
+
+/* Threat Red */
+--threat-500: #f43f5e;
+--threat-400: #fb7185;
+
+/* Secure Green */
+--secure-500: #10b981;
+
+/* Usage: Dark obsidian backgrounds, cyan accents for CTAs and highlights,
+   threat red for danger indicators. Futuristic, technical, hacker-aware. 
+   Think: Vercel dark mode, Raycast */
+
+SCHEME C: Warm White & Charcoal (Minimal Premium)
+/* Warm Whites */
+--cream: #fefdfb;
+--warm-white: #f9f8f6;
+--warm-gray-100: #f3f2f0;
+--warm-gray-200: #e8e6e3;
+
+/* Charcoal */
+--charcoal-900: #1a1a1a;
+--charcoal-800: #2d2d2d;
+--charcoal-700: #404040;
+--charcoal-600: #525252;
+--charcoal-400: #a3a3a3;
+
+/* Accent - Deep Blue */
+--accent: #1e40af;
+--accent-light: #3b82f6;
+
+/* Usage: Predominantly white/cream backgrounds with charcoal text,
+   minimal color usage, accent only for CTAs. Apple-esque restraint.
+   Think: Notion, Linear light mode, Apple */
+
+SCHEME D: Slate & Emerald (Security Trust)
+/* Slate Grays */
+--slate-950: #020617;
+--slate-900: #0f172a;
+--slate-800: #1e293b;
+--slate-700: #334155;
+--slate-400: #94a3b8;
+--slate-200: #e2e8f0;
+--slate-50: #f8fafc;
+
+/* Emerald Accent */
+--emerald-500: #10b981;
+--emerald-400: #34d399;
+--emerald-600: #059669;
+
+/* Alert Red */
+--red-500: #ef4444;
+
+/* Usage: Dark slate sections, emerald for positive/secure states,
+   professional government/defense contractor feel.
+   Think: Palantir, defense industry */
+
+SCHEME E: Pure Monochrome (Ultra Minimal)
+/* Black to White scale only */
+--black: #000000;
+--gray-950: #0a0a0a;
+--gray-900: #171717;
+--gray-800: #262626;
+--gray-700: #404040;
+--gray-500: #737373;
+--gray-400: #a3a3a3;
+--gray-300: #d4d4d4;
+--gray-100: #f5f5f5;
+--white: #ffffff;
+
+/* Single accent color */
+--accent: #2563eb; /* Blue for links/CTAs only */
+
+/* Usage: No color except one accent. Maximum contrast, 
+   bold typography carries the design. Editorial feel.
+   Think: Newspaper, Bloomberg, high-end architecture firms */
+
+DESIGN AESTHETIC OPTIONS
+Pick ONE aesthetic direction (pair with your chosen color scheme):
+
+AESTHETIC 1: "Editorial Longform"
+Magazine-style layout with dramatic typography
+Large headlines, pull quotes, editorial photography style
+Story-driven scroll experience
+Sections flow like a feature article
+Stats displayed as infographics
+Copy tone: Investigative journalism, "the threat they don't want you to know about"
+AESTHETIC 2: "Dashboard Preview"
+Hero shows actual product interface
+Sections reveal different dashboard views
+Live data visualizations (attack counters, threat maps)
+Dark mode interface aesthetic throughout
+Terminal/code snippets as design elements
+Copy tone: Technical insider, "here's what you're missing"
+AESTHETIC 3: "The Briefing"
+Government/intelligence agency aesthetic
+Classified document styling
+Redacted text effects
+Dossier-style information presentation
+Badge/clearance level visual metaphors
+Copy tone: Confidential briefing, "threat assessment for [YOUR COMPANY]"
+AESTHETIC 4: "Conversion Machine"
+Optimized for maximum signups
+Social proof heavy (logos, testimonials, counters)
+Multiple CTAs throughout
+Comparison tables, feature checklists
+Trust badges and guarantees prominent
+Copy tone: Direct response, "start protecting your AI in 5 minutes"
+AESTHETIC 5: "Abstract Security"
+Geometric patterns representing protection
+Abstract data visualizations
+Gradient mesh backgrounds
+Floating 3D elements or isometric illustrations
+Morphing shapes and smooth transitions
+Copy tone: Conceptual, "the invisible shield"
+AESTHETIC 6: "Brutalist Tech"
+Raw, unpolished aesthetic
+Exposed grid systems
+Monospace typography
+Terminal-style interfaces
+Glitch effects and raw data
+Copy tone: No-nonsense, "attacks blocked: 847,293"
+COPYWRITING GUIDELINES
+You have full control to rewrite ALL copy. Requirements:
+
+Factual accuracy - Use the real stats and features provided above
+Shock factor welcome - Voice AI attacks are real and happening now. Be alarming.
+Professional tone - B2B enterprise software, not consumer app
+No fluff - Every sentence adds value or creates urgency
+Technical credibility - Show you understand the security space
+Headlines to Consider (or write your own)
+"Your Voice AI Is Already Compromised"
+"847,293 Attacks Blocked. Today."
+"The 5-Minute Fix for a 5-Million Dollar Problem"
+"What Happens When Your AI Gets Hacked?"
+"Security for AI That Actually Works"
+"They Found a Way In. We Found a Way to Stop Them."
+"Your AI Talks to Customers. Who Else Is Listening?"
+Pain Points to Hammer
+Voice AI deployments are outpacing security measures 10:1
+A single successful attack = data breach + compliance violation + reputation destruction
+Attackers are actively targeting production voice agents NOW
+Your security team doesn't understand LLM-specific attack vectors
+By the time you detect an attack manually, the damage is done
+"We'll add security later" is how breaches happen
+Urgency Drivers
+Attack volume is increasing exponentially
+Regulatory scrutiny on AI is intensifying
+Your competitors' breaches will become your board's questions
+The window to be proactive is closing
+SECTION REQUIREMENTS
+Include these sections (order and layout up to you):
+
+Hero - Immediate impact, clear value prop, CTA to sign up
+Problem/Threat - Why this matters, what's at stake
+Solution - How Ragaurd works
+Features - Text Defense, Audio Defense, Red Team Testing
+How It Works - Integration steps (make it look easy)
+Pricing - 4 tiers (Free, Starter, Pro, Business) - no enterprise tier
+FAQ - Common objections handled
+Final CTA - Close with urgency
+Optional sections:
+
+Live attack counter
+Before/after comparison
+Integration code snippet
+Compliance/certification badges
+ROI calculator
+Threat examples with real attack strings
+TECHNICAL REQUIREMENTS
+Next.js 14 with App Router
+TypeScript
+Tailwind CSS
+Responsive (mobile-first)
+Lucide React for icons
+Framer Motion or CSS animations
+Components in /components/marketing/
+Main page at app/(marketing)/page.tsx
+DYNAMIC BACKGROUND OPTION
+If using dark color scheme, consider a Stripe-inspired animated gradient background for the hero:
+
+.hero-gradient-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-gradient-bg::before {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background: 
+    radial-gradient(ellipse 80% 50% at 20% 40%, var(--accent-glow) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 80% 20%, var(--secondary-glow) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 60% at 60% 80%, var(--tertiary-glow) 0%, transparent 50%);
+  animation: gradient-drift 20s ease-in-out infinite;
+}
+
+@keyframes gradient-drift {
+  0%, 100% { transform: translate(0%, 0%) rotate(0deg); }
+  25% { transform: translate(5%, -5%) rotate(1deg); }
+  50% { transform: translate(-3%, 5%) rotate(-1deg); }
+  75% { transform: translate(-5%, -3%) rotate(0.5deg); }
+}
+
+FILE STRUCTURE
+Create or update:
+
+app/(marketing)/page.tsx
+app/(marketing)/layout.tsx
+components/marketing/Hero.tsx
+components/marketing/Problem.tsx
+components/marketing/Solution.tsx
+components/marketing/Features.tsx
+components/marketing/HowItWorks.tsx
+components/marketing/Pricing.tsx
+components/marketing/FAQ.tsx
+components/marketing/CTA.tsx
+components/marketing/Navbar.tsx
+components/marketing/Footer.tsx
+
+MY RECOMMENDATION
+For maximum enterprise appeal, I recommend:
+
+Color Scheme A: Navy & White - Trustworthy, premium, differentiates from typical "hacker" aesthetics
+Aesthetic 4: Conversion Machine - Optimized for signups with strong social proof
+But you have full creative control. Surprise me.
+
+SUCCESS CRITERIA
+The landing page must:
+
+Make a CISO want to demo it immediately
+Clearly communicate threat severity and solution simplicity
+Feel more trustworthy than competitors
+Convert visitors to free trial signups
+Work flawlessly on mobile
+Load fast with no performance issues
+GO
+Create Ragaurd Landing Page V3.
+
+Pick your color scheme. Pick your aesthetic. Write copy that converts.
+
+Make it premium. Make it convert. Make security look sophisticated.
+
