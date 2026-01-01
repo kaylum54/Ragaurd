@@ -38,13 +38,6 @@ export function Hero() {
       <div className="container relative z-10">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <div 
-              className={`inline-flex items-center gap-2 px-4 py-2 bg-navy-50 border border-navy-200 rounded-full mb-8 transition-all duration-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-            >
-              <Shield className="w-4 h-4 text-navy-600" />
-              <span className="text-sm font-medium text-navy-700">AI Security for Voice Agents</span>
-            </div>
-
             <h1 
               className={`heading-display mb-6 transition-all duration-700 delay-100 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
             >
