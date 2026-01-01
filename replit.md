@@ -19,7 +19,7 @@ Preferred communication style: Simple, everyday language.
 ### Frontend Stack
 - **Framework**: Next.js 14 with App Router
 - **React**: Version 18.3 with TypeScript
-- **Styling**: TailwindCSS with custom Navy Clinical design system (navy blues + white + black)
+- **Styling**: TailwindCSS with V3 Obsidian design system (marketing) and Navy Clinical design system (dashboard)
 - **Components**: Radix UI primitives (dialogs, dropdowns, tabs, tooltips, etc.)
 - **Icons**: Lucide React
 - **Charts**: Recharts for data visualization
@@ -53,7 +53,18 @@ Preferred communication style: Simple, everyday language.
 - JWT session tokens with expiration
 
 ### Design System
-The application uses a "Navy Clinical" design system:
+The marketing landing page uses a "V3 Obsidian" design system:
+- **Void (Obsidian Black)**: #050507 to #3a3a47 - Dark, tactical backgrounds
+- **Electric Cyan**: #00e5ff - Primary accent for CTAs, highlights, and key data
+- **Violet**: #8b5cf6 - Secondary accent for badges and premium features
+- **Threat Red**: #f43f5e - Danger indicators, attack alerts
+- **Secure Green**: #10b981 - Success states, protected status
+- **Warning Amber**: #f59e0b - Caution indicators
+
+Marketing components use dark obsidian backgrounds with electric cyan/violet glowing accents,
+corner decorations, scan line animations, and glass-morphism effects for a premium B2B security feel.
+
+The dashboard retains the legacy "Navy Clinical" design system:
 - Primary colors: Navy blues (#0a1628 to #f4f9fd)
 - Semantic colors: secure (green), warning (amber), danger (red), accent (blue)
 - White variants for dark contexts

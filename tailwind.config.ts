@@ -18,26 +18,62 @@ const config: Config = {
     },
     extend: {
       colors: {
-        // Navy Clinical Design System
-        // Professional navy blue + white + black accents
-
-        // Navy Blues - Primary
-        navy: {
-          DEFAULT: '#1a3a5c',
-          950: '#0a1628',      // Deepest navy - primary dark backgrounds
-          900: '#0f2042',      // Dark navy
-          800: '#1a3a5c',      // Navy
-          700: '#234b72',      // Medium navy
-          600: '#2d5f8a',      // Navy accent
-          500: '#3b7cb8',      // Bright navy
-          400: '#5a9fd4',      // Light navy
-          300: '#8bbde8',      // Pale navy
-          200: '#bdd9f4',      // Very light navy
-          100: '#e8f2fb',      // Near white navy tint
-          50: '#f4f9fd',       // Lightest navy
+        // V3 Obsidian Design System
+        void: {
+          DEFAULT: '#050507',
+          50: '#0d0d14',
+          100: '#0a0a0f',
+          200: '#12121a',
+          300: '#1a1a24',
+          400: '#22222e',
+          500: '#2a2a38',
+          600: '#32323f',
+          700: '#3a3a47',
         },
 
-        // White variants (for use in dark contexts)
+        // Electric Cyan - Primary Accent
+        cyan: {
+          DEFAULT: '#00e5ff',
+          300: '#67e8f9',
+          400: '#22d3ee',
+          500: '#00e5ff',
+          600: '#00bcd4',
+          700: '#0891b2',
+        },
+
+        // Violet - Secondary Accent
+        violet: {
+          DEFAULT: '#8b5cf6',
+          400: '#a78bfa',
+          500: '#8b5cf6',
+          600: '#7c3aed',
+        },
+
+        // Neon Coral - Danger/Threat
+        threat: {
+          DEFAULT: '#f43f5e',
+          400: '#fb7185',
+          500: '#f43f5e',
+          600: '#e11d48',
+        },
+
+        // Mint Emerald - Success/Secure
+        secure: {
+          DEFAULT: '#10b981',
+          400: '#34d399',
+          500: '#10b981',
+          600: '#059669',
+        },
+
+        // Warning
+        warning: {
+          DEFAULT: '#f59e0b',
+          400: '#fbbf24',
+          500: '#f59e0b',
+          600: '#d97706',
+        },
+
+        // White variants
         white: {
           DEFAULT: '#ffffff',
           90: 'rgba(255, 255, 255, 0.9)',
@@ -49,50 +85,23 @@ const config: Config = {
           '05': 'rgba(255, 255, 255, 0.05)',
         },
 
-        // Black accents
-        black: {
-          DEFAULT: '#000000',
-          90: 'rgba(0, 0, 0, 0.9)',
-          80: 'rgba(0, 0, 0, 0.8)',
-          60: 'rgba(0, 0, 0, 0.6)',
-          40: 'rgba(0, 0, 0, 0.4)',
-          20: 'rgba(0, 0, 0, 0.2)',
-          10: 'rgba(0, 0, 0, 0.1)',
-          '05': 'rgba(0, 0, 0, 0.05)',
+        // Legacy navy (for dashboard)
+        navy: {
+          DEFAULT: '#1a3a5c',
+          950: '#0a1628',
+          900: '#0f2042',
+          800: '#1a3a5c',
+          700: '#234b72',
+          600: '#2d5f8a',
+          500: '#3b7cb8',
+          400: '#5a9fd4',
+          300: '#8bbde8',
+          200: '#bdd9f4',
+          100: '#e8f2fb',
+          50: '#f4f9fd',
         },
 
-        // Semantic colors
-        success: {
-          DEFAULT: '#22c55e',
-          50: '#f0fdf4',
-          100: '#dcfce7',
-          200: '#bbf7d0',
-          300: '#86efac',
-          400: '#4ade80',
-          500: '#22c55e',
-          600: '#16a34a',
-          700: '#15803d',
-        },
-
-        warning: {
-          DEFAULT: '#f59e0b',
-          50: '#fffbeb',
-          100: '#fef3c7',
-          500: '#f59e0b',
-          600: '#d97706',
-          700: '#b45309',
-        },
-
-        danger: {
-          DEFAULT: '#ef4444',
-          50: '#fef2f2',
-          100: '#fee2e2',
-          500: '#ef4444',
-          600: '#dc2626',
-          700: '#b91c1c',
-        },
-
-        // Legacy support for dashboard
+        // Legacy support
         midnight: {
           DEFAULT: '#0a1628',
           50: '#f8fafc',
@@ -108,35 +117,23 @@ const config: Config = {
           950: '#050d18',
         },
 
-        // Accent (using navy-500 as primary accent)
-        accent: {
-          DEFAULT: '#3b7cb8',
-          50: '#f4f9fd',
-          100: '#e8f2fb',
-          200: '#bdd9f4',
-          300: '#8bbde8',
-          400: '#5a9fd4',
-          500: '#3b7cb8',
-          600: '#2d5f8a',
-          700: '#234b72',
-          800: '#1a3a5c',
-          900: '#0f2042',
+        // Semantic aliases
+        success: {
+          DEFAULT: '#10b981',
+          50: '#ecfdf5',
+          100: '#d1fae5',
+          400: '#34d399',
+          500: '#10b981',
+          600: '#059669',
         },
 
-        // Primary styling
-        primary: {
-          DEFAULT: '#0a1628',
-          foreground: '#ffffff',
-          50: '#f4f9fd',
-          100: '#e8f2fb',
-          200: '#bdd9f4',
-          300: '#8bbde8',
-          400: '#5a9fd4',
-          500: '#3b7cb8',
-          600: '#2d5f8a',
-          700: '#234b72',
-          800: '#1a3a5c',
-          900: '#0f2042',
+        danger: {
+          DEFAULT: '#f43f5e',
+          50: '#fff1f2',
+          100: '#ffe4e6',
+          400: '#fb7185',
+          500: '#f43f5e',
+          600: '#e11d48',
         },
 
         // Shadcn UI compatibility
@@ -145,6 +142,10 @@ const config: Config = {
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
@@ -156,6 +157,10 @@ const config: Config = {
         muted: {
           DEFAULT: 'hsl(var(--muted))',
           foreground: 'hsl(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
         },
         popover: {
           DEFAULT: 'hsl(var(--popover))',
@@ -204,32 +209,15 @@ const config: Config = {
       },
 
       boxShadow: {
-        'navy-glow': '0 0 30px rgba(59, 124, 184, 0.2), 0 0 60px rgba(59, 124, 184, 0.1)',
-        'navy-glow-lg': '0 0 40px rgba(59, 124, 184, 0.3), 0 0 80px rgba(59, 124, 184, 0.15)',
-        'card-navy': '0 4px 20px rgba(10, 22, 40, 0.1)',
-        'card-elevated': '0 10px 40px rgba(10, 22, 40, 0.15)',
-        'glass': '0 8px 32px rgba(10, 22, 40, 0.12)',
-        'card-hover': '0 20px 40px rgba(10, 22, 40, 0.15)',
+        'cyan-glow': '0 0 30px rgba(0, 229, 255, 0.3), 0 0 60px rgba(0, 229, 255, 0.15)',
+        'cyan-glow-lg': '0 0 50px rgba(0, 229, 255, 0.4), 0 0 100px rgba(0, 229, 255, 0.2)',
+        'violet-glow': '0 0 30px rgba(139, 92, 246, 0.3), 0 0 60px rgba(139, 92, 246, 0.15)',
+        'threat-glow': '0 0 30px rgba(244, 63, 94, 0.3), 0 0 60px rgba(244, 63, 94, 0.15)',
+        'card-dark': '0 4px 20px rgba(0, 0, 0, 0.4)',
+        'card-elevated': '0 20px 50px rgba(0, 0, 0, 0.5)',
       },
 
       keyframes: {
-        // Navy Clinical Animations
-
-        // Gradient mesh drift
-        'gradient-drift': {
-          '0%, 100%': { transform: 'translate(0%, 0%) rotate(0deg) scale(1)' },
-          '25%': { transform: 'translate(5%, -5%) rotate(1deg) scale(1.02)' },
-          '50%': { transform: 'translate(-3%, 5%) rotate(-1deg) scale(0.98)' },
-          '75%': { transform: 'translate(-5%, -3%) rotate(0.5deg) scale(1.01)' },
-        },
-
-        // Security node pulse
-        'node-pulse': {
-          '0%, 100%': { opacity: '0.3', transform: 'scale(1)' },
-          '50%': { opacity: '0.6', transform: 'scale(1.5)' },
-        },
-
-        // Hero entrances
         'fade-up': {
           '0%': { opacity: '0', transform: 'translateY(30px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
@@ -254,38 +242,22 @@ const config: Config = {
           '0%': { opacity: '0', transform: 'scale(0.95)' },
           '100%': { opacity: '1', transform: 'scale(1)' },
         },
-
-        // Counter animations
-        'count-up': {
-          '0%': { opacity: '0', transform: 'translateY(10px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+        'pulse-glow': {
+          '0%, 100%': { opacity: '0.4' },
+          '50%': { opacity: '1' },
         },
-
-        // Subtle float
+        'scan-line': {
+          '0%': { transform: 'translateY(-100%)' },
+          '100%': { transform: 'translateY(200%)' },
+        },
+        'gradient-shift': {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
         'float': {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-10px)' },
         },
-
-        // Border glow
-        'border-glow': {
-          '0%, 100%': { borderColor: 'rgba(59, 124, 184, 0.3)' },
-          '50%': { borderColor: 'rgba(59, 124, 184, 0.6)' },
-        },
-
-        // Shimmer effect
-        'shimmer': {
-          '0%': { backgroundPosition: '-200% 0' },
-          '100%': { backgroundPosition: '200% 0' },
-        },
-
-        // Progress ring
-        'progress-ring': {
-          '0%': { strokeDashoffset: '100' },
-          '100%': { strokeDashoffset: 'var(--progress, 0)' },
-        },
-
-        // Accordion
         'accordion-down': {
           from: { height: '0' },
           to: { height: 'var(--radix-accordion-content-height)' },
@@ -294,48 +266,26 @@ const config: Config = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
-
-        // Pulse subtle
-        'pulse-subtle': {
-          '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '0.7' },
+        'count-up': {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
         },
       },
 
       animation: {
-        // Background
-        'gradient-drift': 'gradient-drift 20s ease-in-out infinite',
-        'node-pulse': 'node-pulse 4s ease-in-out infinite',
-
-        // Entrances
         'fade-up': 'fade-up 0.6s ease-out forwards',
         'fade-in': 'fade-in 0.5s ease-out forwards',
         'slide-up': 'slide-up 0.5s ease-out forwards',
         'slide-right': 'slide-right 0.5s ease-out forwards',
         'slide-left': 'slide-left 0.5s ease-out forwards',
         'scale-in': 'scale-in 0.4s ease-out forwards',
-
-        // Counter
-        'count-up': 'count-up 0.6s ease-out forwards',
-
-        // Float
+        'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+        'scan-line': 'scan-line 3s ease-in-out infinite',
+        'gradient-shift': 'gradient-shift 8s ease-in-out infinite',
         'float': 'float 6s ease-in-out infinite',
-
-        // Border glow
-        'border-glow': 'border-glow 3s ease-in-out infinite',
-
-        // Shimmer
-        'shimmer': 'shimmer 2s linear infinite',
-
-        // Progress
-        'progress-ring': 'progress-ring 1.5s ease-out forwards',
-
-        // Accordion
         'accordion-down': 'accordion-down 0.3s ease-out',
         'accordion-up': 'accordion-up 0.3s ease-out',
-
-        // Pulse
-        'pulse-subtle': 'pulse-subtle 2s ease-in-out infinite',
+        'count-up': 'count-up 0.6s ease-out forwards',
       },
     },
   },

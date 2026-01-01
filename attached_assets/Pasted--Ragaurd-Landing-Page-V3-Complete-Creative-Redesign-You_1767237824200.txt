@@ -1,0 +1,206 @@
+ Ragaurd Landing Page V3 - Complete Creative Redesign
+
+You are designing Version 3 of the landing page for Ragaurd, a B2B SaaS product that provides AI security for voice agents. You have FULL creative control over layout, structure, animations, and copywriting. Create something bold, premium, and memorable.
+
+---
+
+## THE PRODUCT: Ragaurd
+
+Ragaurd is a security layer for AI voice agents. It protects against:
+- **Prompt injection attacks** - Hidden instructions that override system prompts
+- **Jailbreaking** - Social engineering to bypass safety guidelines  
+- **Data exfiltration** - Attackers extracting system prompts and business logic
+- **Deepfake audio** - Synthetic voice cloning to impersonate authorized users
+- **Compliance exposure** - PII/PHI handling that creates regulatory liability
+
+### Core Features
+1. **Text Defense** - 6-layer detection: pattern matching, semantic analysis, embedding similarity, LLM guard, context validation, output filtering. 99.5% detection rate.
+
+2. **Audio Defense** - Real-time deepfake detection using AASIST-L and LCNN models. 0.83% equal error rate. Identifies synthetic voices before they reach your agent.
+
+3. **Red Team Testing** - Automated security scanning with 10,000+ attack vectors. Find vulnerabilities before attackers do.
+
+### Pricing Tiers (keep these exact prices)
+- **Free**: $0/month - 500 text requests, 1 API key, community support
+- **Starter**: $79/month - 25,000 text requests, 3 API keys, email support, <500ms latency
+- **Pro**: $249/month - 150,000 text requests, 50,000 audio requests, 1,000 red team tests, 10 API keys, priority support, <200ms latency (MOST POPULAR)
+- **Business**: $649/month - 500,000 text requests, 200,000 audio requests, 10,000 red team tests, 25 API keys, dedicated support, <100ms latency
+
+### Key Stats (use these or similar)
+- 99.53% attack block rate
+- <200ms average latency
+- 6 defense layers
+- 5 minute integration
+- 10,000+ attack vectors tested
+
+---
+
+## MANDATORY COLOR PALETTE
+
+Keep these exact colors. Do not change them:
+
+```css
+/* Primary Backgrounds - Deep obsidian blacks */
+--void: #050507;
+--void-50: #0d0d14;
+--void-100: #0a0a0f;
+--void-200: #12121a;
+--void-300: #1a1a24;
+--void-400: #22222e;
+--void-500: #2a2a38;
+
+/* Primary Accent - Electric Cyan */
+--cyan-500: #00e5ff;
+--cyan-400: #22d3ee;
+--cyan-300: #67e8f9;
+--cyan-600: #00bcd4;
+--cyan-700: #0891b2;
+
+/* Secondary Accent - Violet */
+--violet-500: #8b5cf6;
+--violet-400: #a78bfa;
+--violet-600: #7c3aed;
+
+/* Danger/Threat - Neon Coral */
+--threat-500: #f43f5e;
+--threat-400: #fb7185;
+--threat-600: #e11d48;
+
+/* Success/Secure - Mint Emerald */
+--secure-500: #10b981;
+--secure-400: #34d399;
+
+/* Warning */
+--warning-500: #f59e0b;
+
+/* Text */
+--white: #ffffff;
+--white-60: rgba(255, 255, 255, 0.6);
+--white-40: rgba(255, 255, 255, 0.4);
+
+CREATIVE DIRECTION
+You have full creative control. Here are some directions to consider (pick one or blend):
+
+Option A: "War Room" Aesthetic
+Dark, tactical, military-grade security feel
+Live threat feeds, radar visualizations, status indicators
+Command center dashboard previews
+Copy tone: Urgent, authoritative, "your AI is under attack right now"
+Option B: "Clinical Precision"
+Ultra-clean, Swiss design influence
+Lots of whitespace (on dark backgrounds), perfect typography
+Minimal animations, maximum clarity
+Copy tone: Confident, understated, "the professionals choose Ragaurd"
+Option C: "Hacker vs. Guardian"
+Show the battle between attackers and defenders
+Split-screen comparisons, before/after scenarios
+Terminal aesthetics, code blocks, attack examples
+Copy tone: Technical, insider knowledge, "we know how they attack"
+Option D: "Enterprise Trust"
+Fortune 500 ready, boardroom-appropriate
+Trust badges, compliance mentions, ROI focus
+Case study style, statistics-heavy
+Copy tone: Business value, risk mitigation, "protect your investment"
+Option E: Go Wild
+Create something unexpected that still feels premium
+Surprise me with layout, interactions, or storytelling approach
+COPYWRITING GUIDELINES
+You have full control to rewrite ALL copy. Requirements:
+
+Factual accuracy - Use the real stats and features provided above
+Shock factor welcome - Voice AI attacks are real and happening now. Don't be afraid to be alarming.
+Professional tone - This is B2B enterprise software, not consumer app
+No fluff - Every sentence should add value or create urgency
+Technical credibility - Show you understand the security space
+Headlines to Consider (or write your own)
+"Your Voice AI Has a Security Hole"
+"847,000 Attacks Blocked Today"
+"They're Already Inside Your Agent"
+"The Security Layer Your AI Is Missing"
+"Built for the Attacks You Haven't Seen Yet"
+"Voice AI Security. Finally."
+Pain Points to Hit
+Voice AI is being deployed faster than security can keep up
+One successful attack = customer data breach, compliance violation, reputation damage
+Attackers are already targeting production voice agents
+Most companies don't know they're vulnerable until it's too late
+Traditional security tools don't understand LLM-specific attacks
+Value Props
+Add security without rebuilding your agent
+5-minute integration via API
+Real-time protection, not post-incident analysis
+Built by security researchers who study these attacks daily
+Scales from startup to enterprise
+SECTION REQUIREMENTS
+Include these sections (order and layout up to you):
+
+Hero - Immediate impact, clear value prop, CTA to sign up
+Problem/Threat - Why this matters, what's at stake
+Solution - How Ragaurd works (can combine with features)
+Features - Text Defense, Audio Defense, Red Team Testing
+How It Works - Integration steps or workflow
+Pricing - 4 tiers (Free, Starter, Pro, Business)
+FAQ - Common questions (create relevant ones)
+Final CTA - Close with urgency
+Optional sections:
+
+Social proof / testimonials (can be placeholder)
+Live threat counter
+Code integration example
+Comparison with "no protection"
+Security certifications / compliance
+TECHNICAL REQUIREMENTS
+Next.js 14 with App Router
+TypeScript
+Tailwind CSS (use the color variables above)
+Responsive (mobile-first)
+Lucide React for icons
+Framer Motion or CSS animations welcome
+Components in /components/marketing/
+Main page at app/(marketing)/page.tsx
+ANIMATIONS & INTERACTIONS
+Be creative but purposeful:
+
+Scroll-triggered reveals
+Hover states on cards and buttons
+Animated counters for statistics
+Subtle background effects (gradients, particles, grids)
+Loading states and micro-interactions
+Avoid:
+
+Anything that hurts performance
+Animations that distract from reading
+Flashy effects that feel unprofessional
+WHAT SUCCESS LOOKS LIKE
+A landing page that:
+
+Makes a CISO want to schedule a demo immediately
+Clearly communicates the threat and the solution
+Feels premium, trustworthy, and technically credible
+Stands out from generic SaaS templates
+Converts visitors to free trial signups
+FILE STRUCTURE
+Create or update:
+
+app/(marketing)/page.tsx
+app/(marketing)/layout.tsx
+components/marketing/Hero.tsx
+components/marketing/Problem.tsx (or Threat.tsx)
+components/marketing/Solution.tsx
+components/marketing/Features.tsx
+components/marketing/HowItWorks.tsx
+components/marketing/Pricing.tsx
+components/marketing/FAQ.tsx
+components/marketing/CTA.tsx
+components/marketing/Navbar.tsx
+components/marketing/Footer.tsx
+
+Keep the existing:
+
+tailwind.config.ts (colors already defined)
+globals.css (base styles exist)
+GO
+Create Ragaurd Landing Page V3. Make it memorable. Make it convert. Make it something a security professional would respect.
+
+Full creative control. Same colors. Impress me.
+

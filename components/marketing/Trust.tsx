@@ -1,4 +1,7 @@
-import { Shield, Clock, Mic, AlertCircle } from 'lucide-react';
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+import { Shield, AlertCircle } from 'lucide-react';
 
 const metrics = [
   { label: 'Attack Block Rate', value: '99.53%', detail: '(426/428 attacks blocked)' },
@@ -20,54 +23,78 @@ const whatWeDoNot = [
   "We don't sell snake oil. This is infrastructure, not magic.",
 ];
 
+function useScrollAnimation() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) setIsVisible(true);
+    }, { threshold: 0.1 });
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+  return { ref, isVisible };
+}
+
 export function Trust() {
+  const { ref: sectionRef, isVisible } = useScrollAnimation();
+
   return (
-    <section className="py-16 bg-[#F9FAFB] border-t border-midnight-200" id="trust">
+    <section ref={sectionRef} className="py-16 bg-void border-t border-white/5" id="trust">
       <div className="container">
         <div className="max-w-3xl">
-          {/* Section Header */}
-          <h2 className="text-2xl font-semibold text-midnight-950">
+          <h2
+            className={`text-2xl font-semibold text-white opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+            style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}
+          >
             Built by Security Practitioners
           </h2>
-          <p className="mt-3 text-sm text-midnight-600 leading-relaxed">
+          <p
+            className={`mt-3 text-sm text-white-60 leading-relaxed opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+            style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}
+          >
             Ragaurd was developed by engineers with backgrounds in enterprise infrastructure, penetration testing, and AI security research.
           </p>
 
-          {/* Testing Methodology */}
-          <div className="mt-10">
-            <h3 className="text-sm font-medium text-midnight-900 mb-4">Our Testing Methodology</h3>
-            <p className="text-sm text-midnight-600 mb-4">
+          <div
+            className={`mt-10 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+            style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}
+          >
+            <h3 className="text-sm font-medium text-white mb-4">Our Testing Methodology</h3>
+            <p className="text-sm text-white-60 mb-4">
               We validate our detection capabilities against continuously updated attack datasets:
             </p>
             <div className="space-y-2">
               {methodology.map((item) => (
                 <div key={item} className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 bg-secure-600 rounded-full shrink-0 mt-2" />
-                  <span className="text-sm text-midnight-600">{item}</span>
+                  <div className="w-1.5 h-1.5 bg-secure-500 shrink-0 mt-2" />
+                  <span className="text-sm text-white-60">{item}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Performance Metrics */}
-          <div className="mt-10">
-            <h3 className="text-sm font-medium text-midnight-900 mb-4">Current Performance</h3>
-            <div className="overflow-hidden rounded border border-midnight-200">
+          <div
+            className={`mt-10 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+            style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}
+          >
+            <h3 className="text-sm font-medium text-white mb-4">Current Performance</h3>
+            <div className="overflow-hidden border border-white/10">
               <table className="w-full">
-                <thead className="bg-midnight-50">
+                <thead className="bg-void-200">
                   <tr>
-                    <th className="px-4 py-2.5 text-left text-xs font-medium text-midnight-600 uppercase tracking-wide">Metric</th>
-                    <th className="px-4 py-2.5 text-right text-xs font-medium text-midnight-600 uppercase tracking-wide">Value</th>
+                    <th className="px-4 py-2.5 text-left text-xs font-medium text-white-60 uppercase tracking-wide">Metric</th>
+                    <th className="px-4 py-2.5 text-right text-xs font-medium text-white-60 uppercase tracking-wide">Value</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-midnight-100">
+                <tbody className="bg-void-100 divide-y divide-white/5">
                   {metrics.map((metric) => (
                     <tr key={metric.label}>
-                      <td className="px-4 py-3 text-sm text-midnight-700">{metric.label}</td>
+                      <td className="px-4 py-3 text-sm text-white-60">{metric.label}</td>
                       <td className="px-4 py-3 text-right">
-                        <span className="text-sm font-medium text-midnight-900 tabular-nums">{metric.value}</span>
+                        <span className="text-sm font-medium text-cyan-500 tabular-nums">{metric.value}</span>
                         {metric.detail && (
-                          <span className="text-xs text-midnight-500 ml-1">{metric.detail}</span>
+                          <span className="text-xs text-white-40 ml-1">{metric.detail}</span>
                         )}
                       </td>
                     </tr>
@@ -75,27 +102,31 @@ export function Trust() {
                 </tbody>
               </table>
             </div>
-            <p className="mt-3 text-xs text-midnight-500">
+            <p className="mt-3 text-xs text-white-40">
               These numbers reflect testing against our combined attack suite as of December 2024. We publish updated benchmarks as our detection capabilities evolve.
             </p>
           </div>
 
-          {/* What We Don't Do */}
-          <div className="mt-10">
-            <h3 className="text-sm font-medium text-midnight-900 mb-4">What We Don't Do</h3>
+          <div
+            className={`mt-10 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+            style={{ animationDelay: '500ms', animationFillMode: 'forwards' }}
+          >
+            <h3 className="text-sm font-medium text-white mb-4">What We Don't Do</h3>
             <div className="space-y-2">
               {whatWeDoNot.map((item) => (
                 <div key={item} className="flex items-start gap-2">
-                  <AlertCircle className="w-4 h-4 text-midnight-400 shrink-0 mt-0.5" />
-                  <span className="text-sm text-midnight-600">{item}</span>
+                  <AlertCircle className="w-4 h-4 text-white-40 shrink-0 mt-0.5" />
+                  <span className="text-sm text-white-60">{item}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Bottom Note */}
-          <div className="mt-8 p-5 bg-midnight-800 rounded">
-            <p className="text-sm text-midnight-300">
+          <div
+            className={`mt-8 p-5 bg-void-200 border border-white/10 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+            style={{ animationDelay: '600ms', animationFillMode: 'forwards' }}
+          >
+            <p className="text-sm text-white-60">
               Ragaurd is a defense layer that significantly raises the difficulty of attacking your voice agents. It's not a silver bullet — it's a necessary component of a responsible AI deployment.
             </p>
           </div>

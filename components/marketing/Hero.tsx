@@ -1,233 +1,147 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Shield, Zap, Lock, CheckCircle2, Play } from 'lucide-react';
+import { ArrowRight, Play, Shield, AlertTriangle, Zap, CheckCircle2 } from 'lucide-react';
 
-function useCounter(end: number, duration: number = 2000) {
-  const [count, setCount] = useState(0);
-  const [hasStarted, setHasStarted] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasStarted) {
-          setHasStarted(true);
-        }
-      },
-      { threshold: 0.5 }
-    );
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => observer.disconnect();
-  }, [hasStarted]);
-
-  useEffect(() => {
-    if (!hasStarted) return;
-
-    let startTime: number;
-    let animationFrame: number;
-
-    const animate = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
-      const easeOut = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(easeOut * end));
-
-      if (progress < 1) {
-        animationFrame = requestAnimationFrame(animate);
-      }
-    };
-
-    animationFrame = requestAnimationFrame(animate);
-
-    return () => cancelAnimationFrame(animationFrame);
-  }, [hasStarted, end, duration]);
-
-  return { count, ref };
-}
-
-function useLiveThreatCounter() {
+function ThreatCounter() {
   const [count, setCount] = useState(847293);
-
+  
   useEffect(() => {
     const interval = setInterval(() => {
       setCount(prev => prev + Math.floor(Math.random() * 3) + 1);
     }, 2000);
-
     return () => clearInterval(interval);
   }, []);
 
-  return count;
-}
-
-function HeroBackground() {
   return (
-    <div className="absolute inset-0 bg-navy-950 overflow-hidden">
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(59,124,184,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(59,124,184,0.03)_1px,transparent_1px)] bg-[size:80px_80px]" />
-      
-      <div className="absolute top-0 right-0 w-1/2 h-full">
-        <div className="absolute inset-0 bg-gradient-to-l from-navy-800/50 via-transparent to-transparent" />
-        <div className="absolute top-20 right-20 w-[500px] h-[500px] bg-navy-500/10 blur-[100px]" />
-        <div className="absolute bottom-40 right-40 w-[300px] h-[300px] bg-navy-400/5 blur-[80px]" />
-      </div>
-
-      <div className="absolute top-1/4 left-10 w-px h-32 bg-gradient-to-b from-transparent via-navy-500/30 to-transparent" />
-      <div className="absolute top-1/3 left-20 w-px h-48 bg-gradient-to-b from-transparent via-navy-400/20 to-transparent" />
-      <div className="absolute bottom-1/4 right-1/4 w-32 h-px bg-gradient-to-r from-transparent via-navy-500/30 to-transparent" />
-      
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-navy-700 to-transparent" />
+    <div className="font-mono text-5xl md:text-6xl font-bold text-cyan-500 tabular-nums tracking-tight">
+      {count.toLocaleString()}
     </div>
   );
 }
 
-function SecurityVisualization() {
-  const threatCount = useLiveThreatCounter();
+function AnimatedStat({ value, label, delay }: { value: string; label: string; delay: number }) {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsVisible(true), delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
 
   return (
-    <div className="relative w-full max-w-md mx-auto">
-      <div className="absolute inset-0 bg-navy-500/5 blur-[60px]" />
-      
-      <div className="relative bg-navy-900/80 border border-navy-700/50 backdrop-blur-sm p-8">
-        <div className="absolute top-0 left-0 w-4 h-4 border-l-2 border-t-2 border-navy-500" />
-        <div className="absolute top-0 right-0 w-4 h-4 border-r-2 border-t-2 border-navy-500" />
-        <div className="absolute bottom-0 left-0 w-4 h-4 border-l-2 border-b-2 border-navy-500" />
-        <div className="absolute bottom-0 right-0 w-4 h-4 border-r-2 border-b-2 border-navy-500" />
-
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-3 h-3 bg-success-500 animate-pulse" />
-          <span className="text-xs text-navy-300 uppercase tracking-widest font-medium">Live Protection Active</span>
-        </div>
-
-        <div className="space-y-4">
-          <div className="flex items-baseline gap-2">
-            <span className="text-5xl font-bold text-white tabular-nums tracking-tight">{threatCount.toLocaleString()}</span>
-          </div>
-          <p className="text-sm text-navy-400 uppercase tracking-wider">Threats Blocked Today</p>
-        </div>
-
-        <div className="mt-8 pt-6 border-t border-navy-700/50">
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <div className="text-2xl font-bold text-white">6</div>
-              <div className="text-[10px] text-navy-400 uppercase tracking-wider mt-1">Defense Layers</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-white">&lt;20ms</div>
-              <div className="text-[10px] text-navy-400 uppercase tracking-wider mt-1">Latency</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-white">99.5%</div>
-              <div className="text-[10px] text-navy-400 uppercase tracking-wider mt-1">Block Rate</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-3/4 h-8 bg-navy-500/10 blur-xl" />
-      </div>
+    <div 
+      className={`text-center transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+    >
+      <div className="text-2xl md:text-3xl font-bold text-white">{value}</div>
+      <div className="text-xs text-white-40 uppercase tracking-wider mt-1">{label}</div>
     </div>
   );
 }
 
 export function Hero() {
-  const { count: blockRate, ref: blockRateRef } = useCounter(99, 1500);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center">
-      <HeroBackground />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-void pt-20">
+      <div className="hero-gradient" />
+      <div className="grid-overlay" />
+      <div className="scan-line" />
+      
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-void pointer-events-none" />
 
-      <div className="container relative z-10 py-20 lg:py-28">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-12 items-center">
-
-          <div className="space-y-8">
-            <div
-              className="inline-flex items-center gap-3 px-4 py-2 bg-navy-800/50 border border-navy-700/50 animate-fade-up"
-              style={{ animationDelay: '100ms' }}
+      <div className="container relative z-10">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-8">
+            <div 
+              className={`inline-flex items-center gap-2 px-4 py-2 bg-threat-500/10 border border-threat-500/30 mb-8 transition-all duration-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
-              <div className="w-2 h-2 bg-success-500" />
-              <span className="text-xs font-medium text-navy-200 uppercase tracking-wider">Enterprise-Grade Voice AI Security</span>
+              <AlertTriangle className="w-4 h-4 text-threat-500 animate-pulse" />
+              <span className="text-xs font-semibold text-threat-400 uppercase tracking-wider">Live Threat Detection Active</span>
             </div>
 
-            <h1
-              className="animate-fade-up"
-              style={{ animationDelay: '200ms' }}
+            <h1 
+              className={`heading-display text-white mb-6 transition-all duration-700 delay-100 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
             >
-              <span className="block text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
-                Stop Attacks on
-              </span>
-              <span className="block text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mt-2 text-navy-300">
-                Your Voice Agents
-              </span>
-              <span className="block text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1] mt-2">
-                Before They Start
-              </span>
+              Your Voice AI Has a{' '}
+              <span className="text-gradient-cyan">Security Hole</span>
             </h1>
 
-            <p
-              className="text-lg text-navy-300 max-w-lg leading-relaxed animate-fade-up"
-              style={{ animationDelay: '350ms' }}
+            <p 
+              className={`text-lg md:text-xl text-white-60 max-w-2xl mx-auto mb-8 leading-relaxed transition-all duration-700 delay-200 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
             >
-              Ragaurd defends your voice AI from <span className="text-white font-medium">prompt injection</span>, <span className="text-white font-medium">jailbreaking</span>, and <span className="text-white font-medium">data exfiltration</span> with enterprise-grade protection that deploys in minutes.
+              Attackers are already targeting production voice agents. Ragaurd blocks prompt injection, jailbreaking, and deepfake attacks with 99.53% accuracy — before they reach your AI.
             </p>
 
-            <div
-              className="flex flex-col sm:flex-row gap-4 animate-fade-up"
-              style={{ animationDelay: '500ms' }}
+            <div 
+              className={`flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 transition-all duration-700 delay-300 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
             >
               <Link
                 href="/signup"
-                className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-white text-navy-950 font-semibold text-lg hover:bg-navy-100 transition-colors"
+                className="btn-primary group"
               >
                 Start Free Trial
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
-              
               <Link
-                href="#how-it-works"
-                className="group inline-flex items-center justify-center gap-3 px-8 py-4 border border-navy-600 text-white font-semibold text-lg hover:bg-navy-800/50 hover:border-navy-500 transition-all"
+                href="/demo"
+                className="btn-secondary group"
               >
                 <Play className="w-4 h-4" />
                 Watch Demo
               </Link>
             </div>
-
-            <div
-              className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-4 animate-fade-up"
-              style={{ animationDelay: '650ms' }}
-            >
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-success-500" />
-                <span className="text-sm text-navy-400">500 free requests/month</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-success-500" />
-                <span className="text-sm text-navy-400">No credit card required</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-success-500" />
-                <span className="text-sm text-navy-400">5 minute integration</span>
-              </div>
-            </div>
           </div>
 
-          <div
-            className="relative animate-fade-up lg:animate-slide-left"
-            style={{ animationDelay: '400ms' }}
+          <div 
+            className={`bg-void-200/50 backdrop-blur-xl border border-white/10 p-8 md:p-12 transition-all duration-700 delay-400 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
           >
-            <SecurityVisualization />
+            <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+              <div>
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-2 h-2 bg-threat-500 animate-pulse" />
+                  <span className="text-xs font-semibold text-white-40 uppercase tracking-wider">Attacks Blocked Today</span>
+                </div>
+                <ThreatCounter />
+                <p className="text-sm text-white-40 mt-4">
+                  Real-time protection across all connected voice agents
+                </p>
+              </div>
+
+              <div className="grid grid-cols-3 gap-6">
+                <AnimatedStat value="6" label="Defense Layers" delay={500} />
+                <AnimatedStat value="<20ms" label="Latency" delay={600} />
+                <AnimatedStat value="99.5%" label="Block Rate" delay={700} />
+              </div>
+            </div>
+
+            <div className="mt-8 pt-8 border-t border-white/5">
+              <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white-40">
+                <div className="flex items-center gap-2">
+                  <Zap className="w-4 h-4 text-cyan-500" />
+                  <span>5 minute integration</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-secure-500" />
+                  <span>SOC 2 compliant</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-secure-500" />
+                  <span>No credit card required</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-fade-in" style={{ animationDelay: '1.5s' }}>
-        <div className="flex flex-col items-center gap-3 text-navy-500">
-          <span className="text-[10px] uppercase tracking-[0.3em] font-medium">Scroll to learn more</span>
-          <div className="w-px h-8 bg-gradient-to-b from-navy-500 to-transparent" />
-        </div>
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white-40">
+        <span className="text-xs uppercase tracking-widest">Scroll</span>
+        <div className="w-px h-8 bg-gradient-to-b from-white/20 to-transparent" />
       </div>
     </section>
   );

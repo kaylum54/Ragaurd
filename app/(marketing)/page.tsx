@@ -6,6 +6,8 @@ import { HowItWorks } from '@/components/marketing/HowItWorks';
 import { RedTeam } from '@/components/marketing/RedTeam';
 import { Pricing } from '@/components/marketing/Pricing';
 import { FAQ } from '@/components/marketing/FAQ';
+import { FinalCTA } from '@/components/marketing/FinalCTA';
+
 export default function HomePage() {
   return (
     <>
@@ -17,6 +19,7 @@ export default function HomePage() {
       <RedTeam />
       <Pricing />
       <FAQ />
+      <FinalCTA />
     </>
   );
 }
