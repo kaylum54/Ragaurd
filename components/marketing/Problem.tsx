@@ -1,39 +1,39 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { AlertTriangle, Shield, Database, Mic, FileWarning } from 'lucide-react';
+import Image from 'next/image';
 
 const threats = [
   {
-    icon: AlertTriangle,
+    iconSrc: '/images/prompt-injection-icon.png',
     title: 'Prompt Injection',
     description: 'Hidden instructions override your agent\'s system prompt, taking control of responses.',
     stat: '73%',
     statLabel: 'of attacks',
   },
   {
-    icon: Shield,
+    iconSrc: '/images/jailbreaking-icon.png',
     title: 'Jailbreaking',
     description: 'Social engineering techniques bypass safety guidelines and restrictions.',
     stat: '52%',
     statLabel: 'success rate',
   },
   {
-    icon: Database,
+    iconSrc: '/images/data-exfiltration-icon.png',
     title: 'Data Exfiltration',
     description: 'Attackers extract system prompts, business logic, and sensitive information.',
     stat: '89%',
     statLabel: 'leak rate',
   },
   {
-    icon: Mic,
+    iconSrc: '/images/deepfake-audio-icon.png',
     title: 'Deepfake Audio',
     description: 'Voice cloning technology impersonates authorized users for verification bypass.',
     stat: '340%',
     statLabel: 'YoY increase',
   },
   {
-    icon: FileWarning,
+    iconSrc: '/images/compliance-exposure-icon.png',
     title: 'Compliance Exposure',
     description: 'PII and PHI handling creates GDPR, HIPAA, and SOC2 compliance liability.',
     stat: '$4.5M',
@@ -102,8 +102,14 @@ export function Problem() {
               className={`card p-8 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
               style={{ animationDelay: `${400 + index * 100}ms`, animationFillMode: 'forwards' }}
             >
-              <div className="w-12 h-12 bg-navy-50 border border-navy-100 flex items-center justify-center mb-6">
-                <threat.icon className="w-6 h-6 text-navy-600" />
+              <div className="w-12 h-12 flex items-center justify-center mb-6">
+                <Image
+                  src={threat.iconSrc}
+                  alt={threat.title}
+                  width={48}
+                  height={48}
+                  className="w-12 h-12 object-contain"
+                />
               </div>
 
               <h3 className="text-lg font-semibold text-navy-950 mb-3">{threat.title}</h3>
@@ -128,8 +134,14 @@ export function Problem() {
               className={`card p-8 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
               style={{ animationDelay: `${700 + index * 100}ms`, animationFillMode: 'forwards' }}
             >
-              <div className="w-12 h-12 bg-navy-50 border border-navy-100 flex items-center justify-center mb-6">
-                <threat.icon className="w-6 h-6 text-navy-600" />
+              <div className="w-12 h-12 flex items-center justify-center mb-6">
+                <Image
+                  src={threat.iconSrc}
+                  alt={threat.title}
+                  width={48}
+                  height={48}
+                  className="w-12 h-12 object-contain"
+                />
               </div>
 
               <h3 className="text-lg font-semibold text-navy-950 mb-3">{threat.title}</h3>
