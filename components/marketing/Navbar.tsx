@@ -35,14 +35,14 @@ export function Navbar() {
         scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-navy-100' : 'bg-transparent'
       )}
     >
-      <nav className="container flex h-16 md:h-18 items-center justify-between">
+      <nav className="container flex h-24 md:h-32 items-center justify-between py-4">
         <Link href="/" className="flex items-center group">
           <Image
             src="/images/ragaurd-logo.png"
             alt="Ragaurd - AI Voice Defense System"
-            width={180}
-            height={45}
-            className="h-5 w-auto"
+            width={450}
+            height={112}
+            className="h-20 md:h-24 w-auto"
             priority
           />
         </Link>
