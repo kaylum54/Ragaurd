@@ -22,72 +22,116 @@ function AnimatedStat({ value, label, delay }: { value: string; label: string; d
   );
 }
 
-function GridBackground() {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const requestRef = useRef<number>();
+interface ThreatLine {
+  id: number;
+  startX: number;
+  startY: number;
+  angle: number;
+  length: number;
+  speed: number;
+  delay: number;
+}
+
+function ThreatInterceptionBackground() {
+  const [lines, setLines] = useState<ThreatLine[]>([]);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const { clientX, clientY } = e;
-      const x = (clientX / window.innerWidth - 0.5) * 20;
-      const y = (clientY / window.innerHeight - 0.5) * 20;
+    const generateLines = (): ThreatLine[] => {
+      const newLines: ThreatLine[] = [];
+      const lineCount = 18;
       
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
-      requestRef.current = requestAnimationFrame(() => {
-        setMousePos({ x, y });
-      });
+      for (let i = 0; i < lineCount; i++) {
+        const side = i % 4;
+        let startX: number, startY: number, angle: number;
+        
+        if (side === 0) {
+          startX = 5 + Math.random() * 90;
+          startY = -10;
+          angle = 170 + Math.random() * 20;
+        } else if (side === 1) {
+          startX = 110;
+          startY = 5 + Math.random() * 50;
+          angle = 200 + Math.random() * 30;
+        } else if (side === 2) {
+          startX = -10;
+          startY = 5 + Math.random() * 50;
+          angle = 310 + Math.random() * 30;
+        } else {
+          startX = 10 + Math.random() * 80;
+          startY = -15;
+          angle = 165 + Math.random() * 30;
+        }
+        
+        newLines.push({
+          id: i,
+          startX,
+          startY,
+          angle,
+          length: 60 + Math.random() * 80,
+          speed: 15 + Math.random() * 10,
+          delay: i * 1.2 + Math.random() * 3,
+        });
+      }
+      return newLines;
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
-    };
+    setLines(generateLines());
   }, []);
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      {/* Primary Infrastructure Grid - The "Structural" Layer */}
+      {lines.map((line) => {
+        const radians = (line.angle * Math.PI) / 180;
+        const translateX = Math.cos(radians) * 400;
+        const translateY = Math.sin(radians) * 400;
+        
+        return (
+          <div
+            key={line.id}
+            className="absolute bg-navy-950"
+            style={{
+              left: `${line.startX}%`,
+              top: `${line.startY}%`,
+              width: `${line.length}px`,
+              height: '1.5px',
+              opacity: 0,
+              transform: `rotate(${line.angle}deg)`,
+              animation: `threatMove ${line.speed}s ease-in-out ${line.delay}s infinite`,
+              ['--tx' as string]: `${translateX}px`,
+              ['--ty' as string]: `${translateY}px`,
+            }}
+          />
+        );
+      })}
+
       <div 
-        className="absolute inset-0 opacity-[0.05] transition-transform duration-1000 ease-out"
-        style={{ 
-          backgroundImage: 'linear-gradient(to right, #0a1628 1.5px, transparent 1.5px), linear-gradient(to bottom, #0a1628 1.5px, transparent 1.5px)',
-          backgroundSize: '100px 100px',
-          transform: `translate(${mousePos.x * 0.4}px, ${mousePos.y * 0.4}px)`,
-          maskImage: 'linear-gradient(to bottom, black 0%, transparent 25%, transparent 75%, black 100%), linear-gradient(to right, black 0%, transparent 25%, transparent 75%, black 100%)',
-          WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 25%, transparent 75%, black 100%), linear-gradient(to right, black 0%, transparent 25%, transparent 75%, black 100%)',
-          maskComposite: 'exclude',
-          WebkitMaskComposite: 'source-out'
-        }}
-      />
-      
-      {/* Secondary Dynamic Grid - The "Data" Layer (Softer, denser) */}
-      <div 
-        className="absolute inset-0 opacity-[0.02] transition-transform duration-1000 ease-out"
-        style={{ 
-          backgroundImage: 'linear-gradient(to right, #0a1628 1px, transparent 1px), linear-gradient(to bottom, #0a1628 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-          transform: `translate(${mousePos.x * 1.1}px, ${mousePos.y * 1.1}px) rotate(0.5deg)`,
-          maskImage: 'radial-gradient(circle at center, transparent 40%, black 100%)',
-          WebkitMaskImage: 'radial-gradient(circle at center, transparent 40%, black 100%)'
+        className="absolute inset-0"
+        style={{
+          background: 'radial-gradient(ellipse 55% 45% at 50% 50%, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.85) 50%, rgba(255,255,255,0.4) 75%, transparent 100%)',
         }}
       />
 
-      {/* Tertiary Horizon Lines - The "Architecture" Layer */}
-      <div 
-        className="absolute inset-0 opacity-[0.015] transition-transform duration-1000 ease-out"
-        style={{ 
-          backgroundImage: 'linear-gradient(to right, #0a1628 1px, transparent 1px)',
-          backgroundSize: '400px 100%',
-          transform: `translate(${mousePos.x * 1.8}px, ${mousePos.y * 0.6}px) rotate(-1deg)`,
-          maskImage: 'linear-gradient(to right, black 0%, transparent 35%, transparent 65%, black 100%)',
-          WebkitMaskImage: 'linear-gradient(to right, black 0%, transparent 35%, transparent 65%, black 100%)'
-        }}
-      />
-      
-      {/* Global atmosphere and softening */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white/15 via-transparent to-white/15" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,white_95%)] opacity-50" />
+      <style jsx>{`
+        @keyframes threatMove {
+          0% {
+            opacity: 0;
+            transform: rotate(var(--angle, 180deg)) translateX(0) translateY(0);
+          }
+          8% {
+            opacity: 0.18;
+          }
+          50% {
+            opacity: 0.18;
+          }
+          75% {
+            opacity: 0.08;
+          }
+          100% {
+            opacity: 0;
+            transform: rotate(var(--angle, 180deg)) translateX(var(--tx)) translateY(var(--ty));
+          }
+        }
+      `}</style>
     </div>
   );
 }
@@ -101,7 +145,7 @@ export function Hero() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden hero-gradient pt-20">
-      <GridBackground />
+      <ThreatInterceptionBackground />
       
       <div className="container relative z-10">
         <div className="max-w-4xl mx-auto">
