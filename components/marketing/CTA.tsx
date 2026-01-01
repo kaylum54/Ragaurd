@@ -81,11 +81,11 @@ function AnimatedStat({ icon: Icon, value, label, delay }: { icon: typeof Shield
       className={`text-center transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
       style={{ transitionDelay: `${delay}ms` }}
     >
-      <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 mb-3 group-hover:scale-110 transition-transform">
-        <Icon className="w-5 h-5 text-cyan-400" />
+      <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-navy-800 border border-navy-600 mb-3 group-hover:scale-110 transition-transform">
+        <Icon className="w-5 h-5 text-navy-300" />
       </div>
       <div className="text-2xl font-bold text-white tabular-nums">{value}</div>
-      <div className="text-xs text-void-600 mt-1">{label}</div>
+      <div className="text-xs text-white/50 mt-1">{label}</div>
     </div>
   );
 }
@@ -95,21 +95,25 @@ export function CTA() {
   const { buttonRef, offset } = useMagneticButton();
 
   return (
-    <section ref={sectionRef} className="py-24 md:py-32 bg-void relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-noir-mesh" />
-      <div className="divider-glow absolute top-0" />
+    <section ref={sectionRef} className="py-24 md:py-32 section-navy relative overflow-hidden">
+      {/* Background pattern */}
+      <div className="absolute inset-0 opacity-[0.03]">
+        <div className="absolute inset-0" style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, #ffffff 1px, transparent 0)',
+          backgroundSize: '40px 40px'
+        }} />
+      </div>
 
-      {/* Floating orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-breathe" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-violet-500/5 rounded-full blur-3xl animate-breathe" style={{ animationDelay: '2s' }} />
+      {/* Floating gradient orbs */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-navy-500/10 rounded-full blur-3xl animate-pulse-subtle" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-navy-400/10 rounded-full blur-3xl animate-pulse-subtle" style={{ animationDelay: '1s' }} />
 
       <div className="container relative">
         <div className="max-w-4xl mx-auto">
-          <div className="noir-card rounded-3xl p-10 md:p-14 text-center">
+          <div className="glass-card-dark rounded-3xl p-10 md:p-14 text-center">
             {/* Badge */}
             <div
-              className={`badge-cyan mb-8 opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+              className={`badge-navy-dark mb-8 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
               style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}
             >
               <Shield className="w-3.5 h-3.5" />
@@ -118,16 +122,16 @@ export function CTA() {
 
             {/* Headline */}
             <h2
-              className={`heading-1 text-white mb-6 opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+              className={`heading-1 text-white mb-6 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
               style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}
             >
               Your Agents Are Live.<br />
-              <span className="gradient-text-cyan">Enhance Your Security Today.</span>
+              <span className="text-navy-300">Enhance Your Security Today.</span>
             </h2>
 
             {/* Subtext */}
             <p
-              className={`text-lg text-void-700 max-w-xl mx-auto mb-10 opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+              className={`text-lg text-white/60 max-w-xl mx-auto mb-10 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
               style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}
             >
               Voice AI attacks are documented, reproducible, and happening now.
@@ -136,25 +140,25 @@ export function CTA() {
 
             {/* CTA Button - Magnetic */}
             <div
-              className={`mb-12 opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+              className={`mb-12 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
               style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}
             >
               <Link
                 ref={buttonRef}
                 href="/signup"
-                className="magnetic-btn group inline-flex items-center gap-3 bg-cyan-500 hover:bg-cyan-400 text-void font-bold text-lg px-10 py-5 rounded-2xl transition-all hover:shadow-glow-cyan"
+                className="group inline-flex items-center gap-3 bg-white hover:bg-navy-50 text-navy-950 font-bold text-lg px-10 py-5 rounded-2xl transition-all shadow-lg hover:shadow-xl"
                 style={{ transform: `translate(${offset.x}px, ${offset.y}px)` }}
               >
                 Start Free
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
-              <p className="mt-4 text-sm text-void-600">
+              <p className="mt-4 text-sm text-white/40">
                 500 requests/month free • No credit card required
               </p>
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-10 border-t border-void-300">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-10 border-t border-white/10">
               {stats.map((stat, index) => (
                 <AnimatedStat
                   key={stat.label}

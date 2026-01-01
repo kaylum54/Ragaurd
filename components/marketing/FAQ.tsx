@@ -31,17 +31,21 @@ export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section ref={sectionRef} className="py-24 md:py-32 bg-void-50 relative" id="faq">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-void to-void-50" />
-      <div className="divider-cyan absolute top-0" />
+    <section ref={sectionRef} className="py-16 md:py-20 section-white relative overflow-hidden" id="faq">
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 opacity-[0.02]">
+        <div className="absolute inset-0" style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, #0a1628 1px, transparent 0)',
+          backgroundSize: '40px 40px'
+        }} />
+      </div>
 
       <div className="container relative">
         <div className="max-w-3xl mx-auto">
           {/* Header */}
           <div className="text-center mb-12">
             <div
-              className={`badge-violet mb-6 opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+              className={`badge-navy mb-6 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
               style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}
             >
               <HelpCircle className="w-3.5 h-3.5" />
@@ -49,14 +53,14 @@ export function FAQ() {
             </div>
 
             <h2
-              className={`heading-1 text-white mb-4 opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+              className={`heading-1 text-navy-950 mb-4 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
               style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}
             >
               Common Questions
             </h2>
 
             <p
-              className={`text-lg text-void-700 leading-relaxed opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+              className={`text-lg text-navy-600 leading-relaxed opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
               style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}
             >
               Everything you need to know about Ragaurd
@@ -72,9 +76,9 @@ export function FAQ() {
                 <div
                   key={index}
                   className={cn(
-                    'noir-card rounded-2xl overflow-hidden transition-all duration-500 opacity-0',
-                    isVisible ? 'animate-cascade-up' : '',
-                    isOpen ? 'ring-1 ring-cyan-500/30' : ''
+                    'white-card rounded-2xl overflow-hidden transition-all duration-500 opacity-0',
+                    isVisible ? 'animate-fade-up' : '',
+                    isOpen ? 'ring-1 ring-navy-300' : ''
                   )}
                   style={{ animationDelay: `${400 + index * 50}ms`, animationFillMode: 'forwards' }}
                 >
@@ -84,20 +88,20 @@ export function FAQ() {
                   >
                     {/* Left accent bar */}
                     <div className={cn(
-                      'absolute left-0 top-0 bottom-0 w-1 bg-cyan-500 transition-opacity duration-300',
+                      'absolute left-0 top-0 bottom-0 w-1 bg-navy-500 transition-opacity duration-300',
                       isOpen ? 'opacity-100' : 'opacity-0'
                     )} />
 
                     <span className={cn(
                       'text-base font-medium transition-colors pr-4',
-                      isOpen ? 'text-cyan-400' : 'text-white group-hover:text-cyan-400'
+                      isOpen ? 'text-navy-950' : 'text-navy-800 group-hover:text-navy-950'
                     )}>
                       {faq.question}
                     </span>
 
                     <ChevronDown className={cn(
                       'w-5 h-5 shrink-0 transition-all duration-300',
-                      isOpen ? 'rotate-180 text-cyan-400' : 'text-void-500 group-hover:text-void-600'
+                      isOpen ? 'rotate-180 text-navy-700' : 'text-navy-400 group-hover:text-navy-600'
                     )} />
                   </button>
 
@@ -106,7 +110,7 @@ export function FAQ() {
                     isOpen ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
                   )}>
                     <div className="px-6 pb-5">
-                      <p className="text-sm text-void-600 leading-relaxed">
+                      <p className="text-sm text-navy-600 leading-relaxed">
                         {faq.answer}
                       </p>
                     </div>
@@ -118,14 +122,14 @@ export function FAQ() {
 
           {/* Contact CTA */}
           <div
-            className={`mt-12 opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+            className={`mt-12 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
             style={{ animationDelay: '700ms', animationFillMode: 'forwards' }}
           >
-            <div className="noir-card rounded-2xl p-6 text-center">
-              <p className="text-sm text-void-600 mb-2">Still have questions?</p>
+            <div className="white-card rounded-2xl p-6 text-center">
+              <p className="text-sm text-navy-500 mb-2">Still have questions?</p>
               <a
                 href="mailto:support@ragaurd.com"
-                className="inline-flex items-center gap-2 text-base font-medium text-cyan-400 hover:text-cyan-300 transition-colors group"
+                className="inline-flex items-center gap-2 text-base font-medium text-navy-700 hover:text-navy-950 transition-colors group"
               >
                 Contact our team
                 <span className="group-hover:translate-x-1 transition-transform">→</span>

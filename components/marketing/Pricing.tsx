@@ -37,16 +37,20 @@ export function Pricing() {
   const { ref: sectionRef, isVisible } = useScrollAnimation();
 
   return (
-    <section ref={sectionRef} className="py-24 md:py-32 bg-void relative" id="pricing">
-      {/* Background */}
-      <div className="absolute inset-0 bg-noir-radial opacity-20" />
-      <div className="divider-noir absolute top-0" />
+    <section ref={sectionRef} className="py-16 md:py-20 section-navy relative overflow-hidden" id="pricing">
+      {/* Background pattern */}
+      <div className="absolute inset-0 opacity-[0.03]">
+        <div className="absolute inset-0" style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, #ffffff 1px, transparent 0)',
+          backgroundSize: '40px 40px'
+        }} />
+      </div>
 
       <div className="container relative">
         {/* Header */}
-        <div className="max-w-3xl mx-auto text-center mb-16">
+        <div className="max-w-3xl mx-auto text-center mb-12">
           <div
-            className={`badge-cyan mb-6 opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+            className={`badge-navy-dark mb-6 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
             style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}
           >
             <Sparkles className="w-3.5 h-3.5" />
@@ -54,25 +58,25 @@ export function Pricing() {
           </div>
 
           <h2
-            className={`heading-1 text-white mb-6 opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+            className={`heading-1 text-white mb-6 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
             style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}
           >
             Pricing That<br />
-            <span className="gradient-text-cyan">Scales With You</span>
+            <span className="text-navy-300">Scales With You</span>
           </h2>
 
           <p
-            className={`text-lg text-void-700 leading-relaxed opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+            className={`text-lg text-white/60 leading-relaxed opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
             style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}
           >
             All plans include dashboard access, usage analytics, and threat logging.
           </p>
 
           <div
-            className={`inline-flex items-center gap-2 mt-6 text-sm text-void-600 opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+            className={`inline-flex items-center gap-2 mt-6 text-sm text-white/50 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
             style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}
           >
-            <Check className="w-4 h-4 text-secure-500" />
+            <Check className="w-4 h-4 text-success-500" />
             No credit card required for free tier
           </div>
         </div>
@@ -82,15 +86,14 @@ export function Pricing() {
           {plans.map((plan, index) => (
             <div
               key={plan.name}
-              className={`group relative noir-card-glow rounded-2xl p-6 opacity-0 hover-lift ${isVisible ? 'animate-cascade-up' : ''} ${
-                plan.featured ? 'ring-2 ring-cyan-500/50 glow-cyan' : ''
-              }`}
+              className={`group relative glass-card-dark rounded-2xl p-6 opacity-0 transition-all duration-300 hover:-translate-y-1 ${isVisible ? 'animate-fade-up' : ''} ${plan.featured ? 'ring-2 ring-navy-400/50 shadow-navy-glow' : ''
+                }`}
               style={{ animationDelay: `${500 + index * 100}ms`, animationFillMode: 'forwards' }}
             >
               {/* Featured badge */}
               {plan.featured && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-cyan-500 text-void text-[10px] font-bold uppercase tracking-wide rounded-full shadow-lg shadow-cyan-500/30">
+                  <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-navy-500 text-white text-[10px] font-bold uppercase tracking-wide rounded-full shadow-lg">
                     <Sparkles className="w-3 h-3" />
                     Popular
                   </span>
@@ -99,12 +102,12 @@ export function Pricing() {
 
               {/* Plan header */}
               <div className="mb-5 pt-2">
-                <div className="text-sm font-medium text-void-600">{plan.name}</div>
+                <div className="text-sm font-medium text-navy-300">{plan.name}</div>
                 <div className="mt-2 flex items-baseline gap-1">
                   <span className="text-4xl font-bold text-white">{plan.price}</span>
-                  <span className="text-sm text-void-500">{plan.period}</span>
+                  <span className="text-sm text-white/40">{plan.period}</span>
                 </div>
-                <div className="text-xs text-void-500 mt-1">{plan.description}</div>
+                <div className="text-xs text-white/40 mt-1">{plan.description}</div>
               </div>
 
               {/* Features */}
@@ -114,9 +117,9 @@ export function Pricing() {
                   const isDisabled = value === '—';
                   return (
                     <div key={feature.key} className="flex items-center justify-between text-sm">
-                      <span className="text-void-600">{feature.label}</span>
-                      <span className={`font-medium ${isDisabled ? 'text-void-400' : 'text-void-700'}`}>
-                        {isDisabled ? <X className="w-4 h-4 text-void-400" /> : value}
+                      <span className="text-white/50">{feature.label}</span>
+                      <span className={`font-medium ${isDisabled ? 'text-white/30' : 'text-white/80'}`}>
+                        {isDisabled ? <X className="w-4 h-4 text-white/30" /> : value}
                       </span>
                     </div>
                   );
@@ -126,48 +129,19 @@ export function Pricing() {
               {/* CTA */}
               <Link
                 href={plan.href}
-                className={`block w-full py-3 px-4 rounded-xl text-sm font-semibold text-center transition-all ${
-                  plan.featured
-                    ? 'bg-cyan-500 hover:bg-cyan-400 text-void shadow-lg shadow-cyan-500/20'
-                    : 'bg-void-200 hover:bg-void-300 text-white border border-void-400'
-                }`}
+                className={`block w-full py-3 px-4 rounded-xl text-sm font-semibold text-center transition-all ${plan.featured
+                    ? 'bg-white hover:bg-navy-50 text-navy-950'
+                    : 'bg-navy-800 hover:bg-navy-700 text-white border border-navy-600'
+                  }`}
               >
                 {plan.cta}
               </Link>
 
               {/* Bottom accent */}
-              <div className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-b-2xl transition-all ${
-                plan.featured ? 'bg-cyan-500' : 'bg-transparent group-hover:bg-void-400'
-              }`} />
+              <div className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-b-2xl transition-all ${plan.featured ? 'bg-navy-400' : 'bg-transparent group-hover:bg-navy-600'
+                }`} />
             </div>
           ))}
-        </div>
-
-        {/* Enterprise */}
-        <div
-          className={`opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
-          style={{ animationDelay: '900ms', animationFillMode: 'forwards' }}
-        >
-          <div className="noir-card rounded-2xl p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div className="flex items-start gap-5">
-              <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center shrink-0">
-                <Sparkles className="w-7 h-7 text-cyan-400" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-white mb-2">Enterprise</h3>
-                <p className="text-sm text-void-600 max-w-lg">
-                  Unlimited requests, custom limits, dedicated infrastructure, SLA guarantees, 24/7 support + TAM.
-                </p>
-              </div>
-            </div>
-            <Link
-              href="/contact"
-              className="btn-primary group shrink-0"
-            >
-              Contact sales
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </div>
         </div>
       </div>
     </section>

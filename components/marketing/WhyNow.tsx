@@ -91,7 +91,7 @@ export function WhyNow() {
   const { ref: sectionRef, isVisible } = useScrollAnimation();
 
   return (
-    <section ref={sectionRef} className="py-24 md:py-32 bg-void-50 relative overflow-hidden">
+    <section ref={sectionRef} className="py-16 md:py-20 bg-void-50 relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-void to-void-50" />
       <div className="absolute inset-0 bg-grid-noir opacity-20" />
@@ -101,7 +101,7 @@ export function WhyNow() {
 
       <div className="container relative">
         {/* Header */}
-        <div className="max-w-3xl mx-auto text-center mb-16">
+        <div className="max-w-3xl mx-auto text-center mb-12">
           <div
             className={`badge-threat mb-6 opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
             style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}

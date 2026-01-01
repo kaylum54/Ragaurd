@@ -67,75 +67,54 @@ function useLiveThreatCounter() {
   return count;
 }
 
-// Floating geometric shapes
-function FloatingShapes() {
+// Hero Background with animated gradient
+function HeroBackground() {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Large cyan orb */}
-      <div
-        className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full opacity-30 float-element"
-        style={{
-          background: 'radial-gradient(circle, rgba(0,229,255,0.15) 0%, transparent 70%)',
-        }}
-      />
-
-      {/* Violet orb */}
-      <div
-        className="absolute top-1/2 -left-40 w-[400px] h-[400px] rounded-full opacity-20 float-element-delay-1"
-        style={{
-          background: 'radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%)',
-        }}
-      />
-
-      {/* Small floating elements */}
-      <div className="absolute top-1/4 right-1/4 w-2 h-2 bg-cyan-500 rounded-full animate-float-diagonal opacity-60" style={{ animationDelay: '0s' }} />
-      <div className="absolute top-1/3 right-1/3 w-1.5 h-1.5 bg-violet-500 rounded-full animate-float-diagonal opacity-40" style={{ animationDelay: '-5s' }} />
-      <div className="absolute bottom-1/4 left-1/4 w-2 h-2 bg-cyan-400 rounded-full animate-float-diagonal opacity-50" style={{ animationDelay: '-10s' }} />
-      <div className="absolute top-1/2 left-1/3 w-1 h-1 bg-threat-400 rounded-full animate-float-diagonal opacity-40" style={{ animationDelay: '-15s' }} />
-
-      {/* Orbital rings */}
-      <div className="absolute top-20 right-20 w-32 h-32 orbital-ring" style={{ animationDuration: '25s' }} />
-      <div className="absolute bottom-40 right-40 w-48 h-48 orbital-ring" style={{ animationDuration: '35s', animationDirection: 'reverse' }} />
-    </div>
+    <>
+      <div className="hero-gradient-bg">
+        <div className="hero-grid-overlay" />
+        {/* Security nodes */}
+        <div className="security-node" style={{ top: '20%', left: '15%', animationDelay: '0s' }} />
+        <div className="security-node" style={{ top: '60%', left: '80%', animationDelay: '-2s' }} />
+        <div className="security-node" style={{ top: '40%', left: '60%', animationDelay: '-4s' }} />
+        <div className="security-node" style={{ top: '75%', left: '25%', animationDelay: '-1s' }} />
+        <div className="security-node" style={{ top: '30%', left: '85%', animationDelay: '-3s' }} />
+      </div>
+      {/* Bottom fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-navy-950 to-transparent" />
+    </>
   );
 }
 
-// Threat visualization orb
-function ThreatOrb() {
+// Threat visualization shield
+function ThreatShield() {
   const threatCount = useLiveThreatCounter();
 
   return (
     <div className="relative">
-      {/* Pulsing rings */}
+      {/* Outer glow rings */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="absolute w-64 h-64 rounded-full border border-threat-500/20 animate-ping-ring" />
-        <div className="absolute w-48 h-48 rounded-full border border-threat-500/30 animate-ping-ring" style={{ animationDelay: '-0.5s' }} />
-        <div className="absolute w-32 h-32 rounded-full border border-threat-500/40 animate-ping-ring" style={{ animationDelay: '-1s' }} />
+        <div className="absolute w-72 h-72 rounded-full border border-navy-400/20 animate-pulse-subtle" />
+        <div className="absolute w-56 h-56 rounded-full border border-navy-400/30" />
       </div>
 
-      {/* Main orb */}
-      <div className="relative w-56 h-56 rounded-full bg-void-100 border border-threat-500/30 flex items-center justify-center glow-threat">
-        <div className="absolute inset-2 rounded-full bg-gradient-to-br from-threat-600/20 to-transparent" />
-
-        {/* Scan line */}
-        <div className="absolute inset-0 rounded-full overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-threat-500/10 via-transparent to-transparent animate-scan-beam" />
-        </div>
+      {/* Main shield container */}
+      <div className="relative w-52 h-52 rounded-full bg-navy-900/80 backdrop-blur-sm border border-white/10 flex items-center justify-center shadow-navy-glow-lg">
+        <div className="absolute inset-3 rounded-full bg-gradient-to-br from-navy-800/50 to-transparent" />
 
         {/* Center content */}
         <div className="relative text-center z-10">
-          <div className="text-3xl font-bold text-threat-400 tabular-nums">
+          <div className="text-4xl font-bold text-white tabular-nums">
             {threatCount.toLocaleString()}
           </div>
-          <div className="text-xs text-threat-500/80 uppercase tracking-wider mt-1">
-            Attacks Today
+          <div className="text-xs text-navy-300 uppercase tracking-wider mt-1">
+            Threats Blocked
           </div>
         </div>
 
-        {/* Threat indicators */}
-        <div className="absolute -top-2 -right-2 w-4 h-4 bg-threat-500 rounded-full animate-pulse" />
-        <div className="absolute top-8 -left-4 w-3 h-3 bg-threat-400 rounded-full animate-pulse" style={{ animationDelay: '-0.5s' }} />
-        <div className="absolute -bottom-1 right-8 w-2 h-2 bg-threat-600 rounded-full animate-pulse" style={{ animationDelay: '-1s' }} />
+        {/* Status indicators */}
+        <div className="absolute -top-1 -right-1 w-4 h-4 bg-success-500 rounded-full animate-pulse-subtle shadow-lg" />
+        <div className="absolute top-6 -left-2 w-3 h-3 bg-navy-400 rounded-full animate-pulse-subtle" style={{ animationDelay: '-0.5s' }} />
       </div>
     </div>
   );
@@ -155,16 +134,16 @@ function StatCard({
 }) {
   return (
     <div
-      className="noir-card-glow rounded-xl p-4 opacity-0 animate-cascade-up"
+      className="glass-card-dark rounded-xl p-4 opacity-0 animate-fade-up"
       style={{ animationDelay: `${delay}ms`, animationFillMode: 'forwards' }}
     >
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
-          <Icon className="w-5 h-5 text-cyan-400" />
+        <div className="w-10 h-10 rounded-lg bg-white/10 border border-white/10 flex items-center justify-center">
+          <Icon className="w-5 h-5 text-navy-300" />
         </div>
         <div>
           <div className="text-xl font-bold text-white">{value}</div>
-          <div className="text-xs text-void-600">{label}</div>
+          <div className="text-xs text-white/50">{label}</div>
         </div>
       </div>
     </div>
@@ -180,68 +159,60 @@ export function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-void">
-      {/* Background layers */}
-      <div className="absolute inset-0 bg-noir-mesh" />
-      <div className="absolute inset-0 bg-grid-noir opacity-50" />
-      <div className="noise-overlay" />
-
-      {/* Floating shapes */}
-      <FloatingShapes />
-
-      {/* Gradient overlays */}
-      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-void to-transparent" />
+    <section className="relative min-h-screen flex items-center overflow-hidden">
+      {/* Background */}
+      <HeroBackground />
 
       <div className="container relative z-10 py-20 md:py-32">
-        {/* Asymmetric grid layout */}
+        {/* Grid layout */}
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
 
           {/* Left content - spans 7 columns */}
           <div className="lg:col-span-7 space-y-8">
             {/* Badge */}
             <div
-              className={`inline-flex items-center gap-2 badge-cyan opacity-0 ${isLoaded ? 'animate-hero-rise' : ''}`}
+              className={`inline-flex items-center gap-2 badge-navy-dark opacity-0 ${isLoaded ? 'animate-fade-up' : ''}`}
               style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}
             >
               <Shield className="w-3.5 h-3.5" />
-              <span>Voice AI Security Layer</span>
+              <span>Enterprise Voice AI Security</span>
             </div>
 
-            {/* Main headline - dramatic sizing */}
+            {/* Main headline */}
             <h1
-              className={`heading-display text-white opacity-0 ${isLoaded ? 'animate-hero-rise' : ''}`}
+              className={`heading-display text-white opacity-0 ${isLoaded ? 'animate-fade-up' : ''}`}
               style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}
             >
-              Your Voice Agents
+              Protect Your Voice AI
               <br />
-              <span className="gradient-text-cyan">Are Under Attack</span>
+              <span className="text-navy-300">From Every Threat</span>
             </h1>
 
             {/* Subheadline */}
             <p
-              className={`text-xl text-void-700 max-w-xl leading-relaxed opacity-0 ${isLoaded ? 'animate-hero-rise' : ''}`}
+              className={`text-xl text-white/60 max-w-xl leading-relaxed opacity-0 ${isLoaded ? 'animate-fade-up' : ''}`}
               style={{ animationDelay: '350ms', animationFillMode: 'forwards' }}
             >
-              Prompt injection. Social engineering. Data exfiltration.
-              <span className="text-white"> Ragaurd adds a security layer </span>
-              between your voice AI and the threats targeting it.
+              Prompt injection. Jailbreaking. Data exfiltration.
+              <span className="text-white"> Ragaurd adds a defense layer </span>
+              between your voice agents and the threats targeting them.
             </p>
 
             {/* CTA buttons */}
             <div
-              className={`flex flex-wrap gap-4 opacity-0 ${isLoaded ? 'animate-hero-rise' : ''}`}
+              className={`flex flex-wrap gap-4 opacity-0 ${isLoaded ? 'animate-fade-up' : ''}`}
               style={{ animationDelay: '500ms', animationFillMode: 'forwards' }}
             >
               <Link
                 href="/signup"
-                className="btn-primary group text-lg px-8 py-4"
+                className="btn-primary-light group text-lg px-8 py-4"
               >
-                Start Free
+                Start Free Trial
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
                 href="#how-it-works"
-                className="btn-secondary text-lg px-8 py-4"
+                className="btn-outline-light text-lg px-8 py-4"
               >
                 See How It Works
               </Link>
@@ -249,33 +220,33 @@ export function Hero() {
 
             {/* Trust indicator */}
             <p
-              className={`text-sm text-void-600 opacity-0 ${isLoaded ? 'animate-hero-rise' : ''}`}
+              className={`text-sm text-white/40 opacity-0 ${isLoaded ? 'animate-fade-up' : ''}`}
               style={{ animationDelay: '650ms', animationFillMode: 'forwards' }}
             >
-              500 free requests/month • No credit card required • 5 min integration
+              500 free requests/month &bull; No credit card required &bull; 5 minute integration
             </p>
           </div>
 
-          {/* Right content - spans 5 columns, offset */}
+          {/* Right content - spans 5 columns */}
           <div className="lg:col-span-5 relative">
-            {/* Threat orb - positioned off-center */}
+            {/* Threat shield - centered */}
             <div
-              className={`flex justify-center lg:justify-end lg:-mr-8 opacity-0 ${isLoaded ? 'animate-hero-slide-left' : ''}`}
+              className={`flex justify-center lg:justify-end opacity-0 ${isLoaded ? 'animate-slide-left' : ''}`}
               style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}
             >
-              <ThreatOrb />
+              <ThreatShield />
             </div>
 
-            {/* Floating stat cards - asymmetric positioning */}
-            <div className="hidden lg:block absolute -left-12 top-0">
+            {/* Floating stat cards */}
+            <div className="hidden lg:block absolute -left-16 top-4">
               <StatCard icon={Shield} value="6" label="Defense Layers" delay={800} />
             </div>
 
-            <div className="hidden lg:block absolute -left-8 bottom-8">
+            <div className="hidden lg:block absolute -left-12 bottom-4">
               <StatCard icon={Zap} value="<20ms" label="Avg Latency" delay={950} />
             </div>
 
-            <div className="hidden lg:block absolute right-0 -bottom-4">
+            <div className="hidden lg:block absolute right-0 -bottom-8">
               <div ref={blockRateRef}>
                 <StatCard icon={Lock} value={`${blockRate}.53%`} label="Block Rate" delay={1100} />
               </div>
@@ -294,10 +265,10 @@ export function Hero() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 opacity-0 animate-hero-fade" style={{ animationDelay: '1.5s', animationFillMode: 'forwards' }}>
-        <div className="flex flex-col items-center gap-2 text-void-600">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 opacity-0 animate-fade-in" style={{ animationDelay: '1.5s', animationFillMode: 'forwards' }}>
+        <div className="flex flex-col items-center gap-2 text-white/40">
           <span className="text-xs uppercase tracking-widest">Scroll</span>
-          <div className="w-px h-8 bg-gradient-to-b from-void-600 to-transparent" />
+          <div className="w-px h-8 bg-gradient-to-b from-white/40 to-transparent" />
         </div>
       </div>
     </section>

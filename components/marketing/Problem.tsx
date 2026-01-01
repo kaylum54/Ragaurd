@@ -43,57 +43,21 @@ const threats = [
 
 const severityStyles = {
   critical: {
-    badge: 'bg-threat-500/20 text-threat-400 border-threat-500/30',
-    icon: 'bg-threat-500/10 text-threat-400',
-    glow: 'group-hover:shadow-glow-threat',
-    accent: 'bg-threat-500',
+    badge: 'bg-danger-50 text-danger-700 border-danger-100',
+    icon: 'bg-danger-50 text-danger-600',
+    accent: 'bg-danger-500',
   },
   high: {
-    badge: 'bg-warning-500/20 text-warning-400 border-warning-500/30',
-    icon: 'bg-warning-500/10 text-warning-400',
-    glow: 'group-hover:shadow-glow-threat',
+    badge: 'bg-warning-50 text-warning-700 border-warning-100',
+    icon: 'bg-warning-50 text-warning-600',
     accent: 'bg-warning-500',
   },
   medium: {
-    badge: 'bg-violet-500/20 text-violet-400 border-violet-500/30',
-    icon: 'bg-violet-500/10 text-violet-400',
-    glow: 'group-hover:shadow-glow-violet',
-    accent: 'bg-violet-500',
+    badge: 'bg-navy-100 text-navy-700 border-navy-200',
+    icon: 'bg-navy-100 text-navy-600',
+    accent: 'bg-navy-500',
   },
 };
-
-// Animated threat scanner
-function ThreatScanner() {
-  return (
-    <div className="relative w-40 h-40">
-      {/* Outer rings */}
-      <div className="absolute inset-0 rounded-full border border-void-400/30" />
-      <div className="absolute inset-4 rounded-full border border-void-400/20" />
-      <div className="absolute inset-8 rounded-full border border-void-400/10" />
-
-      {/* Radar sweep */}
-      <div className="absolute inset-0 rounded-full animate-radar-sweep">
-        <div
-          className="absolute inset-0 rounded-full"
-          style={{
-            background: 'conic-gradient(from 0deg, transparent 0deg, rgba(244, 63, 94, 0.4) 40deg, transparent 80deg)',
-          }}
-        />
-      </div>
-
-      {/* Center pulse */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-3 h-3 rounded-full bg-threat-500 animate-pulse" />
-      </div>
-
-      {/* Threat dots */}
-      <div className="absolute top-3 right-6 w-2 h-2 rounded-full bg-threat-500 animate-pulse" style={{ animationDelay: '0.2s' }} />
-      <div className="absolute bottom-6 right-3 w-1.5 h-1.5 rounded-full bg-warning-500 animate-pulse" style={{ animationDelay: '0.5s' }} />
-      <div className="absolute top-10 left-4 w-2 h-2 rounded-full bg-threat-500 animate-pulse" style={{ animationDelay: '0.8s' }} />
-      <div className="absolute bottom-4 left-8 w-1.5 h-1.5 rounded-full bg-warning-400 animate-pulse" style={{ animationDelay: '1.1s' }} />
-    </div>
-  );
-}
 
 // Scroll animation hook
 function useScrollAnimation() {
@@ -124,145 +88,128 @@ export function Problem() {
   const { ref: sectionRef, isVisible } = useScrollAnimation();
 
   return (
-    <section ref={sectionRef} className="py-24 md:py-32 bg-void relative overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 bg-noir-radial opacity-50" />
-      <div className="absolute inset-0 bg-grid-noir opacity-30" />
+    <>
+      <section ref={sectionRef} className="pt-16 md:pt-20 pb-0 section-white relative">
+        {/* Subtle background pattern */}
+        <div className="absolute inset-0 opacity-[0.02]">
+          <div className="absolute inset-0" style={{
+            backgroundImage: 'radial-gradient(circle at 1px 1px, #0a1628 1px, transparent 0)',
+            backgroundSize: '40px 40px'
+          }} />
+        </div>
 
-      {/* Diagonal accent line */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-threat-600 via-warning-500 to-transparent" />
+        {/* Navy strip at bottom to eliminate gap */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-navy-950" />
 
-      <div className="container relative">
-        {/* Asymmetric header layout */}
-        <div className="grid lg:grid-cols-12 gap-12 mb-20">
-          {/* Left - scanner visualization */}
-          <div className="lg:col-span-4 flex items-center justify-center lg:justify-start">
+        <div className="container relative">
+          {/* Header */}
+          <div className="max-w-3xl mb-12">
             <div
-              className={`opacity-0 ${isVisible ? 'animate-cascade-right' : ''}`}
-              style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}
-            >
-              <ThreatScanner />
-            </div>
-          </div>
-
-          {/* Right - text content */}
-          <div className="lg:col-span-8 lg:pl-8">
-            <div
-              className={`badge-threat mb-6 opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+              className={`badge-danger mb-6 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
               style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}
             >
               <AlertTriangle className="w-3.5 h-3.5" />
-              <span>Active Threats</span>
+              <span>Active Threat Landscape</span>
             </div>
 
             <h2
-              className={`heading-1 text-white mb-6 opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+              className={`heading-1 text-navy-950 mb-6 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
               style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}
             >
-              Voice AI Has a<br />
-              <span className="gradient-text-threat">Security Problem</span>
+              Voice AI Has a{' '}
+              <span className="text-danger-600">Security Problem</span>
             </h2>
 
             <p
-              className={`text-lg text-void-700 max-w-xl leading-relaxed opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+              className={`text-lg text-navy-600 leading-relaxed opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
               style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}
             >
               Voice AI is entering production faster than security teams can evaluate it.
               Sales agents, support bots, and healthcare assistants are being deployed
               with direct access to customers and sensitive data.
             </p>
+          </div>
 
-            {/* Threat count */}
-            <div
-              className={`inline-flex items-center gap-4 mt-8 noir-card rounded-xl px-6 py-4 opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
-              style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}
-            >
-              <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-threat-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-threat-500" />
-              </span>
-              <span className="text-void-600">Tracking</span>
-              <span className="text-3xl font-bold text-threat-400">5</span>
-              <span className="text-void-600">Active Attack Vectors</span>
-            </div>
+          {/* Threat Cards Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {threats.map((threat, index) => {
+              const styles = severityStyles[threat.severity as keyof typeof severityStyles];
+              const isLarge = index === 0;
+
+              return (
+                <div
+                  key={threat.title}
+                  className={`group relative white-card-hover opacity-0 ${isLarge ? 'lg:col-span-2' : ''} ${isVisible ? 'animate-fade-up' : ''}`}
+                  style={{ animationDelay: `${400 + index * 100}ms`, animationFillMode: 'forwards' }}
+                >
+                  {/* Severity badge */}
+                  <div className={`absolute top-4 right-4 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full border ${styles.badge}`}>
+                    {threat.severity}
+                  </div>
+
+                  {/* Icon */}
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110 ${styles.icon}`}>
+                    <threat.icon className="w-6 h-6" />
+                  </div>
+
+                  {/* Content */}
+                  <h3 className="text-lg font-semibold text-navy-950 mb-2 group-hover:text-navy-700 transition-colors">
+                    {threat.title}
+                  </h3>
+                  <p className="text-sm text-navy-600 leading-relaxed mb-4">
+                    {threat.description}
+                  </p>
+
+                  {/* Example */}
+                  <div className="pt-4 border-t border-navy-100">
+                    <p className="text-[10px] text-navy-400 uppercase tracking-wider mb-1">Attack example:</p>
+                    <code className="text-xs text-danger-600/80 font-mono leading-relaxed">
+                      {threat.example}
+                    </code>
+                  </div>
+
+                  {/* Bottom accent on hover */}
+                  <div className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-b-xl scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${styles.accent}`} />
+                </div>
+              );
+            })}
           </div>
         </div>
+      </section>
 
-        {/* Editorial grid of threats - asymmetric */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {threats.map((threat, index) => {
-            const styles = severityStyles[threat.severity as keyof typeof severityStyles];
-            // Make first card span 2 columns on larger screens
-            const isLarge = index === 0;
+      {/* Warning callout - Full bleed with sharp edges, no gap */}
+      <div
+        className={`relative bg-navy-950 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+        style={{ animationDelay: '900ms', animationFillMode: 'forwards' }}
+      >
+        {/* Background glow effect */}
+        <div className="absolute top-0 right-1/4 w-96 h-32 bg-danger-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-1/4 w-64 h-24 bg-navy-400/10 rounded-full blur-3xl" />
 
-            return (
-              <div
-                key={threat.title}
-                className={`group relative noir-card-glow rounded-2xl p-6 opacity-0 ${isLarge ? 'lg:col-span-2 lg:row-span-1' : ''} ${isVisible ? 'animate-cascade-up' : ''} ${styles.glow}`}
-                style={{ animationDelay: `${500 + index * 100}ms`, animationFillMode: 'forwards' }}
-              >
-                {/* Severity badge */}
-                <div className={`absolute top-4 right-4 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full border ${styles.badge}`}>
-                  {threat.severity}
-                </div>
-
-                {/* Icon */}
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110 ${styles.icon}`}>
-                  <threat.icon className="w-6 h-6" />
-                </div>
-
-                {/* Content */}
-                <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-cyan-400 transition-colors">
-                  {threat.title}
-                </h3>
-                <p className="text-sm text-void-600 leading-relaxed mb-4">
-                  {threat.description}
-                </p>
-
-                {/* Example - always visible */}
-                <div className="pt-4 border-t border-void-300">
-                  <p className="text-[10px] text-void-500 uppercase tracking-wider mb-1">Attack example:</p>
-                  <code className="text-xs text-threat-400/80 font-mono leading-relaxed">
-                    {threat.example}
-                  </code>
-                </div>
-
-                {/* Bottom accent */}
-                <div className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-b-2xl scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${styles.accent}`} />
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Warning callout */}
-        <div
-          className={`mt-16 max-w-3xl mx-auto opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
-          style={{ animationDelay: '1000ms', animationFillMode: 'forwards' }}
-        >
-          <div className="relative noir-card rounded-2xl p-8 border-l-4 border-threat-500 overflow-hidden">
-            {/* Scan line effect */}
-            <div className="scan-line-overlay" />
-
-            <div className="relative flex items-start gap-4">
-              <div className="relative flex-shrink-0">
-                <span className="flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-threat-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-threat-500" />
+        <div className="container relative py-12 md:py-16">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-6 max-w-4xl mx-auto">
+            {/* Pulsing indicator */}
+            <div className="flex-shrink-0">
+              <div className="relative w-16 h-16 rounded-none bg-danger-500/20 border border-danger-500/30 flex items-center justify-center">
+                <span className="flex h-4 w-4">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-danger-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-4 w-4 bg-danger-500" />
                 </span>
               </div>
-              <div>
-                <p className="text-xl font-semibold text-white mb-2">
-                  These aren't theoretical risks.
-                </p>
-                <p className="text-void-600">
-                  They're documented attack patterns being used against production voice agents today.
-                  Every unprotected voice AI is a potential entry point.
-                </p>
-              </div>
+            </div>
+
+            <div className="flex-1">
+              <p className="text-2xl md:text-3xl font-bold text-white mb-2">
+                These aren't theoretical risks.
+              </p>
+              <p className="text-navy-300 text-lg">
+                They're documented attack patterns being used against production voice agents today.
+                Every unprotected voice AI is a potential entry point.
+              </p>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </>
   );
 }

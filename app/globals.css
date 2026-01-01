@@ -1,44 +1,44 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ========================================
-   V3 NOIR CYBER Design System
-   Deep obsidian + Electric cyan aesthetic
+   Navy Clinical Design System
+   Professional navy blue + white + black
    ======================================== */
 
 @layer base {
   :root {
-    /* Noir Cyber Theme */
-    --background: 240 10% 2%;
-    --foreground: 0 0% 100%;
+    /* Navy Clinical Theme */
+    --background: 210 40% 98%;
+    --foreground: 210 50% 10%;
 
-    --card: 240 10% 4%;
-    --card-foreground: 0 0% 100%;
+    --card: 0 0% 100%;
+    --card-foreground: 210 50% 10%;
 
-    --popover: 240 10% 4%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 50% 10%;
 
-    --primary: 187 100% 50%;
-    --primary-foreground: 240 10% 2%;
+    --primary: 210 70% 20%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 240 10% 8%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 210 20% 96%;
+    --secondary-foreground: 210 50% 10%;
 
-    --muted: 240 10% 12%;
-    --muted-foreground: 240 5% 50%;
+    --muted: 210 20% 96%;
+    --muted-foreground: 210 20% 45%;
 
-    --accent: 187 100% 50%;
-    --accent-foreground: 240 10% 2%;
+    --accent: 210 70% 45%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 350 89% 60%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 240 10% 15%;
-    --input: 240 10% 15%;
-    --ring: 187 100% 50%;
+    --border: 210 20% 90%;
+    --input: 210 20% 90%;
+    --ring: 210 70% 45%;
 
     --radius: 8px;
   }
@@ -56,398 +56,336 @@
   }
 
   body {
-    @apply bg-void text-white;
-    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    @apply bg-white text-navy-950;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   }
 
   ::selection {
-    @apply bg-cyan-500/30 text-white;
+    @apply bg-navy-200 text-navy-950;
   }
 }
 
 /* ========================================
-   V3 Noir Cyber - Core Components
+   Hero Dynamic Background
+   ======================================== */
+
+.hero-gradient-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #0a1628;
+}
+
+.hero-gradient-bg::before {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 40%, rgba(59, 124, 184, 0.3) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(45, 95, 138, 0.25) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 60% at 60% 80%, rgba(26, 58, 92, 0.35) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 40% at 30% 70%, rgba(90, 159, 212, 0.15) 0%, transparent 50%);
+  animation: gradient-drift 20s ease-in-out infinite;
+}
+
+.hero-gradient-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 70% 60%, rgba(35, 75, 114, 0.2) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 30% at 40% 30%, rgba(139, 189, 232, 0.1) 0%, transparent 50%);
+  animation: gradient-drift 25s ease-in-out infinite reverse;
+}
+
+@keyframes gradient-drift {
+  0%, 100% {
+    transform: translate(0%, 0%) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translate(5%, -5%) rotate(1deg) scale(1.02);
+  }
+  50% {
+    transform: translate(-3%, 5%) rotate(-1deg) scale(0.98);
+  }
+  75% {
+    transform: translate(-5%, -3%) rotate(0.5deg) scale(1.01);
+  }
+}
+
+/* Subtle grid overlay for precision feel */
+.hero-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 20%, transparent 70%);
+}
+
+/* Security nodes */
+.security-node {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(139, 189, 232, 0.4);
+  border-radius: 50%;
+  animation: node-pulse 4s ease-in-out infinite;
+}
+
+@keyframes node-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.5); }
+}
+
+/* ========================================
+   Core Components
    ======================================== */
 
 @layer components {
-  /* Glass Card - Deep noir version */
-  .noir-card {
+  /* Glass Card - Navy version */
+  .glass-card {
+    @apply relative overflow-hidden bg-white/80 backdrop-blur-xl;
+    border: 1px solid rgba(10, 22, 40, 0.1);
+  }
+
+  .glass-card-dark {
     @apply relative overflow-hidden;
-    background: rgba(10, 10, 15, 0.8);
+    background: rgba(10, 22, 40, 0.8);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(0, 229, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .noir-card-glow {
-    @apply noir-card transition-all duration-500;
+  .glass-card-hover {
+    @apply glass-card transition-all duration-300;
   }
 
-  .noir-card-glow:hover {
-    border-color: rgba(0, 229, 255, 0.3);
-    box-shadow: 0 0 40px rgba(0, 229, 255, 0.1),
-                0 20px 40px rgba(0, 0, 0, 0.4);
+  .glass-card-hover:hover {
+    @apply shadow-card-elevated;
+    border-color: rgba(59, 124, 184, 0.3);
+  }
+
+  /* Navy Card */
+  .navy-card {
+    @apply bg-navy-950 text-white rounded-xl p-6;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* White Card */
+  .white-card {
+    @apply bg-white rounded-xl p-6 shadow-card-navy;
+    border: 1px solid rgba(10, 22, 40, 0.08);
+  }
+
+  .white-card-hover {
+    @apply white-card transition-all duration-300;
+  }
+
+  .white-card-hover:hover {
+    @apply shadow-card-elevated;
+    transform: translateY(-4px);
+  }
+
+  /* Background Sections */
+  .section-navy {
+    @apply bg-navy-950 text-white;
+  }
+
+  .section-white {
+    @apply bg-white text-navy-950;
+  }
+
+  .section-light {
+    @apply bg-navy-50 text-navy-950;
   }
 
   /* Gradient Text */
-  .gradient-text-cyan {
+  .gradient-text-navy {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #67e8f9 0%, #00e5ff 50%, #0891b2 100%);
+    background-image: linear-gradient(135deg, #3b7cb8 0%, #0a1628 100%);
   }
 
-  .gradient-text-violet {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #c4b5fd 0%, #8b5cf6 50%, #6d28d9 100%);
+  /* Dividers */
+  .divider-navy {
+    @apply w-full h-px bg-gradient-to-r from-transparent via-navy-200 to-transparent;
   }
 
-  .gradient-text-threat {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #fda4af 0%, #f43f5e 50%, #be123c 100%);
-  }
-
-  .gradient-text-mixed {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #00e5ff 0%, #8b5cf6 50%, #f43f5e 100%);
-  }
-
-  /* Noir Background Variants */
-  .bg-noir-gradient {
-    background: linear-gradient(
-      180deg,
-      #050507 0%,
-      #0a0a0f 50%,
-      #0d0d14 100%
-    );
-  }
-
-  .bg-noir-radial {
-    background: radial-gradient(
-      ellipse at 50% 0%,
-      rgba(0, 229, 255, 0.08) 0%,
-      transparent 50%
-    ), #050507;
-  }
-
-  .bg-noir-mesh {
-    background:
-      radial-gradient(at 20% 30%, rgba(0, 229, 255, 0.12) 0%, transparent 50%),
-      radial-gradient(at 80% 70%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
-      radial-gradient(at 50% 50%, rgba(244, 63, 94, 0.05) 0%, transparent 60%),
-      #050507;
-  }
-
-  /* Grid Lines Background */
-  .bg-grid-noir {
-    background-image:
-      linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-  }
-
-  /* Scan Line Effect */
-  .scan-line-overlay {
-    @apply absolute inset-0 pointer-events-none overflow-hidden;
-  }
-
-  .scan-line-overlay::before {
-    content: '';
-    @apply absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent;
-    animation: scan-beam 3s linear infinite;
-  }
-
-  /* Glow Effects */
-  .glow-cyan {
-    box-shadow: 0 0 20px rgba(0, 229, 255, 0.2),
-                0 0 40px rgba(0, 229, 255, 0.1),
-                0 0 60px rgba(0, 229, 255, 0.05);
-  }
-
-  .glow-violet {
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.2),
-                0 0 40px rgba(139, 92, 246, 0.1),
-                0 0 60px rgba(139, 92, 246, 0.05);
-  }
-
-  .glow-threat {
-    box-shadow: 0 0 20px rgba(244, 63, 94, 0.2),
-                0 0 40px rgba(244, 63, 94, 0.1),
-                0 0 60px rgba(244, 63, 94, 0.05);
-  }
-
-  /* Border Glow Animation */
-  .border-glow-cyan {
-    @apply border border-cyan-500/30;
-    animation: pulse-glow 3s ease-in-out infinite;
-  }
-
-  /* Noise Texture Overlay */
-  .noise-overlay {
-    @apply absolute inset-0 pointer-events-none opacity-[0.03];
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  }
-
-  /* Animated Border */
-  .animated-border {
-    @apply relative;
-  }
-
-  .animated-border::before {
-    content: '';
-    @apply absolute -inset-px rounded-xl;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(0, 229, 255, 0.4),
-      transparent
-    );
-    background-size: 200% 100%;
-    animation: shimmer 3s linear infinite;
-  }
-
-  /* Data Stream Effect */
-  .data-stream {
-    @apply absolute w-1 h-1 rounded-full bg-cyan-400;
-    animation: data-flow 2s linear infinite;
-  }
-
-  /* Floating Elements */
-  .float-element {
-    animation: float-slow 6s ease-in-out infinite;
-  }
-
-  .float-element-delay-1 {
-    animation-delay: -2s;
-  }
-
-  .float-element-delay-2 {
-    animation-delay: -4s;
-  }
-
-  /* Orbital Ring */
-  .orbital-ring {
-    @apply absolute rounded-full border border-cyan-500/20;
-    animation: radar-sweep 20s linear infinite;
-  }
-
-  /* Section Dividers */
-  .divider-noir {
-    @apply w-full h-px bg-gradient-to-r from-transparent via-void-400 to-transparent;
-  }
-
-  .divider-cyan {
-    @apply w-full h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent;
-  }
-
-  .divider-glow {
-    @apply w-full h-0.5;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(0, 229, 255, 0.5),
-      transparent
-    );
-    box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
-  }
-
-  /* Asymmetric Layout Helpers */
-  .offset-right {
-    @apply ml-auto mr-0 md:mr-[-5%] lg:mr-[-10%];
-  }
-
-  .offset-left {
-    @apply mr-auto ml-0 md:ml-[-5%] lg:ml-[-10%];
-  }
-
-  /* Diagonal Cut */
-  .diagonal-cut {
-    clip-path: polygon(0 0, 100% 5%, 100% 100%, 0 95%);
-  }
-
-  .diagonal-cut-reverse {
-    clip-path: polygon(0 5%, 100% 0, 100% 95%, 0 100%);
+  .divider-white {
+    @apply w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent;
   }
 }
 
 /* ========================================
-   V3 Interactive States
-   ======================================== */
-
-@layer components {
-  /* Hover Card Effect */
-  .hover-lift {
-    @apply transition-all duration-500 ease-out;
-  }
-
-  .hover-lift:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4),
-                0 0 40px rgba(0, 229, 255, 0.1);
-  }
-
-  /* Magnetic Button */
-  .magnetic-btn {
-    @apply relative inline-flex items-center justify-center transition-transform duration-200 ease-out;
-  }
-
-  .magnetic-btn:hover {
-    @apply shadow-glow-cyan;
-  }
-
-  /* Interactive Underline */
-  .hover-underline {
-    @apply relative;
-  }
-
-  .hover-underline::after {
-    content: '';
-    @apply absolute left-0 bottom-0 w-0 h-0.5 bg-cyan-500 transition-all duration-300;
-  }
-
-  .hover-underline:hover::after {
-    @apply w-full;
-  }
-
-  /* Glitch Hover */
-  .glitch-hover:hover {
-    animation: glitch 0.3s ease-in-out;
-  }
-
-  /* Scale on View */
-  .scale-on-view {
-    @apply opacity-0 scale-95;
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-  }
-
-  .scale-on-view.is-visible {
-    @apply opacity-100 scale-100;
-  }
-}
-
-/* ========================================
-   V3 Typography
+   Typography
    ======================================== */
 
 @layer components {
   .heading-display {
-    @apply text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight;
-    line-height: 0.95;
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight;
+    line-height: 1.1;
   }
 
   .heading-1 {
-    @apply text-4xl md:text-5xl font-bold tracking-tight;
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight;
   }
 
   .heading-2 {
-    @apply text-3xl md:text-4xl font-bold tracking-tight;
+    @apply text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight;
   }
 
   .heading-3 {
-    @apply text-2xl md:text-3xl font-semibold;
+    @apply text-xl md:text-2xl font-semibold;
   }
 
   .heading-4 {
-    @apply text-xl font-semibold;
+    @apply text-lg font-semibold;
   }
 
   .body-large {
-    @apply text-lg text-void-900/70 leading-relaxed;
+    @apply text-lg leading-relaxed;
   }
 
   .body {
-    @apply text-base text-void-900/60;
+    @apply text-base leading-relaxed;
   }
 
   .label-sm {
     @apply text-xs font-semibold uppercase tracking-widest;
   }
 
-  /* Monospace Code */
   .mono-text {
     @apply font-mono text-sm;
-  }
-
-  /* Counter Numbers */
-  .counter-display {
-    @apply text-5xl md:text-6xl font-bold tabular-nums tracking-tight;
   }
 }
 
 /* ========================================
-   V3 Buttons
+   Buttons
    ======================================== */
 
 @layer components {
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold;
-    @apply bg-cyan-500 text-void hover:bg-cyan-400;
+    @apply bg-navy-950 text-white hover:bg-navy-800;
     @apply transition-all duration-300;
-    @apply shadow-glow-cyan hover:shadow-[0_0_40px_rgba(0,229,255,0.4)];
+    @apply shadow-lg hover:shadow-xl;
+  }
+
+  .btn-primary-light {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold;
+    @apply bg-white text-navy-950 hover:bg-navy-50;
+    @apply transition-all duration-300;
+    @apply shadow-lg hover:shadow-xl;
   }
 
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold;
-    @apply bg-void-200 text-white border border-void-400;
-    @apply hover:bg-void-300 hover:border-cyan-500/30;
+    @apply bg-navy-100 text-navy-950 hover:bg-navy-200;
+    @apply transition-all duration-300;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold;
+    @apply bg-transparent border-2 border-navy-950 text-navy-950;
+    @apply hover:bg-navy-950 hover:text-white;
+    @apply transition-all duration-300;
+  }
+
+  .btn-outline-light {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold;
+    @apply bg-transparent border-2 border-white text-white;
+    @apply hover:bg-white hover:text-navy-950;
     @apply transition-all duration-300;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium;
-    @apply text-void-900 hover:text-cyan-400 hover:bg-void-200;
-    @apply transition-all duration-300;
-  }
-
-  .btn-outline-cyan {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold;
-    @apply bg-transparent text-cyan-400 border border-cyan-500/50;
-    @apply hover:bg-cyan-500/10 hover:border-cyan-400;
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium;
+    @apply text-navy-700 hover:text-navy-950 hover:bg-navy-100;
     @apply transition-all duration-300;
   }
 }
 
 /* ========================================
-   V3 Badges
+   Badges
    ======================================== */
 
 @layer components {
-  .badge-cyan {
+  .badge-navy {
     @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full;
-    @apply bg-cyan-500/10 text-cyan-400 border border-cyan-500/20;
+    @apply bg-navy-100 text-navy-700 border border-navy-200;
     @apply text-xs font-semibold;
   }
 
-  .badge-violet {
+  .badge-navy-dark {
     @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full;
-    @apply bg-violet-500/10 text-violet-400 border border-violet-500/20;
+    @apply bg-white/10 text-white border border-white/20;
     @apply text-xs font-semibold;
   }
 
-  .badge-threat {
+  .badge-success {
     @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full;
-    @apply bg-threat-500/10 text-threat-400 border border-threat-500/20;
+    @apply bg-success-50 text-success-700 border border-success-200;
     @apply text-xs font-semibold;
   }
 
-  .badge-secure {
+  .badge-danger {
     @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full;
-    @apply bg-secure-500/10 text-secure-400 border border-secure-500/20;
+    @apply bg-danger-50 text-danger-700 border border-danger-100;
     @apply text-xs font-semibold;
   }
 }
 
 /* ========================================
-   V3 Code Blocks
+   Cards & Panels
    ======================================== */
 
 @layer components {
-  .code-block-noir {
+  .feature-card {
+    @apply white-card-hover;
+  }
+
+  .stat-card {
+    @apply white-card text-center;
+  }
+
+  .pricing-card {
+    @apply white-card transition-all duration-300;
+  }
+
+  .pricing-card-featured {
+    @apply navy-card relative;
+    box-shadow: 0 0 60px rgba(59, 124, 184, 0.15);
+  }
+
+  .pricing-card-featured::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(59, 124, 184, 0.5), rgba(139, 189, 232, 0.3));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
+/* ========================================
+   Code Blocks
+   ======================================== */
+
+@layer components {
+  .code-block {
     @apply relative rounded-xl overflow-hidden;
-    @apply bg-void-100 border border-void-300;
+    @apply bg-navy-950 border border-navy-800;
   }
 
   .code-block-header {
     @apply flex items-center justify-between px-4 py-3;
-    @apply bg-void-200 border-b border-void-300;
+    @apply bg-navy-900 border-b border-navy-800;
   }
 
   .code-block-dots {
@@ -458,80 +396,35 @@
     @apply w-3 h-3 rounded-full;
   }
 
-  .code-block-dot-red {
-    @apply bg-threat-500/60;
-  }
-
-  .code-block-dot-yellow {
-    @apply bg-warning-500/60;
-  }
-
-  .code-block-dot-green {
-    @apply bg-secure-500/60;
-  }
-
   .code-block-body {
-    @apply p-4 font-mono text-sm overflow-x-auto;
-  }
-
-  .code-line {
-    @apply block py-0.5;
+    @apply p-4 font-mono text-sm overflow-x-auto text-white/90;
   }
 
   .code-keyword {
-    @apply text-violet-400;
+    @apply text-navy-300;
   }
 
   .code-string {
-    @apply text-secure-400;
+    @apply text-success-400;
   }
 
   .code-comment {
-    @apply text-void-600 italic;
+    @apply text-navy-500 italic;
   }
 
   .code-function {
-    @apply text-cyan-400;
-  }
-
-  .code-variable {
-    @apply text-threat-300;
+    @apply text-navy-400;
   }
 }
 
 /* ========================================
-   V3 Cards & Panels
-   ======================================== */
-
-@layer components {
-  .feature-card {
-    @apply noir-card rounded-2xl p-6 hover-lift;
-  }
-
-  .stat-card {
-    @apply noir-card rounded-xl p-4 text-center;
-  }
-
-  .pricing-card {
-    @apply noir-card-glow rounded-2xl p-8;
-  }
-
-  .pricing-card-featured {
-    @apply pricing-card border-cyan-500/30;
-    box-shadow: 0 0 60px rgba(0, 229, 255, 0.1);
-  }
-}
-
-/* ========================================
-   V3 Scroll Animations
+   Scroll Animations
    ======================================== */
 
 @layer utilities {
-  /* Base scroll animation states */
   .reveal-up {
-    @apply opacity-0 translate-y-10;
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    @apply opacity-0 translate-y-8;
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
   }
 
   .reveal-up.is-visible {
@@ -539,9 +432,8 @@
   }
 
   .reveal-left {
-    @apply opacity-0 translate-x-10;
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    @apply opacity-0 translate-x-8;
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
   }
 
   .reveal-left.is-visible {
@@ -549,9 +441,8 @@
   }
 
   .reveal-right {
-    @apply opacity-0 -translate-x-10;
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    @apply opacity-0 -translate-x-8;
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
   }
 
   .reveal-right.is-visible {
@@ -560,7 +451,7 @@
 
   .reveal-scale {
     @apply opacity-0 scale-95;
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
   }
 
   .reveal-scale.is-visible {
@@ -573,47 +464,51 @@
   .delay-300 { transition-delay: 300ms; }
   .delay-400 { transition-delay: 400ms; }
   .delay-500 { transition-delay: 500ms; }
-  .delay-600 { transition-delay: 600ms; }
-  .delay-700 { transition-delay: 700ms; }
-  .delay-800 { transition-delay: 800ms; }
 }
 
 /* ========================================
-   V3 Special Effects
+   Hover Effects
    ======================================== */
 
 @layer utilities {
-  /* Text shadow for headings */
-  .text-glow {
-    text-shadow: 0 0 20px rgba(0, 229, 255, 0.3),
-                 0 0 40px rgba(0, 229, 255, 0.1);
+  .hover-lift {
+    @apply transition-all duration-300;
   }
 
-  /* Frosted glass effect */
-  .frosted {
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    @apply shadow-card-elevated;
   }
 
-  /* Vignette overlay */
-  .vignette {
-    box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.5);
+  .hover-scale {
+    @apply transition-transform duration-300;
   }
 
-  /* Smooth gradient mask */
-  .mask-fade-bottom {
-    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-  }
-
-  .mask-fade-top {
-    mask-image: linear-gradient(to top, black 80%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to top, black 80%, transparent 100%);
+  .hover-scale:hover {
+    transform: scale(1.02);
   }
 }
 
 /* ========================================
-   Scrollbar - Noir Theme
+   Navbar Styles
+   ======================================== */
+
+.navbar-transparent {
+  @apply bg-transparent;
+}
+
+.navbar-solid {
+  @apply bg-white/95 backdrop-blur-lg shadow-sm;
+  border-bottom: 1px solid rgba(10, 22, 40, 0.08);
+}
+
+.navbar-solid-dark {
+  @apply bg-navy-950/95 backdrop-blur-lg;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ========================================
+   Scrollbar
    ======================================== */
 
 ::-webkit-scrollbar {
@@ -622,34 +517,33 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-void-100;
+  @apply bg-navy-50;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-void-400 rounded-full;
+  @apply bg-navy-300 rounded-full;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-void-500;
+  @apply bg-navy-400;
 }
 
 /* ========================================
-   Legacy Support (Dashboard styles)
+   Legacy Dashboard Support
    ======================================== */
 
 @layer components {
-  /* Keep essential dashboard styles for app pages */
   .card-panel {
-    @apply bg-white rounded border border-midnight-300/60 shadow-sm;
+    @apply bg-white rounded-lg border border-navy-200 shadow-sm;
   }
 
   .sidebar {
-    @apply bg-midnight-900 border-r border-midnight-800;
+    @apply bg-navy-950 border-r border-navy-800;
   }
 
   .topbar {
-    @apply h-11 bg-white border-b border-midnight-200 px-4 flex items-center justify-between;
+    @apply h-11 bg-white border-b border-navy-200 px-4 flex items-center justify-between;
   }
 }

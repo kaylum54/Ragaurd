@@ -70,11 +70,11 @@ function TypewriterCode({ isVisible }: { isVisible: boolean }) {
   }, [isVisible, hasStarted]);
 
   const typeStyles = {
-    keyword: 'text-violet-400',
-    string: 'text-secure-400',
-    function: 'text-cyan-400',
-    variable: 'text-threat-300',
-    default: 'text-void-700',
+    keyword: 'text-navy-300',
+    string: 'text-success-400',
+    function: 'text-navy-400',
+    variable: 'text-warning-400',
+    default: 'text-white/80',
   };
 
   return (
@@ -84,12 +84,12 @@ function TypewriterCode({ isVisible }: { isVisible: boolean }) {
           key={index}
           className={`transition-all duration-200 ${index < visibleLines ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'}`}
         >
-          <span className="text-void-500 select-none mr-4">{String(index + 1).padStart(2, ' ')}</span>
+          <span className="text-navy-500 select-none mr-4">{String(index + 1).padStart(2, ' ')}</span>
           <span className={typeStyles[line.type as keyof typeof typeStyles]}>
             {line.text}
           </span>
           {index === visibleLines - 1 && visibleLines < codeLines.length && (
-            <span className="animate-blink-caret text-cyan-400 ml-0.5">|</span>
+            <span className="animate-pulse text-navy-300 ml-0.5">|</span>
           )}
         </div>
       ))}
@@ -131,16 +131,20 @@ export function HowItWorks() {
   }, [isVisible]);
 
   return (
-    <section ref={sectionRef} className="py-24 md:py-32 bg-void-50 relative" id="how-it-works">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-void to-void-50" />
-      <div className="divider-cyan absolute top-0" />
+    <section ref={sectionRef} className="py-16 md:py-20 section-white relative overflow-hidden" id="how-it-works">
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 opacity-[0.02]">
+        <div className="absolute inset-0" style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, #0a1628 1px, transparent 0)',
+          backgroundSize: '40px 40px'
+        }} />
+      </div>
 
       <div className="container relative">
         {/* Header */}
-        <div className="max-w-3xl mx-auto text-center mb-16">
+        <div className="max-w-3xl mx-auto text-center mb-12">
           <div
-            className={`badge-cyan mb-6 opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+            className={`badge-navy mb-6 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
             style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}
           >
             <Zap className="w-3.5 h-3.5" />
@@ -148,27 +152,27 @@ export function HowItWorks() {
           </div>
 
           <h2
-            className={`heading-1 text-white mb-6 opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+            className={`heading-1 text-navy-950 mb-6 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
             style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}
           >
             Integration in<br />
-            <span className="gradient-text-cyan">5 minutes</span>
+            <span className="text-navy-600">5 minutes</span>
           </h2>
 
           <p
-            className={`text-lg text-void-700 leading-relaxed opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+            className={`text-lg text-navy-600 leading-relaxed opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
             style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}
           >
             No architecture changes. One API call. That's it.
           </p>
 
           <div
-            className={`inline-flex items-center gap-3 mt-6 noir-card rounded-full px-5 py-2.5 opacity-0 ${isVisible ? 'animate-cascade-up' : ''}`}
+            className={`inline-flex items-center gap-3 mt-6 white-card rounded-full px-5 py-2.5 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
             style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}
           >
-            <span className="w-2 h-2 rounded-full bg-secure-500 animate-pulse" />
-            <span className="text-sm text-void-600">Average integration:</span>
-            <span className="text-sm font-bold text-secure-400">4.2 minutes</span>
+            <span className="w-2 h-2 rounded-full bg-success-500 animate-pulse" />
+            <span className="text-sm text-navy-600">Average integration:</span>
+            <span className="text-sm font-bold text-navy-950">4.2 minutes</span>
           </div>
         </div>
 
@@ -176,13 +180,13 @@ export function HowItWorks() {
         <div className="max-w-5xl mx-auto grid lg:grid-cols-2 gap-8">
           {/* Steps */}
           <div
-            className={`opacity-0 ${isVisible ? 'animate-cascade-left' : ''}`}
+            className={`opacity-0 ${isVisible ? 'animate-slide-right' : ''}`}
             style={{ animationDelay: '500ms', animationFillMode: 'forwards' }}
           >
-            <div className="noir-card rounded-2xl p-6">
+            <div className="white-card rounded-2xl p-6">
               <div className="relative">
                 {/* Timeline line */}
-                <div className="absolute left-5 top-8 bottom-8 w-0.5 bg-gradient-to-b from-void-400 via-cyan-500/50 to-secure-500" />
+                <div className="absolute left-5 top-8 bottom-8 w-0.5 bg-gradient-to-b from-navy-200 via-navy-400 to-success-500" />
 
                 <div className="space-y-1">
                   {steps.map((step, index) => {
@@ -192,17 +196,17 @@ export function HowItWorks() {
                     return (
                       <div
                         key={index}
-                        className={`relative flex gap-5 p-4 rounded-xl cursor-pointer transition-all ${isActive ? 'bg-cyan-500/10' : 'hover:bg-void-200'}`}
+                        className={`relative flex gap-5 p-4 rounded-xl cursor-pointer transition-all ${isActive ? 'bg-navy-50' : 'hover:bg-navy-50/50'}`}
                         onClick={() => setActiveStep(index)}
                       >
                         <div className="relative z-10 shrink-0">
                           {step.isComplete || isPast ? (
-                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${step.isComplete ? 'bg-secure-500' : 'bg-cyan-500'}`}>
+                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${step.isComplete ? 'bg-success-500' : 'bg-navy-500'}`}>
                               <Check className="w-5 h-5 text-white" />
                             </div>
                           ) : (
                             <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-base font-bold transition-all ${
-                              isActive ? 'bg-cyan-500 text-void ring-4 ring-cyan-500/30' : 'bg-void-300 text-void-600 border border-void-400'
+                              isActive ? 'bg-navy-950 text-white ring-4 ring-navy-200' : 'bg-navy-100 text-navy-600 border border-navy-200'
                             }`}>
                               {step.number}
                             </div>
@@ -211,16 +215,16 @@ export function HowItWorks() {
 
                         <div className="flex-1 pt-1">
                           <div className="flex items-center gap-3">
-                            <h3 className={`text-base font-semibold transition-colors ${isActive ? 'text-cyan-400' : 'text-white'}`}>
+                            <h3 className={`text-base font-semibold transition-colors ${isActive ? 'text-navy-950' : 'text-navy-700'}`}>
                               {step.title}
                             </h3>
                             {step.time && (
-                              <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${isActive ? 'bg-cyan-500/20 text-cyan-400' : 'bg-void-300 text-void-500'}`}>
+                              <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${isActive ? 'bg-navy-100 text-navy-700' : 'bg-navy-50 text-navy-500'}`}>
                                 ~{step.time}
                               </span>
                             )}
                           </div>
-                          <p className="text-sm text-void-600 mt-1">{step.description}</p>
+                          <p className="text-sm text-navy-500 mt-1">{step.description}</p>
                         </div>
                       </div>
                     );
@@ -232,24 +236,24 @@ export function HowItWorks() {
 
           {/* Code */}
           <div
-            className={`opacity-0 ${isVisible ? 'animate-cascade-right' : ''}`}
+            className={`opacity-0 ${isVisible ? 'animate-slide-left' : ''}`}
             style={{ animationDelay: '600ms', animationFillMode: 'forwards' }}
           >
-            <div className="noir-card rounded-2xl overflow-hidden h-full flex flex-col">
+            <div className="code-block rounded-2xl overflow-hidden h-full flex flex-col">
               {/* Terminal header */}
-              <div className="flex items-center justify-between px-4 py-3 border-b border-void-300 bg-void-100">
+              <div className="code-block-header">
                 <div className="flex items-center gap-3">
-                  <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-threat-500/60" />
-                    <div className="w-3 h-3 rounded-full bg-warning-500/60" />
-                    <div className="w-3 h-3 rounded-full bg-secure-500/60" />
+                  <div className="code-block-dots">
+                    <div className="code-block-dot bg-danger-500/60" />
+                    <div className="code-block-dot bg-warning-500/60" />
+                    <div className="code-block-dot bg-success-500/60" />
                   </div>
-                  <span className="text-xs text-void-500 font-mono">integration.ts</span>
+                  <span className="text-xs text-navy-400 font-mono">integration.ts</span>
                 </div>
                 <button
                   onClick={handleCopy}
                   className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                    copied ? 'bg-secure-500/20 text-secure-400' : 'bg-void-200 text-void-500 hover:bg-void-300 hover:text-white'
+                    copied ? 'bg-success-500/20 text-success-400' : 'bg-navy-800 text-navy-400 hover:bg-navy-700 hover:text-white'
                   }`}
                 >
                   {copied ? <><Check className="w-3.5 h-3.5" /> Copied!</> : <><Copy className="w-3.5 h-3.5" /> Copy</>}
@@ -257,13 +261,13 @@ export function HowItWorks() {
               </div>
 
               {/* Code content */}
-              <div className="p-4 overflow-x-auto flex-1 bg-void-100/50">
+              <div className="code-block-body flex-1">
                 <TypewriterCode isVisible={isVisible} />
               </div>
 
               {/* Footer */}
-              <div className="px-4 py-3 border-t border-void-300 bg-void-100/30">
-                <p className="text-xs text-void-500">
+              <div className="px-4 py-3 border-t border-navy-800 bg-navy-900/50">
+                <p className="text-xs text-navy-400">
                   That's it. Your voice agent is now protected by 6 defense layers.
                 </p>
               </div>
