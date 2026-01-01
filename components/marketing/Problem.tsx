@@ -43,23 +43,25 @@ const threats = [
 
 const severityStyles = {
   critical: {
-    badge: 'bg-danger-50 text-danger-700 border-danger-100',
-    icon: 'bg-danger-50 text-danger-600',
-    accent: 'bg-danger-500',
+    badge: 'bg-danger-500/10 text-danger-500 border-danger-500/20',
+    icon: 'bg-gradient-to-br from-danger-500/20 to-danger-600/10 text-danger-500',
+    glow: 'group-hover:shadow-danger-500/20',
+    accent: 'from-danger-500 to-danger-600',
   },
   high: {
-    badge: 'bg-warning-50 text-warning-700 border-warning-100',
-    icon: 'bg-warning-50 text-warning-600',
-    accent: 'bg-warning-500',
+    badge: 'bg-warning-500/10 text-warning-600 border-warning-500/20',
+    icon: 'bg-gradient-to-br from-warning-500/20 to-warning-600/10 text-warning-600',
+    glow: 'group-hover:shadow-warning-500/20',
+    accent: 'from-warning-500 to-warning-600',
   },
   medium: {
-    badge: 'bg-navy-100 text-navy-700 border-navy-200',
-    icon: 'bg-navy-100 text-navy-600',
-    accent: 'bg-navy-500',
+    badge: 'bg-navy-500/10 text-navy-500 border-navy-500/20',
+    icon: 'bg-gradient-to-br from-navy-500/20 to-navy-600/10 text-navy-600',
+    glow: 'group-hover:shadow-navy-500/20',
+    accent: 'from-navy-500 to-navy-600',
   },
 };
 
-// Scroll animation hook
 function useScrollAnimation() {
   const ref = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -89,35 +91,39 @@ export function Problem() {
 
   return (
     <>
-      <section ref={sectionRef} className="pt-16 md:pt-20 pb-0 section-white relative">
-        {/* Subtle background pattern */}
-        <div className="absolute inset-0 opacity-[0.02]">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'radial-gradient(circle at 1px 1px, #0a1628 1px, transparent 0)',
-            backgroundSize: '40px 40px'
-          }} />
+      <section ref={sectionRef} className="pt-20 md:pt-28 pb-0 section-white relative">
+        {/* Subtle geometric pattern */}
+        <div className="absolute inset-0 opacity-[0.015]">
+          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="grid-pattern" width="60" height="60" patternUnits="userSpaceOnUse">
+                <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#0a1628" strokeWidth="1"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid-pattern)" />
+          </svg>
         </div>
 
-        {/* Navy strip at bottom to eliminate gap */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-navy-950" />
+        {/* Navy strip at bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-navy-950" />
 
         <div className="container relative">
           {/* Header */}
-          <div className="max-w-3xl mb-12">
+          <div className="max-w-3xl mb-16">
             <div
-              className={`badge-danger mb-6 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-danger-500/10 border border-danger-500/20 mb-8 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
               style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}
             >
-              <AlertTriangle className="w-3.5 h-3.5" />
-              <span>Active Threat Landscape</span>
+              <AlertTriangle className="w-4 h-4 text-danger-500" />
+              <span className="text-xs font-semibold text-danger-600 uppercase tracking-wider">Active Threat Landscape</span>
             </div>
 
             <h2
-              className={`heading-1 text-navy-950 mb-6 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+              className={`text-4xl md:text-5xl font-bold text-navy-950 mb-6 tracking-tight opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
               style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}
             >
               Voice AI Has a{' '}
-              <span className="text-danger-600">Security Problem</span>
+              <span className="bg-gradient-to-r from-danger-500 to-danger-600 bg-clip-text text-transparent">Security Problem</span>
             </h2>
 
             <p
@@ -131,7 +137,7 @@ export function Problem() {
           </div>
 
           {/* Threat Cards Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {threats.map((threat, index) => {
               const styles = severityStyles[threat.severity as keyof typeof severityStyles];
               const isLarge = index === 0;
@@ -139,37 +145,37 @@ export function Problem() {
               return (
                 <div
                   key={threat.title}
-                  className={`group relative white-card-hover opacity-0 ${isLarge ? 'lg:col-span-2' : ''} ${isVisible ? 'animate-fade-up' : ''}`}
+                  className={`group relative bg-white rounded-2xl p-6 border border-navy-100 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl opacity-0 ${styles.glow} ${isLarge ? 'lg:col-span-2' : ''} ${isVisible ? 'animate-fade-up' : ''}`}
                   style={{ animationDelay: `${400 + index * 100}ms`, animationFillMode: 'forwards' }}
                 >
                   {/* Severity badge */}
-                  <div className={`absolute top-4 right-4 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full border ${styles.badge}`}>
+                  <div className={`absolute top-5 right-5 px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full border ${styles.badge}`}>
                     {threat.severity}
                   </div>
 
                   {/* Icon */}
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110 ${styles.icon}`}>
-                    <threat.icon className="w-6 h-6" />
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:scale-110 ${styles.icon}`}>
+                    <threat.icon className="w-7 h-7" />
                   </div>
 
                   {/* Content */}
-                  <h3 className="text-lg font-semibold text-navy-950 mb-2 group-hover:text-navy-700 transition-colors">
+                  <h3 className="text-xl font-bold text-navy-950 mb-3 group-hover:text-navy-800 transition-colors">
                     {threat.title}
                   </h3>
-                  <p className="text-sm text-navy-600 leading-relaxed mb-4">
+                  <p className="text-sm text-navy-600 leading-relaxed mb-5">
                     {threat.description}
                   </p>
 
                   {/* Example */}
-                  <div className="pt-4 border-t border-navy-100">
-                    <p className="text-[10px] text-navy-400 uppercase tracking-wider mb-1">Attack example:</p>
-                    <code className="text-xs text-danger-600/80 font-mono leading-relaxed">
+                  <div className="pt-5 border-t border-navy-100/60">
+                    <p className="text-[10px] text-navy-400 uppercase tracking-wider mb-2 font-medium">Attack example:</p>
+                    <code className="text-xs text-danger-600/80 font-mono leading-relaxed block bg-navy-50/50 px-3 py-2 rounded-lg">
                       {threat.example}
                     </code>
                   </div>
 
-                  {/* Bottom accent on hover */}
-                  <div className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-b-xl scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${styles.accent}`} />
+                  {/* Bottom accent line */}
+                  <div className={`absolute bottom-0 left-0 right-0 h-1 rounded-b-2xl bg-gradient-to-r ${styles.accent} scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`} />
                 </div>
               );
             })}
@@ -177,32 +183,32 @@ export function Problem() {
         </div>
       </section>
 
-      {/* Warning callout - Full bleed with sharp edges, no gap */}
+      {/* Warning callout */}
       <div
         className={`relative bg-navy-950 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
         style={{ animationDelay: '900ms', animationFillMode: 'forwards' }}
       >
-        {/* Background glow effect */}
-        <div className="absolute top-0 right-1/4 w-96 h-32 bg-danger-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-1/4 w-64 h-24 bg-navy-400/10 rounded-full blur-3xl" />
+        {/* Background effects */}
+        <div className="absolute top-0 right-1/4 w-[500px] h-40 bg-danger-500/5 rounded-full blur-[100px]" />
+        <div className="absolute bottom-0 left-1/4 w-[400px] h-32 bg-navy-400/10 rounded-full blur-[80px]" />
 
-        <div className="container relative py-12 md:py-16">
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-6 max-w-4xl mx-auto">
+        <div className="container relative py-16 md:py-20">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-8 max-w-4xl mx-auto">
             {/* Pulsing indicator */}
             <div className="flex-shrink-0">
-              <div className="relative w-16 h-16 rounded-none bg-danger-500/20 border border-danger-500/30 flex items-center justify-center">
-                <span className="flex h-4 w-4">
+              <div className="relative w-20 h-20 rounded-2xl bg-danger-500/10 border border-danger-500/20 flex items-center justify-center">
+                <span className="flex h-5 w-5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-danger-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-4 w-4 bg-danger-500" />
+                  <span className="relative inline-flex rounded-full h-5 w-5 bg-danger-500" />
                 </span>
               </div>
             </div>
 
             <div className="flex-1">
-              <p className="text-2xl md:text-3xl font-bold text-white mb-2">
+              <p className="text-2xl md:text-3xl font-bold text-white mb-3 tracking-tight">
                 These aren't theoretical risks.
               </p>
-              <p className="text-navy-300 text-lg">
+              <p className="text-navy-300 text-lg leading-relaxed">
                 They're documented attack patterns being used against production voice agents today.
                 Every unprotected voice AI is a potential entry point.
               </p>

@@ -48,7 +48,6 @@ if (allowed) {
   sendToAgent(userMessage);
 }`;
 
-// Typewriter code with syntax highlighting
 function TypewriterCode({ isVisible }: { isVisible: boolean }) {
   const [visibleLines, setVisibleLines] = useState(0);
   const [hasStarted, setHasStarted] = useState(false);
@@ -84,7 +83,7 @@ function TypewriterCode({ isVisible }: { isVisible: boolean }) {
           key={index}
           className={`transition-all duration-200 ${index < visibleLines ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'}`}
         >
-          <span className="text-navy-500 select-none mr-4">{String(index + 1).padStart(2, ' ')}</span>
+          <span className="text-navy-600 select-none mr-4 inline-block w-6 text-right">{String(index + 1).padStart(2, ' ')}</span>
           <span className={typeStyles[line.type as keyof typeof typeStyles]}>
             {line.text}
           </span>
@@ -97,7 +96,6 @@ function TypewriterCode({ isVisible }: { isVisible: boolean }) {
   );
 }
 
-// Scroll animation hook
 function useScrollAnimation() {
   const ref = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -131,28 +129,32 @@ export function HowItWorks() {
   }, [isVisible]);
 
   return (
-    <section ref={sectionRef} className="py-16 md:py-20 section-white relative overflow-hidden" id="how-it-works">
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 opacity-[0.02]">
-        <div className="absolute inset-0" style={{
-          backgroundImage: 'radial-gradient(circle at 1px 1px, #0a1628 1px, transparent 0)',
-          backgroundSize: '40px 40px'
-        }} />
+    <section ref={sectionRef} className="py-20 md:py-28 section-white relative overflow-hidden" id="how-it-works">
+      {/* Background pattern */}
+      <div className="absolute inset-0 opacity-[0.015]">
+        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="lines-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M0 40L40 0" stroke="#0a1628" strokeWidth="0.5" fill="none"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#lines-pattern)" />
+        </svg>
       </div>
 
       <div className="container relative">
         {/* Header */}
-        <div className="max-w-3xl mx-auto text-center mb-12">
+        <div className="max-w-3xl mx-auto text-center mb-16">
           <div
-            className={`badge-navy mb-6 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-navy-100/50 border border-navy-200/50 mb-8 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
             style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}
           >
-            <Zap className="w-3.5 h-3.5" />
-            <span>Quick Setup</span>
+            <Zap className="w-4 h-4 text-navy-600" />
+            <span className="text-xs font-semibold text-navy-700 uppercase tracking-wider">Quick Setup</span>
           </div>
 
           <h2
-            className={`heading-1 text-navy-950 mb-6 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+            className={`text-4xl md:text-5xl font-bold text-navy-950 mb-6 tracking-tight opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
             style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}
           >
             Integration in<br />
@@ -167,10 +169,13 @@ export function HowItWorks() {
           </p>
 
           <div
-            className={`inline-flex items-center gap-3 mt-6 white-card rounded-full px-5 py-2.5 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
+            className={`inline-flex items-center gap-4 mt-8 bg-white rounded-full px-6 py-3 shadow-lg shadow-navy-950/5 border border-navy-100/50 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
             style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}
           >
-            <span className="w-2 h-2 rounded-full bg-success-500 animate-pulse" />
+            <div className="relative">
+              <span className="w-2.5 h-2.5 rounded-full bg-success-500 block" />
+              <span className="absolute inset-0 w-2.5 h-2.5 rounded-full bg-success-500 animate-ping" />
+            </div>
             <span className="text-sm text-navy-600">Average integration:</span>
             <span className="text-sm font-bold text-navy-950">4.2 minutes</span>
           </div>
@@ -183,12 +188,12 @@ export function HowItWorks() {
             className={`opacity-0 ${isVisible ? 'animate-slide-right' : ''}`}
             style={{ animationDelay: '500ms', animationFillMode: 'forwards' }}
           >
-            <div className="white-card rounded-2xl p-6">
+            <div className="bg-white rounded-2xl p-6 md:p-8 shadow-xl shadow-navy-950/5 border border-navy-100/50">
               <div className="relative">
                 {/* Timeline line */}
-                <div className="absolute left-5 top-8 bottom-8 w-0.5 bg-gradient-to-b from-navy-200 via-navy-400 to-success-500" />
+                <div className="absolute left-6 top-10 bottom-10 w-[2px] bg-gradient-to-b from-navy-200 via-navy-400 to-success-500" />
 
-                <div className="space-y-1">
+                <div className="space-y-2">
                   {steps.map((step, index) => {
                     const isActive = activeStep === index;
                     const isPast = activeStep > index;
@@ -196,17 +201,17 @@ export function HowItWorks() {
                     return (
                       <div
                         key={index}
-                        className={`relative flex gap-5 p-4 rounded-xl cursor-pointer transition-all ${isActive ? 'bg-navy-50' : 'hover:bg-navy-50/50'}`}
+                        className={`relative flex gap-5 p-4 rounded-xl cursor-pointer transition-all duration-300 ${isActive ? 'bg-navy-50' : 'hover:bg-navy-50/50'}`}
                         onClick={() => setActiveStep(index)}
                       >
                         <div className="relative z-10 shrink-0">
                           {step.isComplete || isPast ? (
-                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${step.isComplete ? 'bg-success-500' : 'bg-navy-500'}`}>
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all ${step.isComplete ? 'bg-success-500 shadow-lg shadow-success-500/30' : 'bg-navy-500 shadow-lg shadow-navy-500/30'}`}>
                               <Check className="w-5 h-5 text-white" />
                             </div>
                           ) : (
-                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-base font-bold transition-all ${
-                              isActive ? 'bg-navy-950 text-white ring-4 ring-navy-200' : 'bg-navy-100 text-navy-600 border border-navy-200'
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-base font-bold transition-all ${
+                              isActive ? 'bg-navy-950 text-white ring-4 ring-navy-100 shadow-lg' : 'bg-navy-100 text-navy-600 border border-navy-200'
                             }`}>
                               {step.number}
                             </div>
@@ -219,7 +224,7 @@ export function HowItWorks() {
                               {step.title}
                             </h3>
                             {step.time && (
-                              <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${isActive ? 'bg-navy-100 text-navy-700' : 'bg-navy-50 text-navy-500'}`}>
+                              <span className={`text-[10px] font-medium px-2.5 py-1 rounded-full transition-colors ${isActive ? 'bg-navy-200 text-navy-700' : 'bg-navy-100 text-navy-500'}`}>
                                 ~{step.time}
                               </span>
                             )}
@@ -239,20 +244,20 @@ export function HowItWorks() {
             className={`opacity-0 ${isVisible ? 'animate-slide-left' : ''}`}
             style={{ animationDelay: '600ms', animationFillMode: 'forwards' }}
           >
-            <div className="code-block rounded-2xl overflow-hidden h-full flex flex-col">
+            <div className="bg-navy-950 rounded-2xl overflow-hidden h-full flex flex-col shadow-2xl">
               {/* Terminal header */}
-              <div className="code-block-header">
-                <div className="flex items-center gap-3">
-                  <div className="code-block-dots">
-                    <div className="code-block-dot bg-danger-500/60" />
-                    <div className="code-block-dot bg-warning-500/60" />
-                    <div className="code-block-dot bg-success-500/60" />
+              <div className="flex items-center justify-between px-5 py-4 border-b border-navy-800">
+                <div className="flex items-center gap-4">
+                  <div className="flex gap-2">
+                    <div className="w-3 h-3 rounded-full bg-danger-500/60" />
+                    <div className="w-3 h-3 rounded-full bg-warning-500/60" />
+                    <div className="w-3 h-3 rounded-full bg-success-500/60" />
                   </div>
                   <span className="text-xs text-navy-400 font-mono">integration.ts</span>
                 </div>
                 <button
                   onClick={handleCopy}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium transition-all ${
                     copied ? 'bg-success-500/20 text-success-400' : 'bg-navy-800 text-navy-400 hover:bg-navy-700 hover:text-white'
                   }`}
                 >
@@ -261,12 +266,12 @@ export function HowItWorks() {
               </div>
 
               {/* Code content */}
-              <div className="code-block-body flex-1">
+              <div className="flex-1 p-5 overflow-x-auto">
                 <TypewriterCode isVisible={isVisible} />
               </div>
 
               {/* Footer */}
-              <div className="px-4 py-3 border-t border-navy-800 bg-navy-900/50">
+              <div className="px-5 py-4 border-t border-navy-800 bg-navy-900/50">
                 <p className="text-xs text-navy-400">
                   That's it. Your voice agent is now protected by 6 defense layers.
                 </p>
