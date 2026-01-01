@@ -2,11 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { TrendingUp, AlertCircle, Code, Mic2, Calendar, Target, ShieldOff } from 'lucide-react';
+import { ThreatInterceptionBackground } from './shared/ThreatInterceptionBackground';
 
 const timeline = [
   { year: '2024', title: 'Early Adoption', description: 'Voice AI pilots begin, security overlooked', icon: Calendar, status: 'past' },
-  { year: '2025', title: 'Production Scale', description: 'Enterprise deployments, attacks emerge', icon: Target, status: 'current' },
-  { year: '2026', title: 'Critical Window', description: 'Attack sophistication outpaces defenses', icon: ShieldOff, status: 'future' },
+  { year: '2025', title: 'Critical Window', description: 'Enterprise deployments, attacks emerge', icon: Target, status: 'past' },
+  { year: '2026', title: 'Maximum Risk', description: 'Attack sophistication outpaces defenses', icon: ShieldOff, status: 'current' },
 ];
 
 const factors = [
@@ -71,8 +72,10 @@ export function WhyNow() {
   const { ref: sectionRef, isVisible } = useScrollAnimation();
 
   return (
-    <section ref={sectionRef} className="py-24 md:py-32 bg-white-off relative overflow-hidden">
-      <div className="container relative">
+    <section ref={sectionRef} className="py-24 md:py-32 bg-white relative overflow-hidden" id="now">
+      <ThreatInterceptionBackground accentColor="danger" opacity={0.6} centerOpacity={0.9} />
+      
+      <div className="container relative z-10">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <span
             className={`inline-block text-sm font-semibold text-navy-500 uppercase tracking-wider mb-4 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
