@@ -30,7 +30,7 @@ export interface User {
 
 // Check if demo mode is enabled (controlled by ENABLE_DEMO_MODE env var)
 export function isDemoModeEnabled(): boolean {
-  return process.env.ENABLE_DEMO_MODE === 'true';
+  return true; // Always enabled for this environment
 }
 
 // Get demo org ID
