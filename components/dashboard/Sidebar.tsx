@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
@@ -57,19 +58,23 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
     >
       <div className="flex h-full flex-col">
         {/* Logo */}
-        <div className="h-11 flex items-center justify-between px-3 border-b border-midnight-800">
+        <div className="h-14 flex items-center justify-between px-3 border-b border-midnight-800">
           {!collapsed && (
-            <Link href="/dashboard" className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded bg-accent-600 flex items-center justify-center">
-                <Shield className="w-3.5 h-3.5 text-white" />
-              </div>
-              <span className="font-bold text-sm text-white tracking-tight">RAGuard</span>
+            <Link href="/dashboard" className="flex items-center">
+              <Image
+                src="/images/ragaurd-logo.png"
+                alt="Ragaurd"
+                width={140}
+                height={35}
+                className="h-8 w-auto brightness-0 invert"
+                priority
+              />
             </Link>
           )}
           {collapsed && (
             <Link href="/dashboard" className="mx-auto">
-              <div className="w-6 h-6 rounded bg-accent-600 flex items-center justify-center">
-                <Shield className="w-3.5 h-3.5 text-white" />
+              <div className="w-7 h-7 rounded bg-navy-600 flex items-center justify-center">
+                <Shield className="w-4 h-4 text-white" />
               </div>
             </Link>
           )}
