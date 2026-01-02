@@ -1,47 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, Copy, Check, Trash2, Shield, Loader2, RotateCw, AlertTriangle } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Plus, Copy, Check, Trash2, Shield, Loader2, RotateCw, AlertTriangle, Key } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useApiKeys, type ApiKey } from '@/hooks/useApiKeys';
 
@@ -122,269 +82,274 @@ export default function ApiKeysPage() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">API Keys</h1>
-          <p className="text-muted-foreground">
+          <h1 className="dash-page-title">API Keys</h1>
+          <p className="dash-page-subtitle">
             Manage your API keys for authentication
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={() => refetch()}>
-            <RotateCw className="h-4 w-4 mr-2" />
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => refetch()}
+            className="dash-btn dash-btn-secondary"
+          >
+            <RotateCw className="h-4 w-4" />
             Refresh
-          </Button>
-          <Dialog open={showNewKey} onOpenChange={(open) => {
-            if (!open) resetDialog();
-            else setShowNewKey(true);
-          }}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="mr-2 h-4 w-4" />
-                Create API Key
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              {!newSecretKey ? (
-                <>
-                  <DialogHeader>
-                    <DialogTitle>Create New API Key</DialogTitle>
-                    <DialogDescription>
-                      Generate a new API key for your application
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-4 py-4">
-                    <div>
-                      <Label htmlFor="key-name">Key Name</Label>
-                      <Input
-                        id="key-name"
-                        placeholder="e.g., Production API Key"
-                        value={keyName}
-                        onChange={(e) => setKeyName(e.target.value)}
-                        className="mt-1"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="key-expiry">Expiration</Label>
-                      <Select value={keyExpiry} onValueChange={setKeyExpiry}>
-                        <SelectTrigger className="mt-1">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="30d">30 days</SelectItem>
-                          <SelectItem value="90d">90 days</SelectItem>
-                          <SelectItem value="1y">1 year</SelectItem>
-                          <SelectItem value="never">Never</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button variant="outline" onClick={() => setShowNewKey(false)}>
-                      Cancel
-                    </Button>
-                    <Button onClick={handleCreateKey} disabled={creating}>
-                      {creating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                      Create Key
-                    </Button>
-                  </DialogFooter>
-                </>
-              ) : (
-                <>
-                  <DialogHeader>
-                    <DialogTitle>API Key Created</DialogTitle>
-                    <DialogDescription>
-                      Copy your new API key now. You won&apos;t be able to see it again!
-                    </DialogDescription>
-                  </DialogHeader>
-                  <Alert variant="warning" className="my-4">
-                    <AlertTriangle className="h-4 w-4" />
-                    <AlertTitle>Important</AlertTitle>
-                    <AlertDescription>
-                      This is the only time you&apos;ll see this key. Store it securely.
-                    </AlertDescription>
-                  </Alert>
-                  <div className="relative">
-                    <code className="block p-4 bg-slate-100 rounded-lg text-sm break-all font-mono">
-                      {newSecretKey}
-                    </code>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="absolute top-2 right-2"
-                      onClick={copyKey}
-                    >
-                      {copied ? (
-                        <Check className="h-4 w-4 text-success" />
-                      ) : (
-                        <Copy className="h-4 w-4" />
-                      )}
-                    </Button>
-                  </div>
-                  <DialogFooter>
-                    <Button onClick={resetDialog}>
-                      Done
-                    </Button>
-                  </DialogFooter>
-                </>
-              )}
-            </DialogContent>
-          </Dialog>
+          </button>
+          <button
+            onClick={() => setShowNewKey(true)}
+            className="dash-btn dash-btn-primary"
+          >
+            <Plus className="h-4 w-4" />
+            Create API Key
+          </button>
         </div>
       </div>
 
       {/* Keys Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Your API Keys</CardTitle>
-          <CardDescription>
-            {activeKeys.length} active key(s) · {keys.length} total
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      <div className="dash-card">
+        <div className="dash-card-header">
+          <span className="dash-card-title">Your API Keys</span>
+          <span className="text-xs text-dash-text-muted">
+            {activeKeys.length} active · {keys.length} total
+          </span>
+        </div>
+
+        {loading ? (
+          <div className="flex items-center justify-center py-16">
+            <Loader2 className="h-8 w-8 animate-spin text-dash-text-muted" />
+          </div>
+        ) : keys.length === 0 ? (
+          <div className="text-center py-16">
+            <div className="p-4 rounded-full bg-dash-accent/10 w-fit mx-auto mb-4">
+              <Key className="h-8 w-8 text-dash-accent" />
             </div>
-          ) : keys.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground">
-              <p>No API keys yet. Create one to get started.</p>
-            </div>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Key</TableHead>
-                  <TableHead>Scopes</TableHead>
-                  <TableHead>Last Used</TableHead>
-                  <TableHead>Expires</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="w-[50px]"></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
+            <p className="text-dash-text-secondary mb-2">No API keys yet</p>
+            <p className="text-sm text-dash-text-muted">Create one to get started with the API</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto dash-scrollbar">
+            <table className="dash-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Key</th>
+                  <th>Scopes</th>
+                  <th>Last Used</th>
+                  <th>Expires</th>
+                  <th>Status</th>
+                  <th className="w-[50px]"></th>
+                </tr>
+              </thead>
+              <tbody>
                 {keys.map((key) => (
-                  <TableRow key={key.id} className={cn(key.isActive === false && 'opacity-50')}>
-                    <TableCell className="font-medium">{key.name}</TableCell>
-                    <TableCell>
-                      <code className="text-sm bg-slate-100 px-2 py-1 rounded font-mono">
+                  <tr key={key.id} className={cn('group', key.isActive === false && 'opacity-50')}>
+                    <td className="font-medium text-dash-text-primary">{key.name}</td>
+                    <td>
+                      <code className="text-sm bg-white/[0.05] px-2 py-1 rounded font-mono text-dash-text-secondary">
                         {key.prefix}
                       </code>
-                    </TableCell>
-                    <TableCell>
+                    </td>
+                    <td>
                       <div className="flex flex-wrap gap-1">
                         {(key.scopes || []).map((scope) => (
-                          <Badge key={scope} variant="outline" className="text-xs">
+                          <span key={scope} className="dash-badge dash-badge-info">
                             {scope.replace(':', ' ')}
-                          </Badge>
+                          </span>
                         ))}
                       </div>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
+                    </td>
+                    <td className="text-dash-text-muted">
                       {key.lastUsedAt ? formatDate(key.lastUsedAt) : 'Never'}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
+                    </td>
+                    <td className="text-dash-text-muted">
                       {key.expiresAt ? formatDate(key.expiresAt) : 'Never'}
-                    </TableCell>
-                    <TableCell>
+                    </td>
+                    <td>
                       {key.isActive !== false ? (
-                        <Badge variant="success" className="bg-success text-white">Active</Badge>
+                        <span className="dash-badge dash-badge-success">Active</span>
                       ) : (
-                        <Badge variant="secondary">Revoked</Badge>
+                        <span className="dash-badge bg-white/[0.1] text-dash-text-muted border-white/[0.1]">Revoked</span>
                       )}
-                    </TableCell>
-                    <TableCell>
+                    </td>
+                    <td>
                       {key.isActive !== false && (
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 text-danger hover:text-danger"
+                        <button
+                          className="p-2 rounded-lg text-dash-text-muted hover:text-dash-danger hover:bg-dash-danger/10 transition-colors opacity-0 group-hover:opacity-100"
                           onClick={() => setKeyToRevoke(key)}
                         >
                           <Trash2 className="h-4 w-4" />
-                        </Button>
+                        </button>
                       )}
-                    </TableCell>
-                  </TableRow>
+                    </td>
+                  </tr>
                 ))}
-              </TableBody>
-            </Table>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Revoke Confirmation Dialog */}
-      <AlertDialog open={!!keyToRevoke} onOpenChange={(open) => !open && setKeyToRevoke(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Revoke API Key</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to revoke &quot;{keyToRevoke?.name}&quot;? This action cannot be undone
-              and will immediately stop all requests using this key.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleRevokeKey}
-              className="bg-danger text-white hover:bg-danger/90"
-              disabled={revoking}
-            >
-              {revoking && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Revoke Key
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
 
       {/* Security Tips */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base flex items-center gap-2">
-            <Shield className="h-4 w-4" />
-            Security Best Practices
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="space-y-2 text-sm text-muted-foreground">
-            <li className="flex items-start gap-2">
-              <Check className="h-4 w-4 text-success mt-0.5" />
-              Never share your API keys or commit them to version control
-            </li>
-            <li className="flex items-start gap-2">
-              <Check className="h-4 w-4 text-success mt-0.5" />
-              Use environment variables to store your keys securely
-            </li>
-            <li className="flex items-start gap-2">
-              <Check className="h-4 w-4 text-success mt-0.5" />
-              Rotate your keys regularly and revoke unused ones
-            </li>
-            <li className="flex items-start gap-2">
-              <Check className="h-4 w-4 text-success mt-0.5" />
-              Use different keys for development and production
-            </li>
+      <div className="dash-card">
+        <div className="dash-card-header">
+          <div className="flex items-center gap-2">
+            <Shield className="h-4 w-4 text-dash-accent" />
+            <span className="dash-card-title">Security Best Practices</span>
+          </div>
+        </div>
+        <div className="dash-card-body">
+          <ul className="space-y-3">
+            {[
+              'Never share your API keys or commit them to version control',
+              'Use environment variables to store your keys securely',
+              'Rotate your keys regularly and revoke unused ones',
+              'Use different keys for development and production',
+            ].map((tip, i) => (
+              <li key={i} className="flex items-start gap-3">
+                <Check className="h-4 w-4 text-dash-success mt-0.5 flex-shrink-0" />
+                <span className="text-sm text-dash-text-secondary">{tip}</span>
+              </li>
+            ))}
           </ul>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Quick Start */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Quick Start</CardTitle>
-          <CardDescription>Use your API key to make requests</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="bg-slate-900 rounded-lg p-4 overflow-x-auto">
-            <pre className="text-sm text-slate-100 font-mono">
+      <div className="dash-card">
+        <div className="dash-card-header">
+          <span className="dash-card-title">Quick Start</span>
+          <span className="text-xs text-dash-text-muted">Use your API key to make requests</span>
+        </div>
+        <div className="dash-card-body">
+          <div className="bg-dash-bg-primary rounded-lg p-4 overflow-x-auto border border-white/[0.06]">
+            <pre className="text-sm text-dash-text-secondary font-mono">
               <code>{`curl -X POST https://api.ragaurd.com/v1/defend \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{"input": "Your text to analyze"}'`}</code>
             </pre>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
+
+      {/* Create Key Dialog */}
+      {showNewKey && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+          <div className="bg-dash-bg-tertiary rounded-lg border border-white/[0.1] w-full max-w-md mx-4 shadow-dash-lg">
+            {!newSecretKey ? (
+              <>
+                <div className="px-6 py-4 border-b border-white/[0.06]">
+                  <h3 className="text-lg font-semibold text-dash-text-primary">Create New API Key</h3>
+                  <p className="text-sm text-dash-text-muted mt-1">Generate a new API key for your application</p>
+                </div>
+                <div className="px-6 py-4 space-y-4">
+                  <div>
+                    <label className="dash-card-title block mb-2">Key Name</label>
+                    <input
+                      placeholder="e.g., Production API Key"
+                      value={keyName}
+                      onChange={(e) => setKeyName(e.target.value)}
+                      className="dash-input"
+                    />
+                  </div>
+                  <div>
+                    <label className="dash-card-title block mb-2">Expiration</label>
+                    <select
+                      value={keyExpiry}
+                      onChange={(e) => setKeyExpiry(e.target.value)}
+                      className="dash-input"
+                    >
+                      <option value="30d">30 days</option>
+                      <option value="90d">90 days</option>
+                      <option value="1y">1 year</option>
+                      <option value="never">Never</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="flex gap-3 justify-end px-6 py-4 bg-white/[0.02] border-t border-white/[0.06]">
+                  <button onClick={resetDialog} className="dash-btn dash-btn-secondary">
+                    Cancel
+                  </button>
+                  <button onClick={handleCreateKey} disabled={creating} className="dash-btn dash-btn-primary">
+                    {creating && <Loader2 className="h-4 w-4 animate-spin" />}
+                    Create Key
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="px-6 py-4 border-b border-white/[0.06]">
+                  <h3 className="text-lg font-semibold text-dash-text-primary">API Key Created</h3>
+                  <p className="text-sm text-dash-text-muted mt-1">Copy your new API key now. You won't be able to see it again!</p>
+                </div>
+                <div className="px-6 py-4">
+                  <div className="p-3 rounded-lg bg-dash-warning/10 border border-dash-warning/30 mb-4">
+                    <div className="flex items-center gap-2 text-dash-warning">
+                      <AlertTriangle className="h-4 w-4" />
+                      <span className="text-sm font-medium">Important</span>
+                    </div>
+                    <p className="text-sm text-dash-text-secondary mt-1">
+                      This is the only time you'll see this key. Store it securely.
+                    </p>
+                  </div>
+                  <div className="relative">
+                    <code className="block p-4 bg-dash-bg-primary rounded-lg text-sm break-all font-mono text-dash-text-primary border border-white/[0.06]">
+                      {newSecretKey}
+                    </code>
+                    <button
+                      className="absolute top-2 right-2 p-2 rounded-lg hover:bg-white/[0.1] transition-colors"
+                      onClick={copyKey}
+                    >
+                      {copied ? (
+                        <Check className="h-4 w-4 text-dash-success" />
+                      ) : (
+                        <Copy className="h-4 w-4 text-dash-text-muted" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+                <div className="flex justify-end px-6 py-4 bg-white/[0.02] border-t border-white/[0.06]">
+                  <button onClick={resetDialog} className="dash-btn dash-btn-primary">
+                    Done
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Revoke Confirmation Dialog */}
+      {keyToRevoke && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+          <div className="bg-dash-bg-tertiary rounded-lg border border-white/[0.1] w-full max-w-md mx-4 shadow-dash-lg">
+            <div className="px-6 py-4 border-b border-white/[0.06]">
+              <h3 className="text-lg font-semibold text-dash-text-primary">Revoke API Key</h3>
+            </div>
+            <div className="px-6 py-4">
+              <p className="text-sm text-dash-text-secondary">
+                Are you sure you want to revoke "<span className="text-dash-text-primary font-medium">{keyToRevoke.name}</span>"?
+                This action cannot be undone and will immediately stop all requests using this key.
+              </p>
+            </div>
+            <div className="flex gap-3 justify-end px-6 py-4 bg-white/[0.02] border-t border-white/[0.06]">
+              <button onClick={() => setKeyToRevoke(null)} className="dash-btn dash-btn-secondary">
+                Cancel
+              </button>
+              <button
+                onClick={handleRevokeKey}
+                disabled={revoking}
+                className="dash-btn bg-dash-danger text-white hover:bg-red-600"
+              >
+                {revoking && <Loader2 className="h-4 w-4 animate-spin" />}
+                Revoke Key
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

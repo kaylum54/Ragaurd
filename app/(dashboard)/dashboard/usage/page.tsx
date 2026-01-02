@@ -1,13 +1,12 @@
 'use client';
 
-import { Download, Calendar, Loader2, RotateCw } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { useMemo } from 'react';
+import { Calendar, Loader2, RotateCw } from 'lucide-react';
 import { UsageChart } from '@/components/dashboard/UsageChart';
 import { AttackChart } from '@/components/dashboard/AttackChart';
+import { ExportDropdown } from '@/components/dashboard/ExportDropdown';
 import { useUsageStats, useDailyBreakdown } from '@/hooks/useUsage';
+import type { UsageExportData } from '@/lib/utils/export';
 
 export default function UsagePage() {
   const { stats, loading: statsLoading, refetch } = useUsageStats();
@@ -29,6 +28,33 @@ export default function UsagePage() {
   const totalRequests = blocked + passed;
   const blockRate = totalRequests > 0 ? (blocked / totalRequests) * 100 : 0;
 
+  // Prepare export data
+  const exportData: UsageExportData | null = useMemo(() => {
+    if (statsLoading || dailyLoading) return null;
+
+    return {
+      period: {
+        start: stats.period.start,
+        end: stats.period.end,
+      },
+      summary: {
+        textRequests: textUsed,
+        audioRequests: audioUsed,
+        redteamAttacks: redteamUsed,
+        totalBlocked: blocked,
+        totalPassed: passed,
+        blockRate,
+        avgLatencyMs: avgLatency,
+      },
+      daily: dailyStats.map((day) => ({
+        date: day.day,
+        requests: day.requests,
+        blocked: day.blocked,
+        passed: day.requests - day.blocked,
+      })),
+    };
+  }, [statsLoading, dailyLoading, stats, textUsed, audioUsed, redteamUsed, blocked, passed, blockRate, avgLatency, dailyStats]);
+
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -37,155 +63,161 @@ export default function UsagePage() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Usage & Analytics</h1>
-          <p className="text-muted-foreground">
+          <h1 className="dash-page-title">Usage & Analytics</h1>
+          <p className="dash-page-subtitle">
             Monitor your API usage and security metrics
           </p>
         </div>
         <div className="flex items-center gap-4">
-          <Badge variant="outline" className="flex items-center gap-2">
+          <span className="dash-badge dash-badge-info flex items-center gap-2">
             <Calendar className="h-4 w-4" />
             {formatDate(stats.period.start)} - {formatDate(stats.period.end)}
-          </Badge>
-          <Button variant="outline" size="sm" onClick={() => refetch()}>
-            <RotateCw className="h-4 w-4 mr-2" />
+          </span>
+          <button className="dash-btn dash-btn-secondary" onClick={() => refetch()}>
+            <RotateCw className="h-4 w-4" />
             Refresh
-          </Button>
-          <Button variant="outline">
-            <Download className="mr-2 h-4 w-4" />
-            Export Report
-          </Button>
+          </button>
+          <ExportDropdown data={exportData} loading={statsLoading || dailyLoading} />
         </div>
       </div>
 
       {/* Usage Summary */}
       <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Text Requests
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+        <div className="dash-card">
+          <div className="dash-card-header pb-2">
+            <span className="text-sm font-semibold text-dash-text-muted">Text Requests</span>
+          </div>
+          <div className="dash-card-body pt-0">
             {statsLoading ? (
-              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              <Loader2 className="h-6 w-6 animate-spin text-dash-text-muted" />
             ) : (
               <>
-                <div className="text-2xl font-bold">
+                <div className="dash-stats-value">
                   {textUsed.toLocaleString()}
                 </div>
-                <Progress value={textPercent} className="mt-2 h-2" />
-                <p className="text-xs text-muted-foreground mt-2">
+                <div className="mt-2 h-2 bg-dash-bg-tertiary overflow-hidden">
+                  <div
+                    className="h-full bg-dash-accent transition-all"
+                    style={{ width: `${Math.min(textPercent, 100)}%` }}
+                  />
+                </div>
+                <p className="text-xs text-dash-text-muted mt-2 tabular-nums">
                   {Math.round(textPercent)}% of {textLimit.toLocaleString()} limit
                 </p>
               </>
             )}
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Audio Requests
-              </CardTitle>
-              <Badge variant="outline" className="text-xs">Pro+</Badge>
+          </div>
+        </div>
+        <div className="dash-card">
+          <div className="dash-card-header pb-2">
+            <div className="flex items-center justify-between w-full">
+              <span className="text-sm font-semibold text-dash-text-muted">Audio Requests</span>
+              <span className="dash-badge dash-badge-accent">Pro+</span>
             </div>
-          </CardHeader>
-          <CardContent>
+          </div>
+          <div className="dash-card-body pt-0">
             {statsLoading ? (
-              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              <Loader2 className="h-6 w-6 animate-spin text-dash-text-muted" />
             ) : (
               <>
-                <div className="text-2xl font-bold">
+                <div className="dash-stats-value">
                   {audioUsed.toLocaleString()}
                 </div>
-                <Progress value={audioPercent} className="mt-2 h-2" />
-                <p className="text-xs text-muted-foreground mt-2">
+                <div className="mt-2 h-2 bg-dash-bg-tertiary overflow-hidden">
+                  <div
+                    className="h-full bg-purple-500 transition-all"
+                    style={{ width: `${Math.min(audioPercent, 100)}%` }}
+                  />
+                </div>
+                <p className="text-xs text-dash-text-muted mt-2 tabular-nums">
                   {Math.round(audioPercent)}% of {audioLimit.toLocaleString()} limit
                 </p>
               </>
             )}
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Red Team Attacks
-              </CardTitle>
-              <Badge variant="outline" className="text-xs">Pro+</Badge>
+          </div>
+        </div>
+        <div className="dash-card">
+          <div className="dash-card-header pb-2">
+            <div className="flex items-center justify-between w-full">
+              <span className="text-sm font-semibold text-dash-text-muted">Red Team Attacks</span>
+              <span className="dash-badge dash-badge-accent">Pro+</span>
             </div>
-          </CardHeader>
-          <CardContent>
+          </div>
+          <div className="dash-card-body pt-0">
             {statsLoading ? (
-              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              <Loader2 className="h-6 w-6 animate-spin text-dash-text-muted" />
             ) : (
               <>
-                <div className="text-2xl font-bold">
+                <div className="dash-stats-value">
                   {redteamUsed.toLocaleString()}
                 </div>
-                <Progress value={redteamPercent} className="mt-2 h-2" />
-                <p className="text-xs text-muted-foreground mt-2">
+                <div className="mt-2 h-2 bg-dash-bg-tertiary overflow-hidden">
+                  <div
+                    className="h-full bg-dash-warning transition-all"
+                    style={{ width: `${Math.min(redteamPercent, 100)}%` }}
+                  />
+                </div>
+                <p className="text-xs text-dash-text-muted mt-2 tabular-nums">
                   {Math.round(redteamPercent)}% of {redteamLimit.toLocaleString()} limit
                 </p>
               </>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Key Metrics */}
       <div className="grid gap-4 md:grid-cols-4">
-        <Card>
-          <CardContent className="p-6">
-            <div className="text-sm text-muted-foreground">Total Requests</div>
+        <div className="dash-card">
+          <div className="dash-card-body">
+            <div className="text-xs font-semibold text-dash-text-muted uppercase tracking-wider">Total Requests</div>
             {statsLoading ? (
-              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground mt-2" />
+              <Loader2 className="h-6 w-6 animate-spin text-dash-text-muted mt-2" />
             ) : (
-              <div className="text-2xl font-bold">
+              <div className="dash-stats-value mt-1">
                 {totalRequests.toLocaleString()}
               </div>
             )}
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="text-sm text-muted-foreground">Blocked</div>
+          </div>
+        </div>
+        <div className="dash-card">
+          <div className="dash-card-body">
+            <div className="text-xs font-semibold text-dash-text-muted uppercase tracking-wider">Blocked</div>
             {statsLoading ? (
-              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground mt-2" />
+              <Loader2 className="h-6 w-6 animate-spin text-dash-text-muted mt-2" />
             ) : (
-              <div className="text-2xl font-bold text-danger">
+              <div className="dash-stats-value text-dash-danger mt-1">
                 {blocked.toLocaleString()}
               </div>
             )}
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="text-sm text-muted-foreground">Block Rate</div>
+          </div>
+        </div>
+        <div className="dash-card">
+          <div className="dash-card-body">
+            <div className="text-xs font-semibold text-dash-text-muted uppercase tracking-wider">Block Rate</div>
             {statsLoading ? (
-              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground mt-2" />
+              <Loader2 className="h-6 w-6 animate-spin text-dash-text-muted mt-2" />
             ) : (
-              <div className="text-2xl font-bold text-primary-600">
+              <div className="dash-stats-value text-dash-accent mt-1">
                 {blockRate.toFixed(2)}%
               </div>
             )}
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="text-sm text-muted-foreground">Avg Latency</div>
+          </div>
+        </div>
+        <div className="dash-card">
+          <div className="dash-card-body">
+            <div className="text-xs font-semibold text-dash-text-muted uppercase tracking-wider">Avg Latency</div>
             {statsLoading ? (
-              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground mt-2" />
+              <Loader2 className="h-6 w-6 animate-spin text-dash-text-muted mt-2" />
             ) : (
-              <div className="text-2xl font-bold text-success">
+              <div className="dash-stats-value text-dash-success mt-1">
                 {avgLatency}ms
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Charts */}
@@ -195,45 +227,44 @@ export default function UsagePage() {
       </div>
 
       {/* Daily Breakdown */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Daily Breakdown (Last 7 Days)</CardTitle>
-          <CardDescription>Request volume and blocked threats by day</CardDescription>
-        </CardHeader>
-        <CardContent>
+      <div className="dash-card">
+        <div className="dash-card-header">
+          <span className="dash-card-title">Daily Breakdown (Last 7 Days)</span>
+        </div>
+        <div className="dash-card-body">
           {dailyLoading ? (
             <div className="flex items-center justify-center py-8">
-              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+              <Loader2 className="h-8 w-8 animate-spin text-dash-text-muted" />
             </div>
           ) : (
             <div className="space-y-4">
               {dailyStats.map((day, index) => (
                 <div key={index} className="flex items-center gap-4">
-                  <div className="w-12 font-medium">{day.day}</div>
+                  <div className="w-12 font-semibold text-dash-text-secondary">{day.day}</div>
                   <div className="flex-1">
-                    <div className="flex h-4 rounded-full overflow-hidden bg-slate-100">
+                    <div className="flex h-4 overflow-hidden bg-dash-bg-tertiary">
                       <div
-                        className="bg-success transition-all"
+                        className="bg-dash-success transition-all"
                         style={{ width: `${Math.min(((day.requests - day.blocked) / 10000) * 100, 100)}%` }}
                       />
                       <div
-                        className="bg-danger transition-all"
+                        className="bg-dash-danger transition-all"
                         style={{ width: `${Math.min((day.blocked / 10000) * 100, 100)}%` }}
                       />
                     </div>
                   </div>
-                  <div className="text-sm text-muted-foreground w-24 text-right">
+                  <div className="text-sm text-dash-text-muted w-24 text-right tabular-nums">
                     {day.requests.toLocaleString()} total
                   </div>
-                  <div className="text-sm text-danger w-20 text-right">
+                  <div className="text-sm text-dash-danger w-20 text-right tabular-nums">
                     {day.blocked} blocked
                   </div>
                 </div>
               ))}
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

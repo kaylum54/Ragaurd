@@ -81,22 +81,22 @@ export default function AdminUsagePage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-xl font-semibold text-midnight-950">Platform Usage</h1>
-          <p className="text-sm text-midnight-500 mt-0.5">
+          <h1 className="dash-page-title">Platform Usage</h1>
+          <p className="dash-page-subtitle">
             Requests, threats, and growth metrics
           </p>
         </div>
-        <div className="flex border border-midnight-200 rounded overflow-hidden">
+        <div className="flex border-2 border-dash-border overflow-hidden">
           {[7, 30, 90].map((d) => (
             <button
               key={d}
               onClick={() => setDays(d)}
-              className={`px-3 py-1.5 text-xs font-medium transition-colors ${
+              className={`px-4 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${
                 days === d
-                  ? 'bg-midnight-800 text-white'
-                  : 'bg-white text-midnight-600 hover:bg-midnight-50'
+                  ? 'bg-dash-accent text-white'
+                  : 'bg-dash-bg-secondary text-dash-text-muted hover:bg-dash-bg-hover'
               }`}
             >
               {d}d

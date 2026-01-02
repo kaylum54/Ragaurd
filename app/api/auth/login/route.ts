@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { validateDemoCredentials, isDemoModeEnabled, getDemoOrgId } from '@/lib/auth';
 import { createSessionToken, getSessionCookieOptions } from '@/lib/session';
+import { getUserByEmail } from '@/lib/services/db/users';
+import { getOrganizationByUserId } from '@/lib/services/db/organizations';
+import { verifyPassword } from '@/lib/password';
 import { logError } from '@/lib/utils/safe-error';
 
 // Rate limiting map (use Redis in production)
@@ -74,11 +77,29 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // TODO: In production, validate against Auth0 or database here
-    // if (!user) {
-    //   user = await validateWithAuth0(email, password);
-    //   orgId = await getOrgIdForUser(user.id);
-    // }
+    // If not in demo mode or demo auth failed, try database auth
+    if (!user) {
+      const dbUser = await getUserByEmail(email);
+
+      if (dbUser && dbUser.password_hash) {
+        const isValidPassword = await verifyPassword(password, dbUser.password_hash);
+
+        if (isValidPassword) {
+          user = {
+            id: dbUser.id,
+            email: dbUser.email,
+            name: dbUser.name || email.split('@')[0],
+            role: dbUser.is_admin ? 'admin' as const : 'user' as const,
+          };
+
+          // Get user's organization
+          const org = await getOrganizationByUserId(dbUser.id);
+          if (org) {
+            orgId = org.id;
+          }
+        }
+      }
+    }
 
     if (!user) {
       // Use generic error message to prevent account enumeration

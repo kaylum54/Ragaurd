@@ -11,23 +11,23 @@ import {
   ResponsiveContainer,
   Legend,
 } from 'recharts';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useUsageChart } from '@/hooks/useDashboard';
 import { Loader2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-midnight-900 border border-midnight-700 rounded px-2.5 py-2 shadow-lg">
-        <p className="text-[10px] font-medium text-midnight-300 mb-1.5">{label}</p>
+      <div className="bg-dash-bg-tertiary border-2 border-dash-border px-4 py-3 shadow-dash-lg">
+        <p className="text-xs font-bold text-dash-text-secondary mb-2 uppercase tracking-wider">{label}</p>
         {payload.map((entry: any, index: number) => (
-          <div key={index} className="flex items-center gap-2 text-[11px]">
+          <div key={index} className="flex items-center gap-2 text-sm">
             <div
-              className="w-2 h-2 rounded-sm"
+              className="w-3 h-3"
               style={{ backgroundColor: entry.color }}
             />
-            <span className="text-midnight-400">{entry.name}:</span>
-            <span className="text-white tabular-nums font-semibold">
+            <span className="text-dash-text-muted font-medium">{entry.name}:</span>
+            <span className="text-dash-text-primary tabular-nums font-bold">
               {entry.value.toLocaleString()}
             </span>
           </div>
@@ -36,6 +36,22 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     );
   }
   return null;
+};
+
+const CustomLegend = ({ payload }: any) => {
+  return (
+    <div className="flex items-center justify-center gap-6 pt-3">
+      {payload.map((entry: any, index: number) => (
+        <div key={index} className="flex items-center gap-2">
+          <div
+            className="w-3 h-3"
+            style={{ backgroundColor: entry.color }}
+          />
+          <span className="text-xs font-bold text-dash-text-secondary uppercase tracking-wider">{entry.value}</span>
+        </div>
+      ))}
+    </div>
+  );
 };
 
 function ChartContent({ days }: { days: number }) {
@@ -51,55 +67,61 @@ function ChartContent({ days }: { days: number }) {
 
   if (loading) {
     return (
-      <div className="h-[220px] flex items-center justify-center">
-        <Loader2 className="h-5 w-5 animate-spin text-midnight-400" />
+      <div className="h-[260px] flex items-center justify-center">
+        <Loader2 className="h-6 w-6 animate-spin text-dash-text-muted" />
       </div>
     );
   }
 
   return (
-    <div className="h-[220px]">
+    <div className="h-[260px]">
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={chartData} margin={{ top: 5, right: 5, left: -15, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="2 2" stroke="#E2E8F0" vertical={false} />
+        <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+          <defs>
+            <linearGradient id="passedGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.3} />
+              <stop offset="100%" stopColor="#3b82f6" stopOpacity={0} />
+            </linearGradient>
+            <linearGradient id="blockedGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#10b981" stopOpacity={0.3} />
+              <stop offset="100%" stopColor="#10b981" stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" vertical={false} />
           <XAxis
             dataKey="date"
-            stroke="#94A3B8"
-            fontSize={10}
+            stroke="#64748b"
+            fontSize={11}
             tickLine={false}
-            axisLine={{ stroke: '#CBD5E1' }}
+            axisLine={{ stroke: 'rgba(255,255,255,0.06)' }}
+            tick={{ fill: '#64748b' }}
           />
           <YAxis
-            stroke="#94A3B8"
-            fontSize={10}
+            stroke="#64748b"
+            fontSize={11}
             tickLine={false}
             axisLine={false}
-            width={35}
+            width={40}
+            tick={{ fill: '#64748b' }}
+            tickFormatter={(value) => value >= 1000 ? `${(value / 1000).toFixed(0)}k` : value}
           />
           <Tooltip content={<CustomTooltip />} />
-          <Legend
-            wrapperStyle={{ paddingTop: '8px' }}
-            formatter={(value) => (
-              <span className="text-[10px] font-medium text-midnight-600">{value}</span>
-            )}
-          />
+          <Legend content={<CustomLegend />} />
           <Area
             type="monotone"
             dataKey="passed"
             name="Passed"
-            stroke="#1E293B"
-            strokeWidth={1.5}
-            fill="#1E293B"
-            fillOpacity={0.08}
+            stroke="#3b82f6"
+            strokeWidth={2}
+            fill="url(#passedGradient)"
           />
           <Area
             type="monotone"
             dataKey="blocked"
             name="Blocked"
-            stroke="#15803D"
-            strokeWidth={1.5}
-            fill="#15803D"
-            fillOpacity={0.08}
+            stroke="#10b981"
+            strokeWidth={2}
+            fill="url(#blockedGradient)"
           />
         </AreaChart>
       </ResponsiveContainer>
@@ -111,27 +133,35 @@ export function UsageChart() {
   const [activeTab, setActiveTab] = useState('7d');
 
   return (
-    <div className="bg-white rounded border border-midnight-300/60 overflow-hidden">
-      {/* Header */}
-      <div className="px-3 py-2 bg-midnight-50/80 border-b border-midnight-200/60 flex items-center justify-between">
-        <h2 className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">Request Volume</h2>
-        <div className="flex border border-midnight-200 rounded overflow-hidden">
+    <div className="dash-card">
+      <div className="dash-card-header">
+        <span className="dash-card-title">Request Volume</span>
+        <div className="flex overflow-hidden border-2 border-dash-border">
           <button
-            className={`px-2 py-0.5 text-[10px] font-semibold transition-colors ${activeTab === '7d' ? 'bg-midnight-800 text-white' : 'bg-white text-midnight-500 hover:bg-midnight-50'}`}
+            className={cn(
+              'px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors',
+              activeTab === '7d'
+                ? 'bg-dash-accent text-white'
+                : 'bg-transparent text-dash-text-muted hover:text-dash-text-secondary hover:bg-dash-bg-hover'
+            )}
             onClick={() => setActiveTab('7d')}
           >
             7D
           </button>
           <button
-            className={`px-2 py-0.5 text-[10px] font-semibold transition-colors ${activeTab === '30d' ? 'bg-midnight-800 text-white' : 'bg-white text-midnight-500 hover:bg-midnight-50'}`}
+            className={cn(
+              'px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors border-l-2 border-dash-border',
+              activeTab === '30d'
+                ? 'bg-dash-accent text-white'
+                : 'bg-transparent text-dash-text-muted hover:text-dash-text-secondary hover:bg-dash-bg-hover'
+            )}
             onClick={() => setActiveTab('30d')}
           >
             30D
           </button>
         </div>
       </div>
-      {/* Body */}
-      <div className="p-3">
+      <div className="dash-card-body">
         {activeTab === '7d' && <ChartContent days={7} />}
         {activeTab === '30d' && <ChartContent days={30} />}
       </div>

@@ -229,3 +229,8 @@ export async function getMemberCount(orgId: string): Promise<number> {
 
   return count || 0;
 }
+
+export async function getOrganizationByUserId(userId: string): Promise<Organization | null> {
+  const orgs = await getUserOrganizations(userId);
+  return orgs.length > 0 ? orgs[0] : null;
+}

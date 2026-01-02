@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS users (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_users_auth0_id ON users(auth0_id);
-CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_users_auth0_id ON users(auth0_id);
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 
 -- ============================================
 -- ORGANIZATIONS TABLE
@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS organizations (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_organizations_slug ON organizations(slug);
-CREATE INDEX idx_organizations_owner_id ON organizations(owner_id);
+CREATE INDEX IF NOT EXISTS idx_organizations_slug ON organizations(slug);
+CREATE INDEX IF NOT EXISTS idx_organizations_owner_id ON organizations(owner_id);
 
 -- ============================================
 -- ORG_MEMBERS TABLE
@@ -52,8 +52,8 @@ CREATE TABLE IF NOT EXISTS org_members (
   UNIQUE(org_id, user_id)
 );
 
-CREATE INDEX idx_org_members_org_id ON org_members(org_id);
-CREATE INDEX idx_org_members_user_id ON org_members(user_id);
+CREATE INDEX IF NOT EXISTS idx_org_members_org_id ON org_members(org_id);
+CREATE INDEX IF NOT EXISTS idx_org_members_user_id ON org_members(user_id);
 
 -- ============================================
 -- API_KEYS TABLE
@@ -72,9 +72,9 @@ CREATE TABLE IF NOT EXISTS api_keys (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_api_keys_org_id ON api_keys(org_id);
-CREATE INDEX idx_api_keys_key_hash ON api_keys(key_hash);
-CREATE INDEX idx_api_keys_is_active ON api_keys(is_active);
+CREATE INDEX IF NOT EXISTS idx_api_keys_org_id ON api_keys(org_id);
+CREATE INDEX IF NOT EXISTS idx_api_keys_key_hash ON api_keys(key_hash);
+CREATE INDEX IF NOT EXISTS idx_api_keys_is_active ON api_keys(is_active);
 
 -- ============================================
 -- USAGE_DAILY TABLE
@@ -91,9 +91,9 @@ CREATE TABLE IF NOT EXISTS usage_daily (
   UNIQUE(org_id, date)
 );
 
-CREATE INDEX idx_usage_daily_org_id ON usage_daily(org_id);
-CREATE INDEX idx_usage_daily_date ON usage_daily(date);
-CREATE INDEX idx_usage_daily_org_date ON usage_daily(org_id, date);
+CREATE INDEX IF NOT EXISTS idx_usage_daily_org_id ON usage_daily(org_id);
+CREATE INDEX IF NOT EXISTS idx_usage_daily_date ON usage_daily(date);
+CREATE INDEX IF NOT EXISTS idx_usage_daily_org_date ON usage_daily(org_id, date);
 
 -- ============================================
 -- REQUEST_LOG TABLE
@@ -110,10 +110,10 @@ CREATE TABLE IF NOT EXISTS request_log (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_request_log_org_id ON request_log(org_id);
-CREATE INDEX idx_request_log_created_at ON request_log(created_at);
-CREATE INDEX idx_request_log_status ON request_log(status);
-CREATE INDEX idx_request_log_org_created ON request_log(org_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_request_log_org_id ON request_log(org_id);
+CREATE INDEX IF NOT EXISTS idx_request_log_created_at ON request_log(created_at);
+CREATE INDEX IF NOT EXISTS idx_request_log_status ON request_log(status);
+CREATE INDEX IF NOT EXISTS idx_request_log_org_created ON request_log(org_id, created_at DESC);
 
 -- ============================================
 -- REDTEAM_SCANS TABLE
@@ -137,8 +137,8 @@ CREATE TABLE IF NOT EXISTS redteam_scans (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_redteam_scans_org_id ON redteam_scans(org_id);
-CREATE INDEX idx_redteam_scans_status ON redteam_scans(status);
+CREATE INDEX IF NOT EXISTS idx_redteam_scans_org_id ON redteam_scans(org_id);
+CREATE INDEX IF NOT EXISTS idx_redteam_scans_status ON redteam_scans(status);
 
 -- ============================================
 -- PLAN_LIMITS TABLE
@@ -194,6 +194,7 @@ ALTER TABLE redteam_scans ENABLE ROW LEVEL SECURITY;
 ALTER TABLE plan_limits ENABLE ROW LEVEL SECURITY;
 
 -- Plan limits are public read
+DROP POLICY IF EXISTS "Plan limits are viewable by everyone" ON plan_limits;
 CREATE POLICY "Plan limits are viewable by everyone" ON plan_limits
   FOR SELECT USING (true);
 
@@ -201,24 +202,31 @@ CREATE POLICY "Plan limits are viewable by everyone" ON plan_limits
 -- Note: These policies allow the service role to perform all operations
 -- In production, you may want more restrictive policies
 
+DROP POLICY IF EXISTS "Service role full access to users" ON users;
 CREATE POLICY "Service role full access to users" ON users
   FOR ALL USING (auth.role() = 'service_role');
 
+DROP POLICY IF EXISTS "Service role full access to organizations" ON organizations;
 CREATE POLICY "Service role full access to organizations" ON organizations
   FOR ALL USING (auth.role() = 'service_role');
 
+DROP POLICY IF EXISTS "Service role full access to org_members" ON org_members;
 CREATE POLICY "Service role full access to org_members" ON org_members
   FOR ALL USING (auth.role() = 'service_role');
 
+DROP POLICY IF EXISTS "Service role full access to api_keys" ON api_keys;
 CREATE POLICY "Service role full access to api_keys" ON api_keys
   FOR ALL USING (auth.role() = 'service_role');
 
+DROP POLICY IF EXISTS "Service role full access to usage_daily" ON usage_daily;
 CREATE POLICY "Service role full access to usage_daily" ON usage_daily
   FOR ALL USING (auth.role() = 'service_role');
 
+DROP POLICY IF EXISTS "Service role full access to request_log" ON request_log;
 CREATE POLICY "Service role full access to request_log" ON request_log
   FOR ALL USING (auth.role() = 'service_role');
 
+DROP POLICY IF EXISTS "Service role full access to redteam_scans" ON redteam_scans;
 CREATE POLICY "Service role full access to redteam_scans" ON redteam_scans
   FOR ALL USING (auth.role() = 'service_role');
 
@@ -236,11 +244,13 @@ END;
 $$ language 'plpgsql';
 
 -- Apply updated_at triggers
+DROP TRIGGER IF EXISTS update_users_updated_at ON users;
 CREATE TRIGGER update_users_updated_at
   BEFORE UPDATE ON users
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_organizations_updated_at ON organizations;
 CREATE TRIGGER update_organizations_updated_at
   BEFORE UPDATE ON organizations
   FOR EACH ROW

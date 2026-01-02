@@ -124,17 +124,17 @@ export default function AdminSystemPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-xl font-semibold text-midnight-950">System Status</h1>
-          <p className="text-sm text-midnight-500 mt-0.5">
+          <h1 className="dash-page-title">System Status</h1>
+          <p className="dash-page-subtitle">
             Infrastructure health and performance
           </p>
         </div>
         <button
           onClick={refresh}
           disabled={loading}
-          className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded border border-midnight-200 text-midnight-600 hover:bg-midnight-50 disabled:opacity-50 transition-colors"
+          className="dash-btn dash-btn-secondary"
         >
           <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
           Refresh

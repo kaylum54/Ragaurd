@@ -13,54 +13,8 @@ import {
   Check,
   Copy,
 } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { cn } from '@/lib/utils';
+import { LockedFeature } from '@/components/dashboard/LockedFeature';
 
 interface TeamMember {
   id: string;
@@ -118,10 +72,10 @@ const demoTeamMembers: TeamMember[] = [
 ];
 
 const roleColors: Record<TeamMember['role'], string> = {
-  owner: 'bg-amber-500 text-white',
-  admin: 'bg-primary-600 text-white',
-  member: 'bg-slate-500 text-white',
-  viewer: 'bg-slate-400 text-white',
+  owner: 'dash-badge-warning',
+  admin: 'dash-badge-accent',
+  member: 'dash-badge-info',
+  viewer: 'dash-badge-info',
 };
 
 const roleDescriptions: Record<TeamMember['role'], string> = {
@@ -140,6 +94,7 @@ export default function TeamPage() {
   const [memberToRemove, setMemberToRemove] = useState<TeamMember | null>(null);
   const [removing, setRemoving] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   const inviteLink = 'https://ragaurd.com/invite/abc123xyz';
 
@@ -147,7 +102,6 @@ export default function TeamPage() {
     if (!inviteEmail) return;
 
     setInviting(true);
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     const newMember: TeamMember = {
@@ -172,7 +126,6 @@ export default function TeamPage() {
     if (!memberToRemove) return;
 
     setRemoving(true);
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 500));
 
     setMembers(members.filter(m => m.id !== memberToRemove.id));
@@ -208,290 +161,316 @@ export default function TeamPage() {
   const pendingMembers = members.filter(m => m.status === 'pending');
 
   return (
+    <LockedFeature
+      feature="team"
+      title="Team Management"
+      description="Manage your organization's team members and permissions"
+      requiredPlan="Starter"
+    >
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Team Management</h1>
-          <p className="text-muted-foreground">
+          <h1 className="dash-page-title">Team Management</h1>
+          <p className="dash-page-subtitle">
             Manage your organization&apos;s team members and permissions
           </p>
         </div>
-        <Dialog open={showInviteDialog} onOpenChange={setShowInviteDialog}>
-          <DialogTrigger asChild>
-            <Button>
-              <UserPlus className="mr-2 h-4 w-4" />
-              Invite Member
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Invite Team Member</DialogTitle>
-              <DialogDescription>
-                Send an invitation to join your organization
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div>
-                <Label htmlFor="email">Email Address</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="colleague@company.com"
-                  value={inviteEmail}
-                  onChange={(e) => setInviteEmail(e.target.value)}
-                  className="mt-1"
-                />
-              </div>
-              <div>
-                <Label htmlFor="role">Role</Label>
-                <Select value={inviteRole} onValueChange={(v) => setInviteRole(v as TeamMember['role'])}>
-                  <SelectTrigger className="mt-1">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="admin">Admin</SelectItem>
-                    <SelectItem value="member">Member</SelectItem>
-                    <SelectItem value="viewer">Viewer</SelectItem>
-                  </SelectContent>
-                </Select>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {roleDescriptions[inviteRole]}
-                </p>
-              </div>
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setShowInviteDialog(false)}>
-                Cancel
-              </Button>
-              <Button onClick={handleInvite} disabled={!inviteEmail || inviting}>
-                {inviting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Send Invitation
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <button
+          className="dash-btn dash-btn-primary"
+          onClick={() => setShowInviteDialog(true)}
+        >
+          <UserPlus className="h-4 w-4" />
+          Invite Member
+        </button>
       </div>
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardContent className="p-6">
+        <div className="dash-card">
+          <div className="dash-card-body">
             <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-lg bg-primary-100 flex items-center justify-center">
-                <Users className="h-6 w-6 text-primary-600" />
+              <div className="h-12 w-12 bg-dash-accent/20 border-2 border-dash-accent/30 flex items-center justify-center">
+                <Users className="h-6 w-6 text-dash-accent" />
               </div>
               <div>
-                <div className="text-2xl font-bold">{activeMembers.length}</div>
-                <div className="text-sm text-muted-foreground">Active Members</div>
+                <div className="dash-stats-value">{activeMembers.length}</div>
+                <div className="text-xs font-semibold text-dash-text-muted uppercase tracking-wider">Active Members</div>
               </div>
             </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
+          </div>
+        </div>
+        <div className="dash-card">
+          <div className="dash-card-body">
             <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-lg bg-warning/20 flex items-center justify-center">
-                <Mail className="h-6 w-6 text-warning" />
+              <div className="h-12 w-12 bg-dash-warning/20 border-2 border-dash-warning/30 flex items-center justify-center">
+                <Mail className="h-6 w-6 text-dash-warning" />
               </div>
               <div>
-                <div className="text-2xl font-bold">{pendingMembers.length}</div>
-                <div className="text-sm text-muted-foreground">Pending Invites</div>
+                <div className="dash-stats-value">{pendingMembers.length}</div>
+                <div className="text-xs font-semibold text-dash-text-muted uppercase tracking-wider">Pending Invites</div>
               </div>
             </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
+          </div>
+        </div>
+        <div className="dash-card">
+          <div className="dash-card-body">
             <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-lg bg-success/20 flex items-center justify-center">
-                <Shield className="h-6 w-6 text-success" />
+              <div className="h-12 w-12 bg-dash-success/20 border-2 border-dash-success/30 flex items-center justify-center">
+                <Shield className="h-6 w-6 text-dash-success" />
               </div>
               <div>
-                <div className="text-2xl font-bold">
+                <div className="dash-stats-value">
                   {members.filter(m => m.role === 'admin' || m.role === 'owner').length}
                 </div>
-                <div className="text-sm text-muted-foreground">Admins</div>
+                <div className="text-xs font-semibold text-dash-text-muted uppercase tracking-wider">Admins</div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Invite Link */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Invite Link</CardTitle>
-          <CardDescription>Share this link to invite people to your organization</CardDescription>
-        </CardHeader>
-        <CardContent>
+      <div className="dash-card">
+        <div className="dash-card-header">
+          <span className="dash-card-title">Invite Link</span>
+        </div>
+        <div className="dash-card-body">
+          <p className="text-sm text-dash-text-muted mb-3">Share this link to invite people to your organization</p>
           <div className="flex items-center gap-2">
-            <code className="flex-1 p-3 bg-slate-100 rounded-lg text-sm font-mono truncate">
+            <code className="flex-1 p-3 bg-dash-bg-secondary border-2 border-dash-border text-sm font-mono text-dash-text-secondary truncate">
               {inviteLink}
             </code>
-            <Button variant="outline" size="sm" onClick={copyInviteLink}>
+            <button className="dash-btn dash-btn-secondary" onClick={copyInviteLink}>
               {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-            </Button>
+            </button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Members Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Team Members</CardTitle>
-          <CardDescription>
-            {members.length} member(s) in your organization
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Member</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Joined</TableHead>
-                <TableHead>Last Active</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {members.map((member) => (
-                <TableRow key={member.id}>
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={member.avatar || undefined} />
-                        <AvatarFallback className="text-xs bg-primary-100 text-primary-700">
+      <div className="dash-card">
+        <div className="dash-card-header">
+          <span className="dash-card-title">Team Members</span>
+          <span className="text-sm text-dash-text-muted">{members.length} member(s)</span>
+        </div>
+        <div className="dash-card-body p-0">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b-2 border-dash-border">
+                  <th className="text-left py-3 px-4 text-xs font-bold text-dash-text-muted uppercase tracking-wider">Member</th>
+                  <th className="text-left py-3 px-4 text-xs font-bold text-dash-text-muted uppercase tracking-wider">Role</th>
+                  <th className="text-left py-3 px-4 text-xs font-bold text-dash-text-muted uppercase tracking-wider">Status</th>
+                  <th className="text-left py-3 px-4 text-xs font-bold text-dash-text-muted uppercase tracking-wider">Joined</th>
+                  <th className="text-left py-3 px-4 text-xs font-bold text-dash-text-muted uppercase tracking-wider">Last Active</th>
+                  <th className="w-[50px]"></th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-dash-border">
+                {members.map((member) => (
+                  <tr key={member.id} className="hover:bg-dash-bg-hover transition-colors">
+                    <td className="py-3 px-4">
+                      <div className="flex items-center gap-3">
+                        <div className="h-8 w-8 bg-dash-accent/20 border-2 border-dash-accent/30 flex items-center justify-center text-xs font-bold text-dash-accent">
                           {getInitials(member.name)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <div className="font-medium flex items-center gap-2">
-                          {member.name}
-                          {member.role === 'owner' && (
-                            <Crown className="h-3 w-3 text-amber-500" />
+                        </div>
+                        <div>
+                          <div className="font-semibold text-dash-text-primary flex items-center gap-2">
+                            {member.name}
+                            {member.role === 'owner' && (
+                              <Crown className="h-3 w-3 text-dash-warning" />
+                            )}
+                          </div>
+                          <div className="text-sm text-dash-text-muted">{member.email}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-3 px-4">
+                      {member.role === 'owner' ? (
+                        <span className={cn('dash-badge', roleColors[member.role])}>
+                          {member.role}
+                        </span>
+                      ) : (
+                        <select
+                          value={member.role}
+                          onChange={(e) => handleRoleChange(member.id, e.target.value as TeamMember['role'])}
+                          className="dash-input py-1 px-2 text-xs w-24"
+                        >
+                          <option value="admin">Admin</option>
+                          <option value="member">Member</option>
+                          <option value="viewer">Viewer</option>
+                        </select>
+                      )}
+                    </td>
+                    <td className="py-3 px-4">
+                      {member.status === 'active' ? (
+                        <span className="dash-badge dash-badge-success">Active</span>
+                      ) : (
+                        <span className="dash-badge dash-badge-warning">Pending</span>
+                      )}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-dash-text-muted">
+                      {formatDate(member.joinedAt)}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-dash-text-muted">
+                      {member.status === 'active' ? formatDate(member.lastActiveAt) : '-'}
+                    </td>
+                    <td className="py-3 px-4">
+                      {member.role !== 'owner' && (
+                        <div className="relative">
+                          <button
+                            className="p-1.5 text-dash-text-muted hover:text-dash-text-primary hover:bg-dash-bg-hover transition-colors"
+                            onClick={() => setOpenDropdown(openDropdown === member.id ? null : member.id)}
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                          </button>
+                          {openDropdown === member.id && (
+                            <div className="absolute right-0 top-8 z-10 w-40 bg-dash-bg-primary border-2 border-dash-border shadow-lg">
+                              {member.status === 'pending' && (
+                                <button className="w-full px-3 py-2 text-left text-sm text-dash-text-secondary hover:bg-dash-bg-hover flex items-center gap-2">
+                                  <Mail className="h-4 w-4" />
+                                  Resend Invite
+                                </button>
+                              )}
+                              <button
+                                className="w-full px-3 py-2 text-left text-sm text-dash-danger hover:bg-dash-bg-hover flex items-center gap-2"
+                                onClick={() => {
+                                  setMemberToRemove(member);
+                                  setOpenDropdown(null);
+                                }}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                                Remove
+                              </button>
+                            </div>
                           )}
                         </div>
-                        <div className="text-sm text-muted-foreground">{member.email}</div>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    {member.role === 'owner' ? (
-                      <Badge className={roleColors[member.role]}>
-                        {member.role}
-                      </Badge>
-                    ) : (
-                      <Select
-                        value={member.role}
-                        onValueChange={(v) => handleRoleChange(member.id, v as TeamMember['role'])}
-                      >
-                        <SelectTrigger className="w-[100px] h-7 text-xs">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="admin">Admin</SelectItem>
-                          <SelectItem value="member">Member</SelectItem>
-                          <SelectItem value="viewer">Viewer</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {member.status === 'active' ? (
-                      <Badge className="bg-success text-white">Active</Badge>
-                    ) : (
-                      <Badge variant="outline" className="text-warning border-warning">
-                        Pending
-                      </Badge>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {formatDate(member.joinedAt)}
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {member.status === 'active' ? formatDate(member.lastActiveAt) : '-'}
-                  </TableCell>
-                  <TableCell>
-                    {member.role !== 'owner' && (
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          {member.status === 'pending' && (
-                            <DropdownMenuItem>
-                              <Mail className="mr-2 h-4 w-4" />
-                              Resend Invite
-                            </DropdownMenuItem>
-                          )}
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            className="text-danger focus:text-danger"
-                            onClick={() => setMemberToRemove(member)}
-                          >
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Remove
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
 
       {/* Roles Info */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Role Permissions</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <div className="dash-card">
+        <div className="dash-card-header">
+          <span className="dash-card-title">Role Permissions</span>
+        </div>
+        <div className="dash-card-body">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {(Object.keys(roleDescriptions) as TeamMember['role'][]).map((role) => (
-              <div key={role} className="p-4 bg-slate-50 rounded-lg">
-                <Badge className={cn('mb-2', roleColors[role])}>
+              <div key={role} className="p-4 bg-dash-bg-secondary border-2 border-dash-border">
+                <span className={cn('dash-badge mb-2', roleColors[role])}>
                   {role}
-                </Badge>
-                <p className="text-sm text-muted-foreground">
+                </span>
+                <p className="text-sm text-dash-text-muted">
                   {roleDescriptions[role]}
                 </p>
               </div>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
+
+      {/* Invite Dialog */}
+      {showInviteDialog && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="dash-card max-w-md w-full mx-4">
+            <div className="dash-card-header">
+              <span className="dash-card-title">Invite Team Member</span>
+            </div>
+            <div className="dash-card-body space-y-4">
+              <p className="text-sm text-dash-text-muted">
+                Send an invitation to join your organization
+              </p>
+              <div>
+                <label className="text-xs font-bold text-dash-text-secondary uppercase tracking-wider block mb-2">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  placeholder="colleague@company.com"
+                  value={inviteEmail}
+                  onChange={(e) => setInviteEmail(e.target.value)}
+                  className="dash-input"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-bold text-dash-text-secondary uppercase tracking-wider block mb-2">
+                  Role
+                </label>
+                <select
+                  value={inviteRole}
+                  onChange={(e) => setInviteRole(e.target.value as TeamMember['role'])}
+                  className="dash-input"
+                >
+                  <option value="admin">Admin</option>
+                  <option value="member">Member</option>
+                  <option value="viewer">Viewer</option>
+                </select>
+                <p className="text-xs text-dash-text-muted mt-1">
+                  {roleDescriptions[inviteRole]}
+                </p>
+              </div>
+              <div className="flex justify-end gap-2 pt-4 border-t-2 border-dash-border">
+                <button
+                  className="dash-btn dash-btn-secondary"
+                  onClick={() => setShowInviteDialog(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="dash-btn dash-btn-primary"
+                  onClick={handleInvite}
+                  disabled={!inviteEmail || inviting}
+                >
+                  {inviting && <Loader2 className="h-4 w-4 animate-spin" />}
+                  Send Invitation
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Remove Confirmation Dialog */}
-      <AlertDialog open={!!memberToRemove} onOpenChange={(open) => !open && setMemberToRemove(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Remove Team Member</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to remove {memberToRemove?.name} ({memberToRemove?.email}) from your organization?
-              They will lose access to all resources.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleRemove}
-              className="bg-danger text-white hover:bg-danger/90"
-              disabled={removing}
-            >
-              {removing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Remove Member
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      {memberToRemove && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="dash-card max-w-md w-full mx-4">
+            <div className="dash-card-header">
+              <span className="dash-card-title">Remove Team Member</span>
+            </div>
+            <div className="dash-card-body space-y-4">
+              <p className="text-sm text-dash-text-secondary">
+                Are you sure you want to remove {memberToRemove.name} ({memberToRemove.email}) from your organization?
+                They will lose access to all resources.
+              </p>
+              <div className="flex justify-end gap-2">
+                <button
+                  className="dash-btn dash-btn-secondary"
+                  onClick={() => setMemberToRemove(null)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="dash-btn bg-dash-danger text-white border-dash-danger hover:bg-dash-danger/90"
+                  onClick={handleRemove}
+                  disabled={removing}
+                >
+                  {removing && <Loader2 className="h-4 w-4 animate-spin" />}
+                  Remove Member
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
+    </LockedFeature>
   );
 }

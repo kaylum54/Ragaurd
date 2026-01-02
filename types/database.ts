@@ -10,6 +10,7 @@ export interface Database {
           email: string;
           name: string | null;
           avatar_url: string | null;
+          password_hash: string | null;
           is_admin: boolean;
           created_at: string;
           updated_at: string;
@@ -20,6 +21,7 @@ export interface Database {
           email: string;
           name?: string | null;
           avatar_url?: string | null;
+          password_hash?: string | null;
           is_admin?: boolean;
           created_at?: string;
           updated_at?: string;
@@ -30,6 +32,7 @@ export interface Database {
           email?: string;
           name?: string | null;
           avatar_url?: string | null;
+          password_hash?: string | null;
           is_admin?: boolean;
           created_at?: string;
           updated_at?: string;
@@ -327,3 +330,33 @@ export type ApiKey = Database['public']['Tables']['api_keys']['Row'];
 export type UsageDaily = Database['public']['Tables']['usage_daily']['Row'];
 export type RequestLog = Database['public']['Tables']['request_log']['Row'];
 export type RedteamScan = Database['public']['Tables']['redteam_scans']['Row'];
+
+// Saved Endpoints types
+export interface SavedEndpoint {
+  id: string;
+  org_id: string;
+  name: string;
+  endpoint_url: string;
+  endpoint_type: 'voice_agent' | 'chat_api' | 'custom';
+  description: string | null;
+  config: Record<string, unknown>;
+  last_used_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SavedEndpointInsert {
+  name: string;
+  endpoint_url: string;
+  endpoint_type?: 'voice_agent' | 'chat_api' | 'custom';
+  description?: string | null;
+  config?: Record<string, unknown>;
+}
+
+export interface SavedEndpointUpdate {
+  name?: string;
+  endpoint_url?: string;
+  endpoint_type?: 'voice_agent' | 'chat_api' | 'custom';
+  description?: string | null;
+  config?: Record<string, unknown>;
+}

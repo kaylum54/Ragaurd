@@ -1,8 +1,9 @@
 'use client';
 
-import { Shield, AlertTriangle, Clock, Loader2 } from 'lucide-react';
+import { Shield, AlertTriangle, Clock, Loader2, ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useRecentRequests } from '@/hooks/useDashboard';
+import Link from 'next/link';
 
 function formatTimeAgo(dateString: string): string {
   const now = new Date();
@@ -22,82 +23,102 @@ export function RecentRequests() {
   const { data: requests, loading } = useRecentRequests(8);
 
   return (
-    <div className="bg-white rounded border border-midnight-300/60 overflow-hidden">
-      {/* Header */}
-      <div className="px-3 py-2 bg-midnight-50/80 border-b border-midnight-200/60">
-        <h2 className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">Recent Requests</h2>
+    <div className="dash-card">
+      <div className="dash-card-header">
+        <span className="dash-card-title">Recent Requests</span>
+        <Link
+          href="/dashboard/usage"
+          className="flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-dash-accent hover:text-dash-accent-hover transition-colors"
+        >
+          View All
+          <ArrowUpRight className="h-3.5 w-3.5" />
+        </Link>
       </div>
 
       {loading ? (
-        <div className="h-[220px] flex items-center justify-center">
-          <Loader2 className="h-5 w-5 animate-spin text-midnight-400" />
+        <div className="h-[300px] flex items-center justify-center">
+          <Loader2 className="h-6 w-6 animate-spin text-dash-text-muted" />
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-midnight-50/50 border-b border-midnight-200/60">
+        <div className="overflow-x-auto dash-scrollbar">
+          <table className="dash-table">
+            <thead>
               <tr>
-                <th className="px-2.5 py-1.5 text-left text-[10px] font-semibold uppercase tracking-wide text-midnight-500">Status</th>
-                <th className="px-2.5 py-1.5 text-left text-[10px] font-semibold uppercase tracking-wide text-midnight-500">Type</th>
-                <th className="px-2.5 py-1.5 text-left text-[10px] font-semibold uppercase tracking-wide text-midnight-500">Details</th>
-                <th className="px-2.5 py-1.5 text-right text-[10px] font-semibold uppercase tracking-wide text-midnight-500">Latency</th>
-                <th className="px-2.5 py-1.5 text-right text-[10px] font-semibold uppercase tracking-wide text-midnight-500">Time</th>
+                <th>Status</th>
+                <th>Type</th>
+                <th>Details</th>
+                <th className="text-right">Latency</th>
+                <th className="text-right">Time</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-midnight-100/60">
+            <tbody>
               {requests.map((request) => (
-                <tr key={request.id} className="hover:bg-midnight-50/50 transition-colors">
-                  <td className="px-2.5 py-2">
-                    <div className="flex items-center gap-1.5">
+                <tr key={request.id} className="group">
+                  <td>
+                    <div className="flex items-center gap-2">
                       <div
                         className={cn(
-                          'h-5 w-5 rounded flex items-center justify-center',
-                          request.status === 'blocked' && 'bg-critical-100',
-                          request.status === 'passed' && 'bg-secure-100',
-                          request.status === 'error' && 'bg-warning-100'
+                          'h-8 w-8 flex items-center justify-center transition-all border-2',
+                          'group-hover:scale-110',
+                          request.status === 'blocked' && 'bg-dash-danger/10 border-dash-danger/30',
+                          request.status === 'passed' && 'bg-dash-success/10 border-dash-success/30',
+                          request.status === 'error' && 'bg-dash-warning/10 border-dash-warning/30'
                         )}
                       >
                         {request.status === 'blocked' ? (
-                          <AlertTriangle className="h-3 w-3 text-critical-600" />
+                          <AlertTriangle className="h-4 w-4 text-dash-danger" />
                         ) : (
-                          <Shield className="h-3 w-3 text-secure-600" />
+                          <Shield className="h-4 w-4 text-dash-success" />
                         )}
                       </div>
                       <span
                         className={cn(
-                          'text-[10px] font-semibold px-1.5 py-0.5 rounded capitalize',
+                          'dash-badge uppercase',
                           request.status === 'blocked'
-                            ? 'bg-critical-600 text-white'
-                            : 'bg-secure-600 text-white'
+                            ? 'dash-badge-danger'
+                            : 'dash-badge-success'
                         )}
                       >
                         {request.status}
                       </span>
                     </div>
                   </td>
-                  <td className="px-2.5 py-2">
-                    <span className="text-[10px] font-semibold px-1.5 py-0.5 bg-midnight-200 text-midnight-700 rounded capitalize">
+                  <td>
+                    <span className="text-xs font-bold px-2 py-1 bg-dash-bg-secondary text-dash-text-secondary uppercase tracking-wider border border-dash-border">
                       {request.type}
                     </span>
                   </td>
-                  <td className="px-2.5 py-2">
+                  <td>
                     {request.threatCategory ? (
-                      <span className="text-[11px] text-midnight-600">
-                        {request.blockedBy?.replace(/_/g, ' ')} - {request.threatCategory.replace(/_/g, ' ')}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-dash-text-secondary">
+                          {request.blockedBy?.replace(/_/g, ' ')}
+                        </span>
+                        <span className="text-dash-text-muted">-</span>
+                        <span className="text-sm text-dash-text-muted">
+                          {request.threatCategory.replace(/_/g, ' ')}
+                        </span>
+                      </div>
                     ) : (
-                      <span className="text-[11px] text-midnight-400">—</span>
+                      <span className="text-sm text-dash-text-muted">-</span>
                     )}
                   </td>
-                  <td className="px-2.5 py-2 text-right">
-                    <span className="text-[11px] font-semibold text-midnight-900 tabular-nums">
-                      {request.latencyMs ? `${request.latencyMs}ms` : '—'}
+                  <td className="text-right">
+                    <span className={cn(
+                      'text-sm font-medium tabular-nums',
+                      request.latencyMs && request.latencyMs < 100
+                        ? 'text-dash-success'
+                        : request.latencyMs && request.latencyMs < 200
+                        ? 'text-dash-text-primary'
+                        : 'text-dash-warning'
+                    )}>
+                      {request.latencyMs ? `${request.latencyMs}ms` : '-'}
                     </span>
                   </td>
-                  <td className="px-2.5 py-2 text-right">
-                    <div className="flex items-center gap-1 justify-end text-midnight-500">
-                      <Clock className="h-2.5 w-2.5" />
-                      <span className="text-[10px]">{formatTimeAgo(request.timestamp)}</span>
+                  <td className="text-right">
+                    <div className="flex items-center gap-1.5 justify-end text-dash-text-muted">
+                      <Clock className="h-3.5 w-3.5" />
+                      <span className="text-xs">{formatTimeAgo(request.timestamp)}</span>
                     </div>
                   </td>
                 </tr>

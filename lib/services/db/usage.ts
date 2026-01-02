@@ -4,6 +4,131 @@ import type { UsageStats, UsageLimits } from '@/types/api';
 
 type UsageDailyInsert = Database['public']['Tables']['usage_daily']['Insert'];
 
+export interface UsageLimitCheck {
+  allowed: boolean;
+  reason?: string;
+  current: number;
+  limit: number | null;
+  percentage: number;
+}
+
+/**
+ * Check if an organization has exceeded their usage limit for a specific type
+ * Returns { allowed: true } if within limits, or { allowed: false, reason: string } if exceeded
+ */
+interface PlanLimitsRecord {
+  plan: string;
+  text_requests_monthly: number | null;
+  audio_requests_monthly: number | null;
+  redteam_attacks_monthly: number | null;
+  audio_enabled: boolean;
+  redteam_enabled: boolean;
+}
+
+export async function checkUsageLimit(
+  orgId: string,
+  plan: string,
+  type: 'text' | 'audio' | 'redteam'
+): Promise<UsageLimitCheck> {
+  const supabase = createServiceClient();
+
+  // Get plan limits
+  const { data } = await supabase
+    .from('plan_limits')
+    .select('*')
+    .eq('plan', plan)
+    .single();
+
+  const planLimits = data as PlanLimitsRecord | null;
+
+  if (!planLimits) {
+    // If no plan found, allow (fail open for now)
+    return { allowed: true, current: 0, limit: null, percentage: 0 };
+  }
+
+  // Get current month usage
+  const currentUsage = await getCurrentMonthUsage(orgId);
+
+  let current: number;
+  let limit: number | null;
+  let limitName: string;
+
+  switch (type) {
+    case 'text':
+      current = currentUsage.text_requests;
+      limit = planLimits.text_requests_monthly;
+      limitName = 'text requests';
+      break;
+    case 'audio':
+      current = currentUsage.audio_requests;
+      limit = planLimits.audio_requests_monthly;
+      limitName = 'audio requests';
+      // Also check if audio is enabled for this plan
+      if (!planLimits.audio_enabled) {
+        return {
+          allowed: false,
+          reason: 'Audio defense is not available on your current plan. Please upgrade to Pro or higher.',
+          current: 0,
+          limit: 0,
+          percentage: 100,
+        };
+      }
+      break;
+    case 'redteam':
+      current = currentUsage.redteam_attacks;
+      limit = planLimits.redteam_attacks_monthly;
+      limitName = 'red team attacks';
+      // Also check if redteam is enabled for this plan
+      if (!planLimits.redteam_enabled) {
+        return {
+          allowed: false,
+          reason: 'Red team testing is not available on your current plan. Please upgrade to Pro or higher.',
+          current: 0,
+          limit: 0,
+          percentage: 100,
+        };
+      }
+      break;
+    default:
+      return { allowed: true, current: 0, limit: null, percentage: 0 };
+  }
+
+  // null limit means unlimited
+  if (limit === null) {
+    return { allowed: true, current, limit: null, percentage: 0 };
+  }
+
+  const percentage = Math.round((current / limit) * 100);
+
+  if (current >= limit) {
+    return {
+      allowed: false,
+      reason: `Monthly ${limitName} limit exceeded (${current.toLocaleString()}/${limit.toLocaleString()}). Please upgrade your plan.`,
+      current,
+      limit,
+      percentage: 100,
+    };
+  }
+
+  return { allowed: true, current, limit, percentage };
+}
+
+/**
+ * Get the organization's plan from the database
+ */
+export async function getOrgPlan(orgId: string): Promise<string> {
+  const supabase = createServiceClient();
+
+  const { data } = await supabase
+    .from('organizations')
+    .select('plan')
+    .eq('id', orgId)
+    .single();
+
+  const org = data as { plan: string } | null;
+  return org?.plan || 'free';
+}
+
 export async function getUsageForPeriod(
   orgId: string,
   startDate: string,

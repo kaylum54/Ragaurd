@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { Shield } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 interface LogoProps {
@@ -11,33 +11,23 @@ interface LogoProps {
 }
 
 export function Logo({ className, size = 'default', showText = true, href = '/', variant = 'light' }: LogoProps) {
+  // 150% bigger than original (2.5x)
   const sizes = {
-    sm: { icon: 'h-6 w-6', text: 'text-lg' },
-    default: { icon: 'h-8 w-8', text: 'text-xl' },
-    lg: { icon: 'h-10 w-10', text: 'text-2xl' },
+    sm: { height: 'h-20', width: 450, imgHeight: 112 },
+    default: { height: 'h-[7.5rem]', width: 675, imgHeight: 168 },
+    lg: { height: 'h-40', width: 900, imgHeight: 225 },
   };
 
   const content = (
-    <div className={cn('flex items-center gap-2.5', className)}>
-      <div className="relative">
-        <Shield
-          className={cn(
-            sizes[size].icon,
-            variant === 'light'
-              ? 'text-electric-500 fill-electric-500/20'
-              : 'text-electric-600 fill-electric-100'
-          )}
-        />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
-        </div>
-      </div>
-      {showText && (
-        <span className={cn('font-bold tracking-tight', sizes[size].text)}>
-          <span className={variant === 'light' ? 'text-steel-100' : 'text-navy-900'}>RA</span>
-          <span className="gradient-primary-text">Guard</span>
-        </span>
-      )}
+    <div className={cn('flex items-center', className)}>
+      <Image
+        src="/images/ragaurd-logo.png"
+        alt="Ragaurd - AI Voice Defense System"
+        width={sizes[size].width}
+        height={sizes[size].imgHeight}
+        className={cn(sizes[size].height, 'w-auto')}
+        priority
+      />
     </div>
   );
 

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { validateApiKey } from '@/lib/services/db/api-keys';
 import { logRequest } from '@/lib/services/db/request-log';
-import { incrementDailyUsage } from '@/lib/services/db/usage';
+import { incrementDailyUsage, checkUsageLimit, getOrgPlan } from '@/lib/services/db/usage';
 import { analyzeText } from '@/lib/services/defense/text';
 import { isSupabaseConfigured } from '@/lib/supabase/server';
 import { isDemoModeEnabled, getDemoOrgId } from '@/lib/auth';
@@ -123,6 +123,28 @@ export async function POST(request: NextRequest) {
 
       orgId = keyValidation.orgId;
       keyRecord = keyValidation.apiKey;
+    }
+
+    // Check usage limits (skip for demo requests)
+    if (orgId && !isDemoRequest) {
+      const plan = await getOrgPlan(orgId);
+      const limitCheck = await checkUsageLimit(orgId, plan, 'text');
+
+      if (!limitCheck.allowed) {
+        return NextResponse.json(
+          {
+            error: 'Usage limit exceeded',
+            message: limitCheck.reason,
+            usage: {
+              current: limitCheck.current,
+              limit: limitCheck.limit,
+              percentage: limitCheck.percentage,
+            },
+            upgrade_url: '/pricing',
+          },
+          { status: 429 }
+        );
+      }
     }
 
     // Parse and validate request body

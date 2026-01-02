@@ -85,9 +85,9 @@ export default function AdminRevenuePage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-xl font-semibold text-midnight-950">Revenue</h1>
-        <p className="text-sm text-midnight-500 mt-0.5">MRR, ARR, and subscription metrics</p>
+      <div className="mb-8">
+        <h1 className="dash-page-title">Revenue</h1>
+        <p className="dash-page-subtitle">MRR, ARR, and subscription metrics</p>
       </div>
 
       {/* Key Metrics */}

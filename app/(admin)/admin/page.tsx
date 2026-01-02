@@ -75,9 +75,9 @@ export default function AdminPage() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div>
-        <h1 className="text-xl font-semibold text-midnight-950">Overview</h1>
-        <p className="text-sm text-midnight-500 mt-0.5">Platform metrics and system health</p>
+      <div className="mb-8">
+        <h1 className="dash-page-title">Overview</h1>
+        <p className="dash-page-subtitle">Platform metrics and system health</p>
       </div>
 
       {/* Key Metrics */}

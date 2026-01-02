@@ -40,9 +40,9 @@ export function Navbar() {
           <Image
             src="/images/ragaurd-logo.png"
             alt="Ragaurd - AI Voice Defense System"
-            width={450}
-            height={112}
-            className="h-20 md:h-24 w-auto"
+            width={900}
+            height={224}
+            className="h-40 md:h-48 w-auto"
             priority
           />
         </Link>

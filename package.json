@@ -6,10 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.5.0",
+    "@opentelemetry/api": "^1.9.0",
     "@radix-ui/react-alert-dialog": "^1.1.0",
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-checkbox": "^1.1.0",

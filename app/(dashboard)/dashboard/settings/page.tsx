@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { User, Building, Bell, Shield, Trash2, Camera } from 'lucide-react';
+import { User, Building, Bell, Shield, Trash2, Camera, Check } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { cn } from '@/lib/utils';
 
 // Mock user data
 const mockUser = {
@@ -37,28 +38,29 @@ export default function SettingsPage() {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Page Header */}
-      <div>
-        <h1 className="text-lg font-bold text-midnight-950">Settings</h1>
-        <p className="text-xs text-midnight-500 mt-0.5">
+      <div className="mb-8">
+        <h1 className="dash-page-title">Settings</h1>
+        <p className="dash-page-subtitle">
           Manage your account and organization
         </p>
       </div>
 
       {/* Tab Navigation */}
-      <div className="flex gap-1 p-1 bg-midnight-100 rounded w-fit">
+      <div className="flex gap-0.5 p-1 bg-dash-bg-secondary w-fit border-2 border-dash-border">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded transition-colors ${
+            className={cn(
+              'flex items-center gap-2 px-4 py-2.5 text-sm font-bold uppercase tracking-wider transition-all',
               activeTab === tab.id
-                ? 'bg-white text-midnight-900 shadow-sm'
-                : 'text-midnight-600 hover:text-midnight-800'
-            }`}
+                ? 'bg-dash-accent text-white'
+                : 'text-dash-text-secondary hover:text-dash-text-primary hover:bg-dash-bg-hover'
+            )}
           >
-            <tab.icon className="h-3.5 w-3.5" />
+            <tab.icon className="h-4 w-4" />
             {tab.label}
           </button>
         ))}
@@ -66,52 +68,52 @@ export default function SettingsPage() {
 
       {/* Profile Tab */}
       {activeTab === 'profile' && (
-        <div className="bg-white rounded border border-midnight-300/60 overflow-hidden">
-          <div className="px-3 py-2 bg-midnight-50/80 border-b border-midnight-200/60">
-            <h2 className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">Profile Information</h2>
+        <div className="dash-card">
+          <div className="dash-card-header">
+            <span className="dash-card-title">Profile Information</span>
           </div>
-          <div className="p-4 space-y-4">
-            <div className="flex items-center gap-4">
+          <div className="dash-card-body space-y-6">
+            <div className="flex items-center gap-6">
               <div className="relative">
-                <Avatar className="h-16 w-16 border-2 border-midnight-200">
+                <Avatar className="h-20 w-20 border-2 border-white/[0.1]">
                   <AvatarImage src={user.avatar || undefined} />
-                  <AvatarFallback className="text-lg bg-midnight-100 text-midnight-700 font-semibold">
+                  <AvatarFallback className="text-xl bg-dash-accent/20 text-dash-accent font-semibold">
                     {user.name.split(' ').map(n => n[0]).join('')}
                   </AvatarFallback>
                 </Avatar>
-                <button className="absolute -bottom-1 -right-1 h-6 w-6 bg-midnight-800 text-white rounded-full flex items-center justify-center hover:bg-midnight-700 transition-colors">
-                  <Camera className="h-3 w-3" />
+                <button className="absolute -bottom-1 -right-1 h-7 w-7 bg-dash-accent text-white rounded-full flex items-center justify-center hover:bg-dash-accent-hover transition-colors shadow-glow-accent">
+                  <Camera className="h-3.5 w-3.5" />
                 </button>
               </div>
               <div>
-                <p className="text-sm font-semibold text-midnight-900">{user.name}</p>
-                <p className="text-xs text-midnight-500">{user.email}</p>
+                <p className="text-lg font-semibold text-dash-text-primary">{user.name}</p>
+                <p className="text-sm text-dash-text-muted">{user.email}</p>
               </div>
             </div>
 
-            <div className="grid gap-3 md:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <label className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">Full Name</label>
+                <label className="dash-card-title block mb-2">Full Name</label>
                 <input
                   type="text"
                   value={user.name}
                   onChange={(e) => setUser({ ...user, name: e.target.value })}
-                  className="mt-1 w-full px-2.5 py-1.5 text-sm rounded border border-midnight-200 bg-white text-midnight-900 focus:outline-none focus:ring-1 focus:ring-accent-500 focus:border-accent-500"
+                  className="dash-input"
                 />
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">Email</label>
+                <label className="dash-card-title block mb-2">Email</label>
                 <input
                   type="email"
                   value={user.email}
                   onChange={(e) => setUser({ ...user, email: e.target.value })}
-                  className="mt-1 w-full px-2.5 py-1.5 text-sm rounded border border-midnight-200 bg-white text-midnight-900 focus:outline-none focus:ring-1 focus:ring-accent-500 focus:border-accent-500"
+                  className="dash-input"
                 />
               </div>
             </div>
 
-            <div className="pt-2 border-t border-midnight-100">
-              <button className="px-3 py-1.5 text-xs font-semibold rounded bg-midnight-800 text-white hover:bg-midnight-700 transition-colors">
+            <div className="pt-4 border-t border-white/[0.06]">
+              <button className="dash-btn dash-btn-primary">
                 Save Changes
               </button>
             </div>
@@ -121,43 +123,43 @@ export default function SettingsPage() {
 
       {/* Organization Tab */}
       {activeTab === 'organization' && (
-        <div className="bg-white rounded border border-midnight-300/60 overflow-hidden">
-          <div className="px-3 py-2 bg-midnight-50/80 border-b border-midnight-200/60">
-            <h2 className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">Organization Settings</h2>
+        <div className="dash-card">
+          <div className="dash-card-header">
+            <span className="dash-card-title">Organization Settings</span>
           </div>
-          <div className="p-4 space-y-4">
-            <div className="grid gap-3 md:grid-cols-2">
+          <div className="dash-card-body space-y-4">
+            <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <label className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">Organization Name</label>
+                <label className="dash-card-title block mb-2">Organization Name</label>
                 <input
                   type="text"
                   value={org.name}
                   onChange={(e) => setOrg({ ...org, name: e.target.value })}
-                  className="mt-1 w-full px-2.5 py-1.5 text-sm rounded border border-midnight-200 bg-white text-midnight-900 focus:outline-none focus:ring-1 focus:ring-accent-500 focus:border-accent-500"
+                  className="dash-input"
                 />
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">URL Slug</label>
+                <label className="dash-card-title block mb-2">URL Slug</label>
                 <input
                   type="text"
                   value={org.slug}
                   onChange={(e) => setOrg({ ...org, slug: e.target.value })}
-                  className="mt-1 w-full px-2.5 py-1.5 text-sm rounded border border-midnight-200 bg-white text-midnight-900 focus:outline-none focus:ring-1 focus:ring-accent-500 focus:border-accent-500"
+                  className="dash-input"
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">Billing Email</label>
+                <label className="dash-card-title block mb-2">Billing Email</label>
                 <input
                   type="email"
                   value={org.billingEmail}
                   onChange={(e) => setOrg({ ...org, billingEmail: e.target.value })}
-                  className="mt-1 w-full px-2.5 py-1.5 text-sm rounded border border-midnight-200 bg-white text-midnight-900 focus:outline-none focus:ring-1 focus:ring-accent-500 focus:border-accent-500"
+                  className="dash-input"
                 />
               </div>
             </div>
 
-            <div className="pt-2 border-t border-midnight-100">
-              <button className="px-3 py-1.5 text-xs font-semibold rounded bg-midnight-800 text-white hover:bg-midnight-700 transition-colors">
+            <div className="pt-4 border-t border-white/[0.06]">
+              <button className="dash-btn dash-btn-primary">
                 Save Changes
               </button>
             </div>
@@ -167,32 +169,36 @@ export default function SettingsPage() {
 
       {/* Notifications Tab */}
       {activeTab === 'notifications' && (
-        <div className="bg-white rounded border border-midnight-300/60 overflow-hidden">
-          <div className="px-3 py-2 bg-midnight-50/80 border-b border-midnight-200/60">
-            <h2 className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">Notification Preferences</h2>
+        <div className="dash-card">
+          <div className="dash-card-header">
+            <span className="dash-card-title">Notification Preferences</span>
           </div>
-          <div className="divide-y divide-midnight-100">
+          <div className="divide-y divide-white/[0.06]">
             {[
               { key: 'email', title: 'Email Notifications', desc: 'Receive notifications via email' },
               { key: 'attacks', title: 'Attack Alerts', desc: 'Get notified when attacks are blocked' },
               { key: 'usage', title: 'Usage Alerts', desc: 'Get notified when approaching limits' },
               { key: 'marketing', title: 'Marketing Emails', desc: 'Receive product updates and news' },
             ].map((item) => (
-              <div key={item.key} className="flex items-center justify-between px-4 py-3">
+              <div key={item.key} className="flex items-center justify-between px-4 py-4">
                 <div>
-                  <p className="text-sm font-medium text-midnight-900">{item.title}</p>
-                  <p className="text-xs text-midnight-500 mt-0.5">{item.desc}</p>
+                  <p className="text-sm font-medium text-dash-text-primary">{item.title}</p>
+                  <p className="text-xs text-dash-text-muted mt-0.5">{item.desc}</p>
                 </div>
                 <button
                   onClick={() => setNotifications({ ...notifications, [item.key]: !notifications[item.key as keyof typeof notifications] })}
-                  className={`relative w-9 h-5 rounded-full transition-colors ${
-                    notifications[item.key as keyof typeof notifications] ? 'bg-accent-600' : 'bg-midnight-300'
-                  }`}
+                  className={cn(
+                    'relative w-11 h-6 rounded-full transition-colors',
+                    notifications[item.key as keyof typeof notifications]
+                      ? 'bg-dash-accent'
+                      : 'bg-white/[0.1]'
+                  )}
                 >
                   <span
-                    className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${
-                      notifications[item.key as keyof typeof notifications] ? 'translate-x-4' : 'translate-x-0'
-                    }`}
+                    className={cn(
+                      'absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform',
+                      notifications[item.key as keyof typeof notifications] ? 'translate-x-5' : 'translate-x-0'
+                    )}
                   />
                 </button>
               </div>
@@ -205,56 +211,78 @@ export default function SettingsPage() {
       {activeTab === 'security' && (
         <div className="space-y-4">
           {/* Password Change */}
-          <div className="bg-white rounded border border-midnight-300/60 overflow-hidden">
-            <div className="px-3 py-2 bg-midnight-50/80 border-b border-midnight-200/60">
-              <h2 className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">Change Password</h2>
+          <div className="dash-card">
+            <div className="dash-card-header">
+              <span className="dash-card-title">Change Password</span>
             </div>
-            <div className="p-4 space-y-3">
+            <div className="dash-card-body space-y-4">
               <div>
-                <label className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">Current Password</label>
+                <label className="dash-card-title block mb-2">Current Password</label>
                 <input
                   type="password"
-                  className="mt-1 w-full px-2.5 py-1.5 text-sm rounded border border-midnight-200 bg-white text-midnight-900 focus:outline-none focus:ring-1 focus:ring-accent-500 focus:border-accent-500"
+                  className="dash-input"
+                  placeholder="Enter current password"
                 />
               </div>
-              <div className="grid gap-3 md:grid-cols-2">
+              <div className="grid gap-4 md:grid-cols-2">
                 <div>
-                  <label className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">New Password</label>
+                  <label className="dash-card-title block mb-2">New Password</label>
                   <input
                     type="password"
-                    className="mt-1 w-full px-2.5 py-1.5 text-sm rounded border border-midnight-200 bg-white text-midnight-900 focus:outline-none focus:ring-1 focus:ring-accent-500 focus:border-accent-500"
+                    className="dash-input"
+                    placeholder="Enter new password"
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">Confirm Password</label>
+                  <label className="dash-card-title block mb-2">Confirm Password</label>
                   <input
                     type="password"
-                    className="mt-1 w-full px-2.5 py-1.5 text-sm rounded border border-midnight-200 bg-white text-midnight-900 focus:outline-none focus:ring-1 focus:ring-accent-500 focus:border-accent-500"
+                    className="dash-input"
+                    placeholder="Confirm new password"
                   />
                 </div>
               </div>
-              <div className="pt-2 border-t border-midnight-100">
-                <button className="px-3 py-1.5 text-xs font-semibold rounded bg-midnight-800 text-white hover:bg-midnight-700 transition-colors">
+              <div className="pt-4 border-t border-white/[0.06]">
+                <button className="dash-btn dash-btn-primary">
                   Update Password
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Danger Zone */}
-          <div className="bg-white rounded border border-critical-300 overflow-hidden">
-            <div className="px-3 py-2 bg-critical-50 border-b border-critical-200">
-              <h2 className="text-[10px] font-semibold text-critical-700 uppercase tracking-wide">Danger Zone</h2>
+          {/* Two-Factor Authentication */}
+          <div className="dash-card">
+            <div className="dash-card-header">
+              <span className="dash-card-title">Two-Factor Authentication</span>
+              <span className="dash-badge dash-badge-success">
+                <Check className="h-3 w-3 mr-1" />
+                Enabled
+              </span>
             </div>
-            <div className="p-4">
-              <p className="text-xs text-midnight-600 mb-3">
+            <div className="dash-card-body">
+              <p className="text-sm text-dash-text-secondary mb-4">
+                Add an extra layer of security to your account by enabling two-factor authentication.
+              </p>
+              <button className="dash-btn dash-btn-secondary">
+                Manage 2FA
+              </button>
+            </div>
+          </div>
+
+          {/* Danger Zone */}
+          <div className="rounded-lg border border-dash-danger/30 overflow-hidden">
+            <div className="px-4 py-3 bg-dash-danger/10 border-b border-dash-danger/20">
+              <span className="text-xs font-semibold text-dash-danger uppercase tracking-wider">Danger Zone</span>
+            </div>
+            <div className="p-4 bg-dash-bg-secondary">
+              <p className="text-sm text-dash-text-secondary mb-4">
                 Permanently delete your account and all associated data. This action cannot be undone.
               </p>
               <button
                 onClick={() => setDeleteDialogOpen(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded bg-critical-600 text-white hover:bg-critical-700 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-dash-danger text-white hover:bg-red-600 transition-colors"
               >
-                <Trash2 className="h-3.5 w-3.5" />
+                <Trash2 className="h-4 w-4" />
                 Delete Account
               </button>
             </div>
@@ -262,24 +290,24 @@ export default function SettingsPage() {
 
           {/* Delete Dialog */}
           {deleteDialogOpen && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-              <div className="bg-white rounded border border-midnight-200 w-full max-w-md mx-4 overflow-hidden">
-                <div className="px-4 py-3 border-b border-midnight-100">
-                  <h3 className="text-sm font-semibold text-midnight-900">Delete Account</h3>
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+              <div className="bg-dash-bg-tertiary rounded-lg border border-white/[0.1] w-full max-w-md mx-4 shadow-dash-lg">
+                <div className="px-6 py-4 border-b border-white/[0.06]">
+                  <h3 className="text-lg font-semibold text-dash-text-primary">Delete Account</h3>
                 </div>
-                <div className="p-4">
-                  <p className="text-sm text-midnight-600">
+                <div className="px-6 py-4">
+                  <p className="text-sm text-dash-text-secondary">
                     This action cannot be undone. This will permanently delete your account and remove all data from our servers.
                   </p>
                 </div>
-                <div className="flex gap-2 justify-end px-4 py-3 bg-midnight-50 border-t border-midnight-100">
+                <div className="flex gap-3 justify-end px-6 py-4 bg-white/[0.02] border-t border-white/[0.06]">
                   <button
                     onClick={() => setDeleteDialogOpen(false)}
-                    className="px-3 py-1.5 text-xs font-medium rounded border border-midnight-200 text-midnight-700 hover:bg-midnight-100 transition-colors"
+                    className="dash-btn dash-btn-secondary"
                   >
                     Cancel
                   </button>
-                  <button className="px-3 py-1.5 text-xs font-semibold rounded bg-critical-600 text-white hover:bg-critical-700 transition-colors">
+                  <button className="dash-btn bg-dash-danger text-white hover:bg-red-600">
                     Delete Account
                   </button>
                 </div>

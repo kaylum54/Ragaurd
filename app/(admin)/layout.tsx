@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
@@ -13,7 +14,6 @@ import {
   ChevronLeft,
   ChevronRight,
   LogOut,
-  Shield,
   ArrowLeft,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -50,26 +50,31 @@ export default function AdminLayout({
         )}
       >
         <div className="flex h-full flex-col">
-          {/* Logo */}
-          <div className="flex h-11 items-center justify-between px-3 border-b border-midnight-800">
+          {/* Logo - 150% bigger (2.5x) */}
+          <div className="flex h-20 items-center justify-between px-3 border-b border-midnight-800">
             {!collapsed && (
               <Link href="/admin" className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded bg-critical-600 flex items-center justify-center">
-                  <Shield className="w-3.5 h-3.5 text-white" />
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="font-bold text-sm text-white tracking-tight">RAGuard</span>
-                  <span className="text-[9px] font-bold px-1 py-0.5 bg-critical-600 text-white rounded">
-                    ADMIN
-                  </span>
-                </div>
+                <Image
+                  src="/images/ragaurd-logo.png"
+                  alt="Ragaurd"
+                  width={300}
+                  height={75}
+                  className="h-[3.75rem] w-auto"
+                />
+                <span className="text-[9px] font-bold px-1 py-0.5 bg-critical-600 text-white rounded">
+                  ADMIN
+                </span>
               </Link>
             )}
             {collapsed && (
               <Link href="/admin" className="mx-auto">
-                <div className="w-6 h-6 rounded bg-critical-600 flex items-center justify-center">
-                  <Shield className="w-3.5 h-3.5 text-white" />
-                </div>
+                <Image
+                  src="/images/ragaurd-logo.png"
+                  alt="Ragaurd"
+                  width={80}
+                  height={80}
+                  className="h-[3.75rem] w-auto"
+                />
               </Link>
             )}
             {!collapsed && (

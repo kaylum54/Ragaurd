@@ -1,81 +1,136 @@
 'use client';
 
-import { CreditCard, Check, Download, ExternalLink, Zap, Loader2 } from 'lucide-react';
+import { CreditCard, Check, Download, ExternalLink, Zap, Loader2, Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useUsageStats } from '@/hooks/useUsage';
+import { usePlan } from '@/lib/contexts/PlanContext';
 
-// Mock subscription data (would come from Stripe in production)
-const subscription = {
-  plan: 'pro',
-  planName: 'Professional',
-  status: 'active',
-  currentPeriodStart: '2024-12-01',
-  currentPeriodEnd: '2025-01-01',
-  priceMonthly: 24900, // cents
-};
-
-const plans = [
+// Plan details for display
+const planDetails = [
+  {
+    id: 'free',
+    name: 'Free',
+    price: 0,
+    features: [
+      '1,000 text requests/month',
+      '2 API keys',
+      'Community support',
+    ],
+    lockedFeatures: [
+      'Audio defense',
+      'Red team scans',
+      'Team members',
+    ],
+  },
   {
     id: 'starter',
     name: 'Starter',
-    price: 7900,
-    features: ['25K text requests', 'Email support', '3 team members'],
+    price: 4900,
+    features: [
+      '10,000 text requests/month',
+      '5 API keys',
+      '3 team members',
+      'Email support',
+    ],
+    lockedFeatures: [
+      'Audio defense',
+      'Red team scans',
+    ],
   },
   {
     id: 'pro',
-    name: 'Professional',
-    price: 24900,
-    features: ['150K text requests', '50K audio requests', '1K red team attacks', 'Priority support'],
-    current: true,
+    name: 'Pro',
+    price: 19900,
+    popular: true,
+    features: [
+      '100,000 text requests/month',
+      '1,000 audio requests/month',
+      '100 red team attacks/month',
+      '10 API keys',
+      '10 team members',
+      'Priority support',
+    ],
+    lockedFeatures: [],
   },
   {
     id: 'business',
     name: 'Business',
-    price: 64900,
-    features: ['500K text requests', '200K audio requests', '10K red team attacks', 'Dedicated support'],
+    price: 49900,
+    features: [
+      '500,000 text requests/month',
+      '5,000 audio requests/month',
+      '500 red team attacks/month',
+      '25 API keys',
+      '25 team members',
+      'Dedicated support',
+      'SLA guarantee',
+    ],
+    lockedFeatures: [],
   },
 ];
 
-const invoices = [
-  { id: 'inv_001', date: '2024-12-01', amount: 24900, status: 'paid' },
-  { id: 'inv_002', date: '2024-11-01', amount: 24900, status: 'paid' },
-  { id: 'inv_003', date: '2024-10-01', amount: 24900, status: 'paid' },
-];
-
 export default function BillingPage() {
-  const { stats, loading } = useUsageStats();
+  const { plan, usage, limits, loading, organization } = usePlan();
 
-  const textPercent = stats.text.limit > 0 ? (stats.text.used / stats.text.limit) * 100 : 0;
-  const audioPercent = stats.audio.limit > 0 ? (stats.audio.used / stats.audio.limit) * 100 : 0;
-  const redteamPercent = stats.redteam.limit > 0 ? (stats.redteam.used / stats.redteam.limit) * 100 : 0;
+  const currentPlanId = plan?.name || 'free';
+  const currentPlanIndex = planDetails.findIndex(p => p.id === currentPlanId);
+
+  // Calculate usage percentages
+  const textPercent = usage?.text_requests?.limit
+    ? (usage.text_requests.used / usage.text_requests.limit) * 100
+    : 0;
+  const audioPercent = usage?.audio_requests?.limit
+    ? (usage.audio_requests.used / usage.audio_requests.limit) * 100
+    : 0;
+  const redteamPercent = usage?.redteam_attacks?.limit
+    ? (usage.redteam_attacks.used / usage.redteam_attacks.limit) * 100
+    : 0;
+
+  const isFreePlan = currentPlanId === 'free';
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Page Header */}
-      <div>
-        <h1 className="text-lg font-bold text-midnight-950">Billing & Subscription</h1>
-        <p className="text-xs text-midnight-500 mt-0.5">
+      <div className="mb-8">
+        <h1 className="dash-page-title">Billing & Subscription</h1>
+        <p className="dash-page-subtitle">
           Manage your plan and payment methods
         </p>
       </div>
 
       {/* Current Plan */}
-      <div className="bg-white rounded border border-midnight-300/60 overflow-hidden">
-        <div className="px-3 py-2 bg-midnight-50/80 border-b border-midnight-200/60 flex items-center justify-between">
-          <h2 className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">Current Plan</h2>
-          <span className="text-[10px] font-bold px-1.5 py-0.5 bg-secure-600 text-white rounded uppercase">
-            {subscription.status}
+      <div className="dash-card">
+        <div className="dash-card-header">
+          <span className="dash-card-title">Current Plan</span>
+          <span className={cn(
+            'dash-badge uppercase',
+            isFreePlan ? 'bg-slate-500/20 text-slate-400 border-slate-500/40' : 'dash-badge-success'
+          )}>
+            {isFreePlan ? 'Free Tier' : 'Active'}
           </span>
         </div>
-        <div className="p-4 space-y-4">
+        <div className="dash-card-body space-y-6">
           <div className="flex items-center gap-4">
-            <div className="h-12 w-12 rounded bg-accent-100 border border-accent-200 flex items-center justify-center">
-              <Zap className="h-6 w-6 text-accent-600" />
+            <div className={cn(
+              'h-12 w-12 border-2 flex items-center justify-center',
+              isFreePlan
+                ? 'bg-slate-500/20 border-slate-500/30'
+                : 'bg-dash-accent/20 border-dash-accent/30'
+            )}>
+              <Zap className={cn(
+                'h-6 w-6',
+                isFreePlan ? 'text-slate-400' : 'text-dash-accent'
+              )} />
             </div>
             <div>
-              <div className="text-lg font-bold text-midnight-950">{subscription.planName}</div>
-              <div className="text-xs text-midnight-500">
-                ${(subscription.priceMonthly / 100).toFixed(0)}/month · Renews {new Date(subscription.currentPeriodEnd).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+              <div className="text-lg font-bold text-dash-text-primary">
+                {plan?.displayName || 'Free'} Plan
+              </div>
+              <div className="text-xs text-dash-text-muted">
+                {isFreePlan ? (
+                  'Upgrade to unlock more features'
+                ) : (
+                  `$${((plan?.priceMonthly || 0) / 100).toFixed(0)}/month`
+                )}
               </div>
             </div>
           </div>
@@ -83,158 +138,209 @@ export default function BillingPage() {
           {/* Usage */}
           {loading ? (
             <div className="flex items-center justify-center py-4">
-              <Loader2 className="h-5 w-5 animate-spin text-midnight-400" />
+              <Loader2 className="h-5 w-5 animate-spin text-dash-text-muted" />
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
+              {/* Text Requests */}
               <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs font-medium text-midnight-700">Text Requests</span>
-                  <span className="text-xs text-midnight-500 tabular-nums font-medium">
-                    {stats.text.used.toLocaleString()} / {stats.text.limit.toLocaleString()}
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-semibold text-dash-text-secondary">Text Requests</span>
+                  <span className="text-xs text-dash-text-muted tabular-nums font-medium">
+                    {(usage?.text_requests?.used || 0).toLocaleString()} / {(usage?.text_requests?.limit || limits?.text_requests_monthly || 1000).toLocaleString()}
                   </span>
                 </div>
-                <div className="h-2 bg-midnight-100 rounded-sm overflow-hidden">
+                <div className="h-2 bg-dash-bg-tertiary overflow-hidden">
                   <div
-                    className="h-full bg-midnight-700 rounded-sm transition-all"
+                    className="h-full bg-dash-accent transition-all"
                     style={{ width: `${Math.min(textPercent, 100)}%` }}
                   />
                 </div>
               </div>
-              <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs font-medium text-midnight-700">Audio Requests</span>
-                  <span className="text-xs text-midnight-500 tabular-nums font-medium">
-                    {stats.audio.used.toLocaleString()} / {stats.audio.limit.toLocaleString()}
+
+              {/* Audio Requests - Show locked for free plan */}
+              <div className={cn(!limits?.audio_enabled && 'opacity-50')}>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-semibold text-dash-text-secondary flex items-center gap-2">
+                    Audio Requests
+                    {!limits?.audio_enabled && <Lock className="h-3 w-3 text-dash-text-muted" />}
+                  </span>
+                  <span className="text-xs text-dash-text-muted tabular-nums font-medium">
+                    {limits?.audio_enabled
+                      ? `${(usage?.audio_requests?.used || 0).toLocaleString()} / ${(usage?.audio_requests?.limit || 0).toLocaleString()}`
+                      : 'Pro+ only'
+                    }
                   </span>
                 </div>
-                <div className="h-2 bg-midnight-100 rounded-sm overflow-hidden">
+                <div className="h-2 bg-dash-bg-tertiary overflow-hidden">
                   <div
-                    className="h-full bg-accent-600 rounded-sm transition-all"
-                    style={{ width: `${Math.min(audioPercent, 100)}%` }}
+                    className="h-full bg-purple-500 transition-all"
+                    style={{ width: limits?.audio_enabled ? `${Math.min(audioPercent, 100)}%` : '0%' }}
                   />
                 </div>
               </div>
-              <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs font-medium text-midnight-700">Red Team Attacks</span>
-                  <span className="text-xs text-midnight-500 tabular-nums font-medium">
-                    {stats.redteam.used.toLocaleString()} / {stats.redteam.limit.toLocaleString()}
+
+              {/* Red Team Attacks - Show locked for free plan */}
+              <div className={cn(!limits?.redteam_enabled && 'opacity-50')}>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-semibold text-dash-text-secondary flex items-center gap-2">
+                    Red Team Attacks
+                    {!limits?.redteam_enabled && <Lock className="h-3 w-3 text-dash-text-muted" />}
+                  </span>
+                  <span className="text-xs text-dash-text-muted tabular-nums font-medium">
+                    {limits?.redteam_enabled
+                      ? `${(usage?.redteam_attacks?.used || 0).toLocaleString()} / ${(usage?.redteam_attacks?.limit || 0).toLocaleString()}`
+                      : 'Pro+ only'
+                    }
                   </span>
                 </div>
-                <div className="h-2 bg-midnight-100 rounded-sm overflow-hidden">
+                <div className="h-2 bg-dash-bg-tertiary overflow-hidden">
                   <div
-                    className="h-full bg-warning-600 rounded-sm transition-all"
-                    style={{ width: `${Math.min(redteamPercent, 100)}%` }}
+                    className="h-full bg-dash-warning transition-all"
+                    style={{ width: limits?.redteam_enabled ? `${Math.min(redteamPercent, 100)}%` : '0%' }}
                   />
                 </div>
               </div>
             </div>
           )}
 
-          <div className="flex gap-2 pt-2 border-t border-midnight-100">
-            <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded border border-midnight-200 text-midnight-700 hover:bg-midnight-50 transition-colors">
-              <ExternalLink className="h-3.5 w-3.5" />
-              Manage Subscription
-            </button>
-            <button className="px-3 py-1.5 text-xs font-medium rounded border border-midnight-200 text-midnight-700 hover:bg-midnight-50 transition-colors">
-              Update Payment Method
-            </button>
-          </div>
+          {!isFreePlan && (
+            <div className="flex gap-2 pt-4 border-t-2 border-dash-border">
+              <button className="dash-btn dash-btn-secondary">
+                <ExternalLink className="h-4 w-4" />
+                Manage Subscription
+              </button>
+              <button className="dash-btn dash-btn-secondary">
+                Update Payment Method
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Available Plans */}
       <div>
-        <h2 className="text-sm font-semibold text-midnight-900 mb-3">Available Plans</h2>
-        <div className="grid md:grid-cols-3 gap-3">
-          {plans.map((plan) => (
-            <div
-              key={plan.id}
-              className={cn(
-                'bg-white rounded border overflow-hidden',
-                plan.current ? 'border-accent-500 border-2' : 'border-midnight-300/60'
-              )}
-            >
-              {plan.current && (
-                <div className="bg-accent-600 text-white text-[10px] font-bold uppercase tracking-wide text-center py-1">
-                  Current Plan
-                </div>
-              )}
-              <div className="p-4">
-                <div className="text-sm font-semibold text-midnight-900">{plan.name}</div>
-                <div className="mt-1">
-                  <span className="text-2xl font-bold text-midnight-950 tabular-nums">
-                    ${(plan.price / 100).toFixed(0)}
-                  </span>
-                  <span className="text-xs text-midnight-500">/month</span>
-                </div>
-                <ul className="mt-3 space-y-1.5">
-                  {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-1.5 text-xs text-midnight-600">
-                      <Check className="h-3.5 w-3.5 text-secure-600 shrink-0" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  className={cn(
-                    'w-full mt-4 px-3 py-1.5 text-xs font-semibold rounded transition-colors',
-                    plan.current
-                      ? 'bg-midnight-100 text-midnight-500 cursor-not-allowed'
-                      : 'bg-midnight-800 text-white hover:bg-midnight-700'
+        <h2 className="text-sm font-bold text-dash-text-secondary uppercase tracking-wider mb-4">
+          {isFreePlan ? 'Upgrade Your Plan' : 'Available Plans'}
+        </h2>
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {planDetails.map((planItem, index) => {
+            const isCurrent = planItem.id === currentPlanId;
+            const isDowngrade = index < currentPlanIndex;
+            const isUpgrade = index > currentPlanIndex;
+
+            return (
+              <div
+                key={planItem.id}
+                className={cn(
+                  'dash-card relative',
+                  isCurrent && 'border-dash-accent',
+                  planItem.popular && !isCurrent && 'border-purple-500/50'
+                )}
+              >
+                {planItem.popular && !isCurrent && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-500 text-white text-[10px] font-bold uppercase tracking-wide px-3 py-1">
+                    Most Popular
+                  </div>
+                )}
+                {isCurrent && (
+                  <div className="bg-dash-accent text-white text-xs font-bold uppercase tracking-wide text-center py-2">
+                    Current Plan
+                  </div>
+                )}
+                <div className="dash-card-body">
+                  <div className="text-sm font-bold text-dash-text-primary">{planItem.name}</div>
+                  <div className="mt-2">
+                    {planItem.price === 0 ? (
+                      <span className="dash-stats-value">Free</span>
+                    ) : (
+                      <>
+                        <span className="dash-stats-value">
+                          ${(planItem.price / 100).toFixed(0)}
+                        </span>
+                        <span className="text-xs text-dash-text-muted">/month</span>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Included Features */}
+                  <ul className="mt-4 space-y-2">
+                    {planItem.features.map((feature) => (
+                      <li key={feature} className="flex items-center gap-2 text-sm text-dash-text-secondary">
+                        <Check className="h-4 w-4 text-dash-success shrink-0" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Locked Features */}
+                  {planItem.lockedFeatures.length > 0 && (
+                    <ul className="mt-2 space-y-2">
+                      {planItem.lockedFeatures.map((feature) => (
+                        <li key={feature} className="flex items-center gap-2 text-sm text-dash-text-muted">
+                          <Lock className="h-4 w-4 text-dash-text-muted shrink-0" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
                   )}
-                  disabled={plan.current}
-                >
-                  {plan.current ? 'Current Plan' : 'Upgrade'}
-                </button>
+
+                  <button
+                    className={cn(
+                      'dash-btn w-full mt-4',
+                      isCurrent
+                        ? 'bg-dash-bg-tertiary text-dash-text-muted cursor-not-allowed border-dash-border'
+                        : isUpgrade
+                          ? 'dash-btn-primary'
+                          : 'dash-btn-secondary'
+                    )}
+                    disabled={isCurrent}
+                  >
+                    {isCurrent
+                      ? 'Current Plan'
+                      : isUpgrade
+                        ? 'Upgrade'
+                        : 'Downgrade'
+                    }
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
-      {/* Invoices */}
-      <div className="bg-white rounded border border-midnight-300/60 overflow-hidden">
-        <div className="px-3 py-2 bg-midnight-50/80 border-b border-midnight-200/60">
-          <h2 className="text-[10px] font-semibold text-midnight-600 uppercase tracking-wide">Invoice History</h2>
-        </div>
-        <div className="divide-y divide-midnight-100">
-          {invoices.map((invoice) => (
-            <div
-              key={invoice.id}
-              className="flex items-center justify-between px-4 py-3 hover:bg-midnight-50/50 transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                <div className="h-8 w-8 rounded bg-midnight-100 flex items-center justify-center">
-                  <CreditCard className="h-4 w-4 text-midnight-600" />
-                </div>
-                <div>
-                  <div className="text-sm font-medium text-midnight-900">
-                    {new Date(invoice.date).toLocaleDateString('en-US', {
-                      month: 'long',
-                      day: 'numeric',
-                      year: 'numeric',
-                    })}
-                  </div>
-                  <div className="text-xs text-midnight-500 tabular-nums">
-                    ${(invoice.amount / 100).toFixed(2)}
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-[10px] font-bold px-1.5 py-0.5 bg-secure-100 text-secure-700 rounded uppercase">
-                  {invoice.status}
-                </span>
-                <button className="flex items-center gap-1 text-xs font-medium text-midnight-600 hover:text-midnight-900 transition-colors">
-                  <Download className="h-3.5 w-3.5" />
-                  Download
-                </button>
-              </div>
+      {/* Invoice History - Only show for paid plans */}
+      {!isFreePlan && (
+        <div className="dash-card">
+          <div className="dash-card-header">
+            <span className="dash-card-title">Invoice History</span>
+          </div>
+          <div className="dash-card-body p-0">
+            <div className="flex items-center justify-center py-8 text-dash-text-muted">
+              <p className="text-sm">No invoices yet. Invoices will appear here after your first payment.</p>
             </div>
-          ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Free Plan CTA */}
+      {isFreePlan && (
+        <div className="dash-card bg-gradient-to-r from-dash-accent/10 to-purple-500/10 border-dash-accent/30">
+          <div className="dash-card-body text-center py-8">
+            <Zap className="h-12 w-12 text-dash-accent mx-auto mb-4" />
+            <h3 className="text-xl font-bold text-dash-text-primary mb-2">
+              Unlock the Full Power of Ragaurd
+            </h3>
+            <p className="text-dash-text-secondary mb-6 max-w-md mx-auto">
+              Upgrade to Pro to access audio defense, red team scanning, and priority support.
+            </p>
+            <button className="dash-btn dash-btn-primary px-8">
+              Upgrade to Pro - $199/month
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

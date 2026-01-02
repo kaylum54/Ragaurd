@@ -85,9 +85,9 @@ export default function AdminOrganizationsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-xl font-semibold text-midnight-950">Organizations</h1>
-        <p className="text-sm text-midnight-500 mt-0.5">
+      <div className="mb-8">
+        <h1 className="dash-page-title">Organizations</h1>
+        <p className="dash-page-subtitle">
           {total.toLocaleString()} total organizations
         </p>
       </div>
