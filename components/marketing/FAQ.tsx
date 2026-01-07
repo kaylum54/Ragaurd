@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { ChevronDown, Mail } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const faqs = [
@@ -109,24 +109,7 @@ export function FAQ() {
             })}
           </div>
 
-          <div
-            className={`mt-12 opacity-0 ${isVisible ? 'animate-fade-up' : ''}`}
-            style={{ animationDelay: '700ms', animationFillMode: 'forwards' }}
-          >
-            <div className="bg-navy-50 border border-navy-100 p-8 text-center rounded-lg">
-              <p className="text-sm text-navy-500 mb-4">Still have questions?</p>
-              <a
-                href="mailto:support@ragaurd.com"
-                className="inline-flex items-center gap-3 text-base font-semibold text-navy-950 hover:text-navy-700 transition-colors group"
-              >
-                <div className="w-10 h-10 bg-navy-950 flex items-center justify-center group-hover:bg-navy-800 transition-colors">
-                  <Mail className="w-5 h-5 text-white" />
-                </div>
-                Contact our team
-              </a>
-            </div>
           </div>
-        </div>
       </div>
     </section>
   );

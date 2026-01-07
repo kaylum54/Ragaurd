@@ -132,13 +132,12 @@ export default function LoginPage() {
 
           {/* Footer */}
           <p className="mt-8 text-sm text-steel-500 text-center">
-            Don&apos;t have an account?{' '}
-            <Link href="/signup" className="text-electric-500 hover:text-electric-400 transition-colors">
-              Sign up
-            </Link>
+            Want early access?{' '}
+            <Link href="/#beta" className="text-electric-500 hover:text-electric-400 transition-colors">Join the beta</Link>
           </p>
         </div>
       </main>
     </div>
   );
 }
+

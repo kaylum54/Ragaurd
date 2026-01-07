@@ -157,10 +157,10 @@ export function Solution() {
           style={{ animationDelay: '800ms', animationFillMode: 'forwards' }}
         >
           <Link
-            href="/signup"
+            href="#beta"
             className="btn-primary group"
           >
-            Start Free Trial
+            Join Beta
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link
@@ -174,3 +174,4 @@ export function Solution() {
     </section>
   );
 }
+

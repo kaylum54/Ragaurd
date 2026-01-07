@@ -58,17 +58,11 @@ export function FinalCTA() {
             style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}
           >
             <Link
-              href="/signup"
+              href="#beta"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-semibold bg-white text-navy-950 hover:bg-navy-50 transition-all shadow-lg group"
             >
-              Start Free Trial
+              Apply for Beta
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <Link
-              href="/demo"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-semibold text-white border border-white/30 hover:bg-white/10 transition-all"
-            >
-              Schedule Demo
             </Link>
           </div>
 
@@ -94,3 +88,4 @@ export function FinalCTA() {
     </section>
   );
 }
+

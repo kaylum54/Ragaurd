@@ -10,7 +10,6 @@ const navLinks = [
   { href: '#problem', label: 'Why Security' },
   { href: '#solution', label: 'Solution' },
   { href: '#how-it-works', label: 'How It Works' },
-  { href: '#pricing', label: 'Pricing' },
   { href: '#faq', label: 'FAQ' },
 ];
 
@@ -61,16 +60,10 @@ export function Navbar() {
 
         <div className="hidden md:flex items-center gap-3">
           <Link
-            href="/login"
-            className="text-sm font-medium px-4 py-2 text-navy-600 hover:text-navy-950 transition-colors"
-          >
-            Sign in
-          </Link>
-          <Link
-            href="/signup"
+            href="#beta"
             className="btn-primary text-sm px-5 py-2.5"
           >
-            Get Started
+            Join Beta
           </Link>
         </div>
 
@@ -101,18 +94,11 @@ export function Navbar() {
             ))}
             <div className="flex flex-col gap-3 pt-4 mt-2 border-t border-navy-100">
               <Link
-                href="/login"
-                className="btn-secondary text-sm justify-center"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Sign in
-              </Link>
-              <Link
-                href="/signup"
+                href="#beta"
                 className="btn-primary text-sm justify-center"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Get Started
+                Join Beta
               </Link>
             </div>
           </div>

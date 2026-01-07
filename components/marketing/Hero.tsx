@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Play, Shield, Zap, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Shield, Zap, CheckCircle2 } from 'lucide-react';
 
 import { ThreatInterceptionBackground } from './shared/ThreatInterceptionBackground';
 
@@ -56,18 +56,11 @@ export function Hero() {
               className={`flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 transition-all duration-700 delay-300 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
             >
               <Link
-                href="/signup"
+                href="#beta"
                 className="btn-primary group text-base px-8 py-4"
               >
-                Start Free Trial
+                Apply for Beta
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <Link
-                href="/demo"
-                className="btn-secondary group text-base px-8 py-4"
-              >
-                <Play className="w-4 h-4" />
-                Watch Demo
               </Link>
             </div>
           </div>
