@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
@@ -57,28 +58,32 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
     >
       <div className="flex h-full flex-col">
         {/* Logo */}
-        <div className="h-11 flex items-center justify-between px-3 border-b border-midnight-800">
+        <div className="h-20 flex items-center justify-between px-4 border-b border-midnight-800">
           {!collapsed && (
-            <Link href="/dashboard" className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded bg-accent-600 flex items-center justify-center">
-                <Shield className="w-3.5 h-3.5 text-white" />
-              </div>
-              <span className="font-bold text-sm text-white tracking-tight">RAGuard</span>
+            <Link href="/dashboard" className="flex items-center">
+              <Image
+                src="/images/ragaurd-logo.png"
+                alt="Ragaurd"
+                width={180}
+                height={45}
+                className="h-10 w-auto brightness-0 invert"
+                priority
+              />
             </Link>
           )}
           {collapsed && (
             <Link href="/dashboard" className="mx-auto">
-              <div className="w-6 h-6 rounded bg-accent-600 flex items-center justify-center">
-                <Shield className="w-3.5 h-3.5 text-white" />
+              <div className="w-8 h-8 bg-slate-600 flex items-center justify-center">
+                <Shield className="w-5 h-5 text-white" />
               </div>
             </Link>
           )}
           {!collapsed && (
             <button
-              className="p-1 rounded text-midnight-500 hover:text-midnight-300 hover:bg-midnight-800 transition-colors"
+              className="p-1 text-midnight-500 hover:text-midnight-300 hover:bg-midnight-800 transition-colors"
               onClick={onToggle}
             >
-              <ChevronLeft className="h-3.5 w-3.5" />
+              <ChevronLeft className="h-4 w-4" />
             </button>
           )}
         </div>
