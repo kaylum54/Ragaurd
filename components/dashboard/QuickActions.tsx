@@ -1,64 +1,123 @@
 'use client';
 
 import Link from 'next/link';
-import { Key, Target, FileText, Settings, ChevronRight } from 'lucide-react';
+import { Key, Target, FileText, Settings, ArrowUpRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const actions = [
   {
     title: 'Create API Key',
-    description: 'Generate new credentials',
+    description: 'Generate a new key for your application',
     icon: Key,
     href: '/dashboard/api-keys',
+    color: 'dash-accent',
   },
   {
     title: 'Run Red Team',
-    description: 'Automated security scan',
+    description: 'Start an automated security scan',
     icon: Target,
     href: '/dashboard/redteam/new',
     badge: 'Pro',
+    color: 'dash-danger',
   },
   {
     title: 'View Reports',
-    description: 'Download analytics',
+    description: 'Download security reports',
     icon: FileText,
     href: '/dashboard/usage',
+    color: 'dash-success',
   },
   {
     title: 'Settings',
-    description: 'Account configuration',
+    description: 'Configure your account',
     icon: Settings,
     href: '/dashboard/settings',
+    color: 'dash-info',
   },
 ];
 
+const colorMap: Record<string, { bg: string; text: string; hover: string }> = {
+  'dash-accent': {
+    bg: 'bg-dash-accent/10',
+    text: 'text-dash-accent',
+    hover: 'group-hover:bg-dash-accent/20',
+  },
+  'dash-danger': {
+    bg: 'bg-dash-danger/10',
+    text: 'text-dash-danger',
+    hover: 'group-hover:bg-dash-danger/20',
+  },
+  'dash-success': {
+    bg: 'bg-dash-success/10',
+    text: 'text-dash-success',
+    hover: 'group-hover:bg-dash-success/20',
+  },
+  'dash-info': {
+    bg: 'bg-dash-info/10',
+    text: 'text-dash-info',
+    hover: 'group-hover:bg-dash-info/20',
+  },
+};
+
 export function QuickActions() {
   return (
-    <div className="divide-y divide-slate-100">
-      {actions.map((action) => (
-        <Link
-          key={action.title}
-          href={action.href}
-          className="flex items-center justify-between px-4 py-3 hover:bg-slate-50 transition-colors group"
-        >
-          <div className="flex items-center gap-3">
-            <div className="h-8 w-8 bg-slate-100 flex items-center justify-center group-hover:bg-slate-200 transition-colors">
-              <action.icon className="h-4 w-4 text-slate-600" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-slate-800">{action.title}</span>
-                {action.badge && (
-                  <span className="text-[9px] font-bold px-1 py-0.5 bg-slate-700 text-white uppercase">
-                    {action.badge}
-                  </span>
-                )}
-              </div>
-              <p className="text-[10px] text-slate-500">{action.description}</p>
-            </div>
-          </div>
-          <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-slate-600 transition-colors" />
-        </Link>
-      ))}
+    <div className="dash-card">
+      <div className="dash-card-header">
+        <span className="dash-card-title">Quick Actions</span>
+      </div>
+      <div className="dash-card-body">
+        <div className="grid grid-cols-2 gap-3">
+          {actions.map((action) => {
+            const colors = colorMap[action.color];
+            return (
+              <Link
+                key={action.title}
+                href={action.href}
+                className="group relative p-4 border-2 border-dash-border bg-dash-bg-secondary hover:bg-dash-bg-hover hover:border-dash-border-hover transition-all duration-200"
+              >
+                {/* Icon */}
+                <div
+                  className={cn(
+                    'h-11 w-11 flex items-center justify-center mb-3 transition-all duration-200 border-2',
+                    colors.bg,
+                    colors.hover,
+                    action.color === 'dash-accent' && 'border-dash-accent/30',
+                    action.color === 'dash-danger' && 'border-dash-danger/30',
+                    action.color === 'dash-success' && 'border-dash-success/30',
+                    action.color === 'dash-info' && 'border-dash-info/30'
+                  )}
+                >
+                  <action.icon className={cn('h-5 w-5', colors.text)} />
+                </div>
+
+                {/* Content */}
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-bold text-sm text-dash-text-primary group-hover:text-white transition-colors">
+                        {action.title}
+                      </span>
+                      {action.badge && (
+                        <span className="dash-badge dash-badge-accent text-[9px]">
+                          {action.badge}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-dash-text-muted leading-relaxed font-medium">
+                      {action.description}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Hover arrow */}
+                <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <ArrowUpRight className="h-4 w-4 text-dash-text-muted" />
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
